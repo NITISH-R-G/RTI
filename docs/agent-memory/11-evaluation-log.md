@@ -123,6 +123,57 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 
 **Architecture note:** answer refinement lives in `src/reasoning/refine.js`, **separate from the frozen `pipeline.js`**, so the Phase 2.5 corpus keeps testing exactly what it tested before. 8 new tests cover it, including a no-fabricated-authority assertion.
 
+## 2026-08-27 — Phase 3 Work Units 4 & 5 — Draft and Authority
+
+Built and verified as one connected experience: what you told us to what you want to know to the request to where it goes. The authority is **derived from the request**, not guessed before it exists.
+
+### Automated
+
+| Suite | Result |
+|---|---|
+| Reasoning (node) | **70 passing** — corpus 62, refine 8 |
+| Unit + component (vitest) | **79 passing** across 6 files |
+| Playwright e2e + axe | **28 passing** across desktop and 360 px |
+| **axe-core, serious/critical violations** | **0** on landing, clarify, draft, draft-error and authority-with-search |
+| Build / typecheck | clean |
+
+### Required regression suite (all passing)
+
+| # | Case | Result |
+|---|---|---|
+| 1 | Central/service pension | Department of Pensions & Pensioners Welfare |
+| 2 | EPS pension | Employees Provident Fund Organisation |
+| 3 | Old-age/social pension | **no central authority proposed**, fee-not-refunded warning |
+| 4 | Provident fund | Employees Provident Fund Organisation |
+| 5 | Passport | MEA - Consular, Passport & Visa Division (CPV) |
+| 6 | Railways | Ministry of Railways |
+| 7 | Income tax refund | Central Board of Direct Taxes |
+| 8 | Ambiguous (`where is my refund`) | clarification offered, zero authorities, no false certainty |
+| 9 | Manual override | search, select EPFO, carried through to review |
+| 10 | Authority search | order-independent, acronym-tolerant, context on every hit, helpful empty state |
+
+Every returned name is asserted against `public-authorities.json`. A fabricated authority is impossible by construction, and tested for.
+
+### Demo-critical path
+
+`my pension has not been paid` to pension clarification to information selection to editable draft to authority recommendation to review. Covered by **both** a component test and a Playwright test that runs at desktop and 360 px, asserts no dead end, and asserts the literal string `No such Public Authority` never appears.
+
+### Three real defects found by these tests, and fixed
+
+1. **Duplicate heading name.** The draft page `h1` and the textarea label were both "Your request" — two same-named headings on one page, confusing for screen-reader users. The page title is now "Build your request"; the section keeps "Your request".
+2. **Back navigation showed a dead summary.** Returning to `/clarify` after answering showed "we have what we need" instead of re-offering the question, so the citizen could not change their answer. Fixed by keeping the unrefined classification as `baseResult` and always asking from it.
+3. **The too-short threshold was wrong.** 80 characters blocked *"Please provide the pension processing history for my case."* — a perfectly good RTI request, and one our own copy tells people to prefer. Lowered to 40; the threshold exists to catch nonsense, not to push people toward padding.
+
+### Also caught
+
+A bug in `SearchHit` construction where the context spread produced `text` instead of `context`, so every search result would have rendered without its context line. Caught by the "never a bare name" test before it reached a screen.
+
+### Honest limitations
+
+- Manual search still matches **names**, not problems. We do not pretend otherwise — the screen says so explicitly and tells the citizen what to type, which the real portal does not.
+- Where we have no authored description of an office, the search result says *"We do not hold a description of what this office covers"* rather than inventing one.
+- Colour contrast is still not measured. Screen-reader behaviour is still not tested with a real screen reader.
+
 ## Pending evaluations (to run once the product exists)
 
 - The assistant evaluation case set in `09-ai-behavior.md`, plus the taxonomy-coverage figure.

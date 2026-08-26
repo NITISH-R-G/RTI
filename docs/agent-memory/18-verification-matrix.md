@@ -8,13 +8,13 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 |---|---|---|---|---|---|---|---|---|---|---|
 | J1 — Describe a problem in plain language | `/` | S1–S10 | Built | Built | 8 pass | — | Chrome | **0 overflow @360** | partial (no axe yet) | **Working** |
 | J2 — Honest suitability verdict, including "not an RTI matter" | `/clarify`, `/not-rti` | S5, S6, S7 | Built | Built | 17 pass | — | Chrome | pending | partial (no axe) | **Clarify working; /not-rti stub** |
-| J3 — Drafted request: understand it, edit it, validated live | `/request` | S10, S13 | — | — | — | — | — | — | — | Not started |
-| J4 — Right authority, with reasoning and alternatives | `/authority` | S1–S4, S12 | — | — | — | — | — | — | — | Not started |
+| J3 — Drafted request: understand it, edit it, validated live | `/request` | S10, S13 | Built | Built | 18 pass | 28 pass | Chrome | **0 overflow** | **axe 0 serious** | **Working** |
+| J4 — Right authority, with reasoning and alternatives | `/authority` | S1–S4, S12 | Built | Built | 25 pass | 28 pass | Chrome | **0 overflow** | **axe 0 serious** | **Working** |
 | J5 — Review: what will be filed, fee, appeal date | `/review` | S11, S12 | — | — | — | — | — | — | — | Not started |
 | J6 — File (simulated) and understand what happens next | `/filed/[ref]` | ref-format | — | — | — | — | — | — | — | Not started |
 | J7 — Out-of-coverage input still reaches somewhere useful | `/clarify`→`/authority` | S6, S9 | — | — | — | — | — | — | — | Not started |
 | J8 — Understand what is real and what is simulated | `/about` | link check | — | — | — | — | — | — | — | Not started |
-| J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | — | — | — | — | — | — | — | Not started |
+| J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | partial | Built | pass | pass | Chrome | pass | pass | **Logic verified; /not-rti screen is WU8** |
 | J10 — Journey completes with the network blocked entirely | all | — | — | — | — | — | — | — | — | Not started |
 
 ### Phase 2.5 — deterministic reasoning, VERIFIED 2026-08-26

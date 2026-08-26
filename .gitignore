@@ -17,3 +17,5 @@ Thumbs.db
 
 # Vite
 dist/
+test-results/
+playwright-report/

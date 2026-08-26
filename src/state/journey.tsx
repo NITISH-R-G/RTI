@@ -15,6 +15,9 @@ import type { ReasoningResult } from '../reasoning/pipeline';
 export interface JourneyState {
   problem: string;
   answers: Record<string, string>;
+  /** The unrefined classification. Kept so going back re-asks the question
+   *  with the previous answer selected, rather than showing a dead summary (ED-008). */
+  baseResult: ReasoningResult | null;
   result: ReasoningResult | null;
   infoTypes: string[];
   draft: string;
@@ -28,6 +31,7 @@ export interface JourneyState {
 export const EMPTY: JourneyState = {
   problem: '',
   answers: {},
+  baseResult: null,
   result: null,
   infoTypes: [],
   draft: '',

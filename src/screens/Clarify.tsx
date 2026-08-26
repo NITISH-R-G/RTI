@@ -22,7 +22,10 @@ export function Clarify() {
 
   if (!state.result) return <Navigate to="/" replace />;
 
-  const queue = pendingQuestions(state.result, {});
+  // Always ask from the ORIGINAL classification, so returning to this screen
+  // re-offers the question with the previous answer selected instead of a summary.
+  const source = state.baseResult ?? state.result;
+  const queue = pendingQuestions(source, {});
   const question = queue[index];
 
   function choose(questionId: string, value: string) {
@@ -35,7 +38,7 @@ export function Clarify() {
       return;
     }
 
-    const refined = refine(state.result!, next);
+    const refined = refine(source, next);
     update({ answers: next, result: refined });
 
     if (refined.classification === 'unsupported' || refined.classification === 'not_rti') {

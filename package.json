@@ -13,7 +13,9 @@
     "test:reasoning": "node --test \"test/*.test.js\"",
     "test:unit": "vitest run",
     "eval": "node scripts/evaluate.js",
-    "eval:holdout": "node scripts/holdout.js"
+    "eval:holdout": "node scripts/holdout.js",
+    "test:e2e": "playwright test",
+    "test:a11y": "playwright test e2e/a11y.spec.ts"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -21,6 +23,8 @@
     "react-router-dom": "^7.18.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",

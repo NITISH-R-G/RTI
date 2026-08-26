@@ -59,7 +59,7 @@ export function Landing() {
 
     // Deterministic, local, instant. No network call happens here (ED-003).
     const result = run(value);
-    update({ problem: value, result, answers: {}, draft: '', draftEdited: false, authority: null });
+    update({ problem: value, result, baseResult: result, answers: {}, draft: '', draftEdited: false, authority: null });
     navigate(result.classification === 'not_rti' ? '/not-rti' : '/clarify');
   }
 
