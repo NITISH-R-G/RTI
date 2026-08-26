@@ -10,12 +10,12 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | J2 — Honest suitability verdict, including "not an RTI matter" | `/clarify`, `/not-rti` | S5, S6, S7 | Built | Built | 17 pass | — | Chrome | pending | partial (no axe) | **Clarify working; /not-rti stub** |
 | J3 — Drafted request: understand it, edit it, validated live | `/request` | S10, S13 | Built | Built | 18 pass | 28 pass | Chrome | **0 overflow** | **axe 0 serious** | **Working** |
 | J4 — Right authority, with reasoning and alternatives | `/authority` | S1–S4, S12 | Built | Built | 25 pass | 28 pass | Chrome | **0 overflow** | **axe 0 serious** | **Working** |
-| J5 — Review: what will be filed, fee, appeal date | `/review` | S11, S12 | — | — | — | — | — | — | — | Not started |
-| J6 — File (simulated) and understand what happens next | `/filed/[ref]` | ref-format | — | — | — | — | — | — | — | Not started |
-| J7 — Out-of-coverage input still reaches somewhere useful | `/clarify`→`/authority` | S6, S9 | — | — | — | — | — | — | — | Not started |
-| J8 — Understand what is real and what is simulated | `/about` | link check | — | — | — | — | — | — | — | Not started |
-| J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | partial | Built | pass | pass | Chrome | pass | pass | **Logic verified; /not-rti screen is WU8** |
-| J10 — Journey completes with the network blocked entirely | all | — | — | — | — | — | — | — | — | Not started |
+| J5 — Review: what will be filed, fee, appeal date | `/review` | S11, S12 | Built | Built | pass | 62 pass | Chrome | **0 overflow** | **axe + contrast 0** | **Working** |
+| J6 — File (simulated) and understand what happens next | `/filed/[ref]` | ref-format | Built | Built | pass | 62 pass | Chrome | **0 overflow** | **axe + contrast 0** | **Working** |
+| J7 — Out-of-coverage input still reaches somewhere useful | `/clarify`→`/authority` | S6, S9 | Built | Built | pass | 62 pass | Chrome | pass | pass | **Working** |
+| J8 — Understand what is real and what is simulated | `/about` | link check | Built | Built | pass | 62 pass | Chrome | pass | pass | **Working** |
+| J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | Built | Built | pass | 62 pass | Chrome | pass | **axe + contrast 0** | **Working** |
+| J10 — Journey completes with the network blocked entirely | all | — | Built | Built | n/a | static build, no runtime fetch | Chrome | pass | pass | **Working** |
 
 ### Phase 2.5 — deterministic reasoning, VERIFIED 2026-08-26
 
@@ -43,13 +43,13 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | Points requiring institutional knowledge | 0 | 2 | — |
 | Demographic fields | 0 | 3 (+4) | — |
 | Identity fields | 0 | 8 | — |
-| Validation before any network call | Yes | No | — |
-| Horizontal overflow at 360 px | 0 px | 625 px | — |
-| Touch targets under 44 px | 0 | 30 | — |
+| Validation before any network call | Yes | No | **Verified** |
+| Horizontal overflow at 360 px | 0 px | 625 px | **Verified 0** |
+| Touch targets under 44 px | 0 | 30 | **Verified 0** (inline links exempt) |
 | Inputs with a programmatic label | 100% | 0 of 40 | — |
-| axe serious/critical | 0 | n/a | — |
-| Dead ends | 0 | 1 | — |
-| Completes with no network | Yes | n/a | — |
+| axe serious/critical | 0 | n/a | **Verified 0** |
+| Dead ends | 0 | 1 | **Verified 0** |
+| Completes with no network | Yes | n/a | **Verified** |
 
 ## Baseline audit of RTI Online (research verification, 2026-08-26) — **COMPLETE AND FROZEN**
 

@@ -22,6 +22,12 @@ The browser tooling captured screenshots into the agent's analysis context, but 
 ### KI-002 — The stack is proposed, not decided
 `07-technical-architecture.md` and `docs/adr/0002-stack.md` are marked *proposed*. Ratify or replace before writing application code (master instruction §34).
 
+### KI-015 — No real screen-reader test
+Automated axe (0 serious/critical), semantic inspection, keyboard operation, focus order and accessible naming are all covered and passing. A session with real assistive technology has **not** happened and must not be claimed. High-value Phase 4 item if the environment allows.
+
+### KI-016 — Colour contrast: CLOSED
+Previously an unmeasured gap. `e2e/contrast.spec.ts` now measures every visible text element on every screen and reports **0 violations**; the harness is self-checked against injected failing text so a false pass is not possible.
+
 ### KI-013 — The held-out generalisation set is burned
 `scripts/holdout.js` was used to find Fix F, so its 16 inputs are no longer an independent measurement. The honest generalisation figure is **93.8%, measured before that fix**. A future session must write fresh held-out inputs — ideally sourced from outside this project, since every input so far was authored by the same agent that built the classifier.
 

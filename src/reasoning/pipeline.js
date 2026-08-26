@@ -274,9 +274,15 @@ export function run(rawInput) {
   const contested = contenders.length > 1;
 
   if (contested || confidence < 0.4 || top.distinctive === 0) {
-    trace.stages.push(contested ? 'ambiguous:contested' : 'ambiguous:weak');
+    // Which question to ask matters as much as asking one.
+    // If the input is claimed only by cross-domain words ("refund", "status"), a
+    // domain-specific question cannot disambiguate - asking "What is this about?"
+    // from the income-tax vocabulary would quietly assume income tax. In that case
+    // ask WHICH SUBJECT. Only ask a domain question when one domain clearly leads.
+    const needsSubjectChoice = contested || top.distinctive === 0;
+    trace.stages.push(needsSubjectChoice ? 'ambiguous:subject-choice' : 'ambiguous:weak');
     const cands = (contested ? contenders : scored.filter((s) => s.score > 0)).slice(0, 3);
-    const qs = contested
+    const qs = needsSubjectChoice
       ? [disambiguationQuestion(cands)]
       : (cands[0] ? questionsFor(cands[0].id) : []);
     return result({

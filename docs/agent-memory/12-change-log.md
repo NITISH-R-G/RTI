@@ -4,6 +4,23 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
+## 2026-08-27 — Phase 3 WU6-WU9 — Review, mock filing, not-RTI, about
+
+**Built:**
+- **Review** — sectioned summary with an edit affordance on every section, the authority reasoning repeated, a BPL question that reveals the fee (the real portal hides it until you answer), the appeal date as a date, an explicit list of what the real portal will additionally ask for, and a warning block stating that nothing is sent anywhere.
+- **Filed** — demo confirmation, a visibly synthetic `DEMO-NOT-REAL/nnnnn` reference shown alongside the real format so they cannot be confused, a four-stage timeline with the last two marked "not started", the full request text with a copy button and a manual-copy fallback, and a link to the real portal.
+- **Not-RTI** — what we understood, why this may not fit, what you may need instead, what the prototype can and cannot help with, and a "continue anyway" override. Deliberately does **not** invent a service link we have not verified.
+- **About** — the observed failure quoted verbatim, the design change, how it actually works, what is simulated, the privacy boundary and what it does not do.
+
+**Closed the colour-contrast gap** with a measurement harness that is itself self-checked against injected failing text. Zero violations across all six screens.
+
+**Fixed a real reasoning defect** found by the new end-to-end tests: ambiguous cross-domain input asked a domain-specific question instead of asking which subject. Corpus re-run confirmed no regression (still 60/60).
+
+**Totals at the Phase 3 gate:** 72 reasoning + 79 unit/component + 62 Playwright = 213 automated tests, all passing. Bundle 123 kB gzipped.
+
+
+---
+
 ## 2026-08-26 — Phase 3 WU1 — Application shell, design system, routing
 
 **Ratified ADR-0002 with an amendment.** Next.js replaced by **Vite + React + TypeScript**, static output. The original justification for Next.js was keeping an OpenAI key off the client in server routes; PD-009 removed the runtime LLM and ED-014 removed identity collection, so there is no server-side work left. A framework justified by its server is the wrong tool once the server is gone.

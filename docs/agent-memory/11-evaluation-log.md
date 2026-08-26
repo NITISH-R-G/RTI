@@ -174,6 +174,63 @@ A bug in `SearchHit` construction where the context spread produced `text` inste
 - Where we have no authored description of an office, the search result says *"We do not hold a description of what this office covers"* rather than inventing one.
 - Colour contrast is still not measured. Screen-reader behaviour is still not tested with a real screen reader.
 
+## 2026-08-27 — Phase 3 Work Units 6-9 — Review, mock filing, not-RTI, about
+
+### Every suite, run together at the Phase 3 gate
+
+| Suite | Result |
+|---|---|
+| Reasoning (node) | **72 passing** |
+| Corpus evaluation | **60 / 60 (100%)** — 0 dead ends, 0 fabricated authorities |
+| Held-out set | 16 / 16 (note: burned since Phase 2.5, see KI-013) |
+| Unit + component (vitest) | **79 passing**, 6 files |
+| Playwright (desktop + 360 px) | **62 passing** |
+| axe serious/critical violations | **0** |
+| **Colour contrast** | **0 violations** on all six screens |
+| Build | 412 kB JS / **123 kB gzip**, 19 kB CSS / 4.8 kB gzip |
+| Typecheck | clean |
+
+### Colour contrast — the gap is now closed
+
+Previously listed as an unmeasured gap. A measurement harness (`e2e/contrast.spec.ts`) now computes the WCAG ratio for **every visible text element** on every screen, resolving the effective background through the ancestor chain and compositing alpha, and applies the correct 4.5:1 / 3:1 threshold by font size and weight.
+
+**Result: zero violations** on landing, clarify, draft (including the warning notice), authority, not-RTI (including the fee warning) and about. The focus ring is asserted at 3 px solid.
+
+**The harness is self-checked.** A measurement that can only ever return an empty array proves nothing, so one test injects deliberately unreadable grey-on-white text and asserts the harness catches it. It does.
+
+### Required end-to-end tests, from a genuinely fresh session
+
+| Test | Result |
+|---|---|
+| Full demo path: pension to mock tracking | Pass, desktop and 360 px |
+| Social/old-age pension | Pass — no central authority, fee warning, useful onward route, and the body never contains "Department of Pensions" |
+| Not-RTI grievance | Pass — grievance route explained, never a rejection |
+| All five supported domains | Pass |
+| Ambiguous input | Pass — asks which subject |
+| Unsupported input | Pass — helpful, never the observed refusal string |
+| About page honesty claims | Pass |
+| Deep-link guards (/review, /filed without state) | Pass — redirect, no crash |
+
+### A real defect found by these tests
+
+**Ambiguity asked the wrong question.** `where is my refund` correctly classified as ambiguous, but then asked the **income tax** question ("What is this about?") instead of asking *which subject*. That quietly assumes income tax — precisely the false certainty the ambiguity detection exists to prevent. The Phase 2.5 corpus missed it because it asserted classification, domain and next action, but never the *quality of the question asked*.
+
+**Fix (category: clarification failure).** When a domain is claimed only by cross-domain words, or when domains are contested, ask which subject. A domain-specific question is asked only when one domain clearly leads. Two regression tests added; full corpus re-run: still 60/60, no regression.
+
+This is exactly the class of defect the frozen-corpus discipline is meant to surface, and it was found by testing the product rather than the module.
+
+### Honesty boundaries now in the product
+
+- Review: "Nothing here is sent to the government", no payment, no account, no details stored — stated next to the action button.
+- Filed: "Demo confirmation", a `DEMO-NOT-REAL/nnnnn` reference with the real format shown for contrast, and the timeline explicitly labelled as not representing actual government processing.
+- Not-RTI: says plainly that we are **not** linking to a specific service because we have not verified one, rather than inventing a destination.
+- About: "There is no artificial intelligence running here", the verbatim observed failure, the privacy boundary, and what the prototype cannot do.
+
+### Remaining honest gaps
+
+- **No real screen-reader test.** Automated axe, semantic inspection, keyboard operation, focus order and accessible naming are all covered; a real assistive-technology session is not. Not claimed.
+- The held-out reasoning set is still burned (KI-013). A fresh blind set is a Phase 4 item.
+
 ## Pending evaluations (to run once the product exists)
 
 - The assistant evaluation case set in `09-ai-behavior.md`, plus the taxonomy-coverage figure.

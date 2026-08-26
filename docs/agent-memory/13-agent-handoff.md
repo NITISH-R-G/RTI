@@ -1,116 +1,101 @@
 # 13 — Agent Handoff
 
-**Last updated:** 2026-08-26, Session 2 (Claude Opus 5, Claude Code) — **audit FROZEN · Phase 2 spec FROZEN · PHASE 2.5 (deterministic reasoning) VALIDATED. Awaiting owner review before Phase 3 UI work.**
-
-> **Read two things first:** PD-009 (no runtime LLM; competition rule R1 is satisfied through Codex-assisted development) and the **Context Recovery Snapshot** immediately below.
+**Last updated:** 2026-08-27 — **PHASE 3 COMPLETE.** Audit frozen, spec frozen, reasoning validated, full citizen journey built and verified. Next: Phase 4 integration and competition evaluation.
 
 ## Context Recovery Snapshot
 
-**Assume the previous agent's context is gone. This section is the recovery point.**
+**Assume the previous agent's context is gone. This is the recovery point.**
 
-### Phase 2.5 outcome — the brain works
+### What exists now
 
-The core product risk was whether a deterministic taxonomy can bridge citizen problem-language to institutions without reproducing the observed portal failure. **It was tested before any UI was built.**
+A working prototype. `npm run dev`, open `http://localhost:5173`, type *my pension has not been paid*, and the complete journey runs: clarification, information selection, editable draft, explained authority recommendation, review, mock filing, mock tracking.
+
+### The one thing to understand first
+
+RTI Online asks **which office?** before **what do you want?** We reversed it. Reversing that back means abandoning the product. Evidence: typing `my pension has not been paid` into the real portal's authority search returns **"No such Public Authority available in this portal !"** while the correct department sits in a dropdown on the same screen.
+
+### Where the code is
+
+| Path | What |
+|---|---|
+| `src/reasoning/pipeline.js` | **FROZEN** Phase 2.5 engine. Changing it requires the process in `docs/evals/taxonomy-evaluation.md` |
+| `src/reasoning/taxonomy.js` | The five domains as data |
+| `src/reasoning/refine.js` | Answer refinement, deliberately separate from the frozen pipeline |
+| `src/rules/` | Fee, appeal date, character rules — pure, sourced, unit-tested |
+| `src/draft/compose.ts` | Information options and request composition |
+| `src/authorities/` | The 2,904 captured names, search, honest context, reasoning bullets |
+| `src/screens/` | Eight routes |
+| `test/`, `src/**/*.test.*`, `e2e/` | 213 automated tests |
+
+### Commands
+
+```
+npm run dev          # local
+npm run build        # static bundle
+npm run typecheck
+npm test             # reasoning + unit/component
+npm run test:e2e     # Playwright: journey, a11y, contrast
+npm run eval         # corpus evaluation, prints real numbers
+npm run eval:holdout # generalisation check (set is burned, see KI-013)
+```
+
+### Current numbers, all verified
 
 | | |
 |---|---|
-| Corpus | 60 cases, **committed before the classifier existed** (commit `8dabb86`) |
-| Corpus result | **60 / 60 (100%)** — 0 dead ends, 0 fabricated authorities |
-| Held-out generalisation | **93.8% (15/16) before the final fix.** That set is now burned — see KI-013 |
-| Unit tests | 62 passing |
-| Code | `src/reasoning/` — pure functions, no network, no LLM, no UI imports |
-| Run it | `node scripts/evaluate.js` · `node scripts/holdout.js` · `node --test test/corpus.test.js` |
-
-**The founding regression test passes:** `my pension has not been paid` → supported / pension / Department of Pensions & Pensioners Welfare, where RTI Online returns *"No such Public Authority available in this portal !"*.
-
-Full tuning history — six fixes, one failure category at a time, full corpus re-run after each — is in `docs/evals/taxonomy-evaluation.md`. Architecture and **seven documented known weaknesses** are in `docs/design/deterministic-reasoning.md`.
-
-**Do not treat 100% as proof.** The corpus was written by the same agent that built the classifier. Corpus-first ordering and the held-out set mitigate that; they do not eliminate it.
-
-### Phase 2 outcome (read this before anything else)
-
-The frozen research baseline was converted into an **implementation-ready specification**. Seven design documents now exist and are frozen. **Do not start application code until the owner has reviewed them.**
-
-| Document | What it settles |
-|---|---|
-| `docs/design/mvp-spec.md` **v1.0 FROZEN** | Scope, the five domains, unsupported-case handling, 6 screens, 12 frozen metrics |
-| `docs/design/evidence-to-design.md` | 14 chains: observed problem → evidence → impact → design → measurable improvement → test. **A feature without a chain does not ship** |
-| `docs/design/before-after-journey.md` | 25 measured dimensions vs the observed baseline |
-| `docs/design/information-architecture.md` | Per screen: purpose, actions, what is deliberately hidden, validation, errors, mobile, a11y, tests |
-| `docs/design/user-flow.md` | 9 transitions + state diagram + a control inventory proving no dead buttons |
-| `docs/evals/citizen-scenarios.md` | 15 scenarios with explicit failure conditions; S1 is a permanent regression test |
-| `docs/design/demo-journey.md` | The two-minute demo, with integrity rules forbidding exaggeration of the portal |
-
-**PD-010** ratifies the thesis, re-argued against the authenticated evidence rather than inherited from the Session 1 ranking.
-
-**The founding inversion:** RTI Online asks *"which office?"* before *"what do you want?"*. We reverse it. Reversing that back means abandoning the product.
-
-**The five frozen domains:** pension (the observed dead-end case), provident fund (the control case — their search already works here), passport (the noisy-search case), railways (the 183-authority cascade case), income tax refund. Everything else fails helpfully; state subjects get the no-refund warning.
-
-### What was being done
-An **authenticated audit** of `rtionline.gov.in`. Session 1 could only reach an OTP wall. In Session 2 the project owner manually completed email + mobile + CAPTCHA + OTP in their own Chrome, and the agent then audited the real **Online RTI Request Form**. The agent entered no credentials at any point.
-
-### What was discovered
-All of it is written down — see "Files to read first". The single most important finding:
-
-> Typing `my pension has not been paid` into the form's `Search Public Authority` box returns **`No such Public Authority available in this portal !`**, while `Department of Pensions & Pensioners Welfare` exists in the ministry cascade on the same screen. `[O]`
-
-Three findings closed the audit after the checkpoint:
-- **No client-side field validation exists at all.** The entire form has exactly two dialogs — `Only Indian citizens can file RTI Request application.` and `Your request will be filed with <authority>` (with two literal newlines before the name). The latter is an `alert()`, not a `confirm()`: the citizen acknowledges the authority choice, they cannot cancel it. Every mandatory-field check is server-side. (F-A11)
-- **The form does not reflow.** Constrained to 360 px, minimum content width is **985 px** — 625 px of overflow, 32 controls past the right edge, 30 controls under the 44 px touch target. It has a viewport meta but a ~888 px fixed table layout. (F-A12, Critical)
-- **`Country = Other` produces no branching** — the India State dropdown and the free-text country field stay visible together. (F-A13)
-
-Supporting findings: a two-level ministry-to-authority cascade (96 options, then 184 for Railways); a search that matches institutional names rather than needs (`passport` returns 3 irrelevant results of 4); 40 visible inputs with **zero** `<label>` elements; the fee disclosed only after answering BPL; the submit button relabelling to `Make Payment`; the restricted character set enforced only at submit with no live counter; a second CAPTCHA after the OTP; and back-navigation breaking the single-use OTP token.
-
-### What was changed
-Created `docs/research/rti-online/authenticated-form-structure.md`, `authenticated-flow-map.md`, `authenticated-friction-map.md`, `ministries.json`, `screenshots/README.md`. Updated memory files `03`, `04`, `12`, `14`, `15`, `18` and this file. **Three Session 1 claims were corrected, with the superseded wording kept visible.**
-
-### What was tested
-No application code exists, so no test suite ran. Audit findings were verified in the live DOM or read from official material, and every one carries an evidence tag.
-
-### Browser state
-The owner's Chrome, tab `1398493818`, is on the authenticated request form and responsive. The page reloaded at some point, which cleared the earlier blocking dialog; the owner's real email and mobile were re-prefilled by that reload and were **re-replaced with synthetic values**. The form holds synthetic data only and was never submitted. The browser window was resized to 390x844 during testing and **was not restored** — reset it if you reuse that window.
+| Reasoning tests | 72 passing |
+| Corpus | 60/60, 0 dead ends, 0 fabricated authorities |
+| Unit + component | 79 passing |
+| Playwright, desktop + 360 px | 62 passing |
+| axe serious/critical | **0** |
+| Colour contrast violations | **0** (harness self-checked) |
+| Bundle | 123 kB gzipped |
 
 ### What is blocked
-**Nothing.** The three items previously blocked on a human were resolved without further authentication — see "What was discovered".
+
+Nothing.
 
 ### What is pending
-**Owner review of Phase 2.5.** After that, Phase 3 UI work. The reasoning layer is done and validated; the remaining code is the rules module (fee, dates, character rules), the request templates per domain (KI-008b), and the eight routes.
 
-### Important assumptions
-- The observed form is representative of what all citizens see. Only one session, one browser and one authenticated identity were observed. `[I]`
-- The taxonomy approach (PD-009) can bridge problem-language to institutions well enough to beat the observed baseline. **Untested — the project's biggest open assumption** (R-02, R-17).
+**Phase 4: integration and competition evaluation** — test the product as a fresh reviewer, deliberately try to break it, run every citizen scenario, build a **fresh blind reasoning set** (the current held-out set is burned), audit against the judging criteria, fix the highest-impact weaknesses. Then submission materials. **Do not start the video before Phase 4.**
 
-### Important corrections — do not reintroduce the old claims
-1. The authority picker is **not** a flat 2,900-item dropdown; it is a searchable two-level cascade. The 2,904 figure describes the separate `allpa.php` catalogue page.
-2. Accessibility findings A1/A2 are **page-scoped**: `/index.php` lacks `lang` and a viewport meta; the authenticated form has both.
-3. The form **does** disclose the ₹10 fee — conditionally, once `BPL = No` is chosen.
+### Important decisions that must not be casually reversed
 
-### Important URLs / routes
-`rtionline.gov.in/` then `guidelines.php?request` then `request/request_email_check.php` then `request/Request_Check_Otp.php` then `request/request.php?emailchk=...` then **`Make Payment` — never crossed**.
+- **PD-009** no runtime LLM; R1 satisfied by Codex-assisted development.
+- **PD-010** the product thesis; authority derived from the request, not before it.
+- **ED-014** no identity collection — nothing the citizen types leaves the browser.
+- **ADR-0002 (amended)** Vite + React static; Next.js was dropped because no server-side work remains.
+- The reasoning engine is frozen. Changes need a failing scenario, a test, a full suite run, and a recorded failure category.
 
-### Commands to run
-None — no application exists. The contract for when one does is in `10-test-strategy.md`.
+### Known gaps, stated plainly
+
+1. **No real screen-reader test.** axe, semantics, keyboard, focus order and accessible naming are covered; assistive technology is not. Do not claim otherwise.
+2. **The held-out reasoning set is burned** (KI-013). A fresh blind set is a Phase 4 requirement.
+3. **Five domains only.** Everything else takes the honest-failure path by design.
+4. **English-centric** (KI-014). Devanagari input lands on "no signal".
+5. **`19-codex-contribution-log.md` is still empty** — it is the R1 evidence. Only real Codex work may be logged there.
 
 ### Git state
-Working tree clean as of this commit; all Session 2 findings committed and pushed to `origin/main` at `https://github.com/NITISH-R-G/RTI`. Run `git log --oneline -3` for the latest.
+
+Working tree clean. All Phase 3 work committed and pushed to `origin/main` at `https://github.com/NITISH-R-G/RTI`. Run `git log --oneline -8`.
 
 ### Files to read first
-1. `docs/research/rti-online/authenticated-friction-map.md` — the **thirteen** reproducible failures, with severity
-2. `docs/research/rti-online/authenticated-form-structure.md` — the complete form
-3. `docs/research/rti-online/authenticated-flow-map.md` — the journey and where we stopped
-4. `docs/agent-memory/04-user-problem.md` — the re-ranked problem
-5. `docs/agent-memory/02-competition-rules.md` — the constraints that can disqualify
+
+1. `docs/design/mvp-spec.md` — the frozen scope
+2. `docs/design/evidence-to-design.md` — why every feature exists
+3. `docs/research/rti-online/authenticated-friction-map.md` — the observed failures
+4. `docs/evals/taxonomy-evaluation.md` — how the engine was validated
+5. `docs/agent-memory/11-evaluation-log.md` — every verification run, with real numbers
 
 ---
 
 ## What is currently working
 
-Nothing runs. There is no application. What exists is an evidence-labelled research foundation, now including a direct authenticated audit.
+**The complete citizen journey.** Eight routes, 213 automated tests, verified in a real browser at desktop and 360 px.
 
 ## What is currently broken
 
-Nothing. The modal dialog that blocked the earlier session is gone and every previously blocked item is resolved.
+Nothing known.
 
 ## What failed / could not be done
 

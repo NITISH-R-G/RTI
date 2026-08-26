@@ -67,3 +67,26 @@ test('refine never fabricates an authority', () => {
     }
   }
 });
+
+test('a cross-domain word asks WHICH SUBJECT, not a domain-specific question', () => {
+  // "refund" spans income tax, railways and provident fund. Asking the income-tax
+  // question here would quietly assume income tax - the exact false certainty we
+  // exist to avoid. Regression for a defect found by the WU6-9 e2e suite.
+  for (const input of ['where is my refund', 'refund']) {
+    const r = run(input);
+    assert.equal(r.classification, 'ambiguous');
+    assert.equal(r.required_questions.length, 1);
+    assert.equal(r.required_questions[0].id, 'which_domain', `${input} asked the wrong question`);
+    assert.match(r.required_questions[0].text, /which of these/i);
+    assert.ok(
+      r.required_questions[0].options.some((o) => o.value === 'none'),
+      'must offer an escape from all offered subjects',
+    );
+  }
+});
+
+test('a clearly-led domain still gets its own specific question', () => {
+  const r = run('passport');
+  assert.ok(['supported', 'ambiguous'].includes(r.classification));
+  assert.equal(r.required_questions[0].id, 'passport_stage');
+});
