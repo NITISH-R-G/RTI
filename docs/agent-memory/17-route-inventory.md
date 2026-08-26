@@ -1,13 +1,13 @@
 # 17 — Route Inventory (our application)
 
-**Status: no routes exist.** The table below is the **frozen** set from `docs/design/mvp-spec.md` v1.0 and `docs/design/information-architecture.md`. As each route is built, the agent building it fills in its real row and **may not mark it complete without evidence**.
+**Status: Phase 3 in progress — `/` is built and verified; the rest are stubs.** The table below is the **frozen** set from `docs/design/mvp-spec.md` v1.0 and `docs/design/information-architecture.md`. As each route is built, the agent building it fills in its real row and **may not mark it complete without evidence**.
 
 Adding a route that is not in this table requires an evidence chain in `docs/design/evidence-to-design.md` first.
 
 | Path | Purpose | Entry | Citizen's goal | Data | Mock/Live | A11y | Tests | Status |
 |---|---|---|---|---|---|---|---|---|
 | `/` | **What happened?** — the problem in the citizen's own words | Public URL | "Say what I want to know" | reasoning engine | Deterministic, no network | Labelled textarea, error via `aria-describedby`, `aria-invalid`, live region, 0 overflow @360px | 8 component tests | **Built + verified** |
-| `/clarify` | ≤3 clarifying questions, then the suitability verdict | from `/` | "Answer a couple of things so you can help" | taxonomy | Deterministic, no network | — | S1–S9, S11 | **Not built** |
+| `/clarify` | ≤3 clarifying questions, then the suitability verdict | from `/` | "Answer a couple of things so you can help" | taxonomy + refine | Deterministic, no network | `fieldset`/`legend`, labelled radiogroup, progress announced, escape answer on every question | 9 component + 8 refine tests | **Built + verified** |
 | `/not-rti` | Honest verdict + where to actually go | from `/clarify` | "Don't waste my ₹10 and 30 days" | suitability rules | Deterministic | — | S5, S7 | **Not built** |
 | `/request` | Information types + editable draft + live validation | from `/clarify` | "Ask it properly" | templates + character rules | Deterministic, no network | — | S10, S13 | **Not built** |
 | `/authority` | Recommendation + reasoning + alternatives + search + state warning | from `/request` | "Send it to the right place" | 2,904-name dataset | **Real names**, deterministic ranking | — | S1–S4, S7, S12 | **Not built** |

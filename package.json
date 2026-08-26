@@ -9,8 +9,8 @@
     "build": "vite build",
     "preview": "vite preview --port 4173",
     "typecheck": "tsc --noEmit",
-    "test": "node --test test/ && vitest run",
-    "test:reasoning": "node --test test/corpus.test.js",
+    "test": "node --test \"test/*.test.js\" && vitest run",
+    "test:reasoning": "node --test \"test/*.test.js\"",
     "test:unit": "vitest run",
     "eval": "node scripts/evaluate.js",
     "eval:holdout": "node scripts/holdout.js"

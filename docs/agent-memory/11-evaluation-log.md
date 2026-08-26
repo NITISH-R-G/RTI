@@ -101,6 +101,28 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 
 **Still not verified:** axe-core (Playwright not yet installed), screen reader, colour contrast.
 
+## 2026-08-27 — Phase 3 Work Unit 3 — Clarification flow
+
+**Automated:** 33 vitest tests (16 rules + 8 Landing + 9 Clarify) and 70 node tests (62 corpus + 8 refine). All passing.
+
+| Scenario | Expected | Actual | Pass |
+|---|---|---|---|
+| S1 pension → central | proceeds to the request screen | central answer → `/request` | Pass |
+| **S1 pension → social** | routes away from the central portal with the fee warning | → `/not-rti`, no central authority proposed | Pass |
+| S1 pension → EPS | moves to EPFO, the body that actually holds it | domain switches to provident_fund | Pass |
+| "I am not sure" | lowers confidence, does not invent certainty | band drops to medium, wording becomes "best guess", still offers somewhere to go | Pass |
+| E04 contested (pension + passport) | asks which, does not guess | radiogroup "Which of these is your situation about?" incl. "None of these" | Pass |
+| "None of these" | fails helpfully | unsupported + offer of full search, reasoning present | Pass |
+| Question count | at most 3 | "Question 1 of 1" for pension | Pass |
+| Back | returns with text intact | landing shows the original text | Pass |
+| No problem in state | redirect, not a crash | `/clarify` direct → redirected to `/` | Pass |
+
+**Browser (Chrome):** the founding scenario reaches "Which kind of pension is this?" with four full-width options including "I am not sure", and the notice explaining that a state office returns the application and the fee is not refunded.
+
+**Note on the demo:** this is the moment that contrasts with the observed baseline. RTI Online answers `my pension has not been paid` with *"No such Public Authority available in this portal !"*. Ours answers with a question a citizen can actually answer.
+
+**Architecture note:** answer refinement lives in `src/reasoning/refine.js`, **separate from the frozen `pipeline.js`**, so the Phase 2.5 corpus keeps testing exactly what it tested before. 8 new tests cover it, including a no-fabricated-authority assertion.
+
 ## Pending evaluations (to run once the product exists)
 
 - The assistant evaluation case set in `09-ai-behavior.md`, plus the taxonomy-coverage figure.

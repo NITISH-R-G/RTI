@@ -7,7 +7,7 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | Journey | Route(s) | Scenarios | UI | Logic | Unit | E2E | Manual | Mobile 360 | A11y | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
 | J1 — Describe a problem in plain language | `/` | S1–S10 | Built | Built | 8 pass | — | Chrome | **0 overflow @360** | partial (no axe yet) | **Working** |
-| J2 — Honest suitability verdict, including "not an RTI matter" | `/clarify`, `/not-rti` | S5, S6, S7 | — | — | — | — | — | — | — | Not started |
+| J2 — Honest suitability verdict, including "not an RTI matter" | `/clarify`, `/not-rti` | S5, S6, S7 | Built | Built | 17 pass | — | Chrome | pending | partial (no axe) | **Clarify working; /not-rti stub** |
 | J3 — Drafted request: understand it, edit it, validated live | `/request` | S10, S13 | — | — | — | — | — | — | — | Not started |
 | J4 — Right authority, with reasoning and alternatives | `/authority` | S1–S4, S12 | — | — | — | — | — | — | — | Not started |
 | J5 — Review: what will be filed, fee, appeal date | `/review` | S11, S12 | — | — | — | — | — | — | — | Not started |
