@@ -15,6 +15,30 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | J7 — Complete the whole journey on input the domain taxonomy does not cover | — | — | — | — | — | — | — | Not started |
 | J8 — Understand what is real and what is simulated | — | — | — | — | — | — | — | Not started |
 
+## Baseline audit of RTI Online (research verification, 2026-08-26)
+
+Separate from our product's journeys. Tracks what was actually observed versus documented, inferred, unknown, or deliberately not crossed.
+
+| Item | Status | Evidence |
+|---|---|---|
+| Public/unauthenticated pages (home, guidelines, status, history, login, FAQ, contact, authority catalogue) | **OBSERVED** | `03-rti-site-inventory.md` |
+| Citizen user manual (29 pp.) and all 26 FAQ answers | **OBSERVED (documented material)** | `03` §9 |
+| Request step 1 — email / mobile / CAPTCHA, and its validation | **OBSERVED** | `03` §3 |
+| OTP screen route | **OBSERVED (route only)** | `authenticated-flow-map.md` STEP 3 |
+| **Authenticated RTI Request Form — full field structure (40 inputs)** | **OBSERVED** | `authenticated-form-structure.md` §1 |
+| Ministry → Public Authority cascade (96 → 184 for Railways) | **OBSERVED** | `authenticated-form-structure.md` §3 |
+| Authority search behaviour (3 inputs, incl. the pension dead end) | **OBSERVED** | `authenticated-friction-map.md` F-A1 |
+| BPL conditional, fee disclosure, Make Payment relabel | **OBSERVED** | `authenticated-form-structure.md` §4 |
+| Educational-status conditional branch | **OBSERVED** | `authenticated-form-structure.md` §4 |
+| Request-text limit, absent counter, no input-time filtering | **OBSERVED** | `authenticated-form-structure.md` §5 |
+| Accessibility measures on the authenticated form | **OBSERVED** | `authenticated-form-structure.md` §6 |
+| Back-navigation breaking the OTP token | **OBSERVED** | `authenticated-flow-map.md` STEP 3 |
+| Exact validation dialog text | **NOT YET OBSERVED** — native `alert()`, unreadable by automation; requested from owner | KI-009 |
+| 360 px mobile behaviour of the authenticated form | **NOT YET TESTED** | KI-009 |
+| `Country = Other` branch | **NOT YET TESTED** | KI-009 |
+| Screenshot image files | **NOT PERSISTABLE** in this environment | KI-010 |
+| Payment gateway, submission, registration number, post-submission status | **INTENTIONALLY NOT OBSERVED** — stopped at the irreversible boundary | `authenticated-flow-map.md` |
+
 ## Release audit (pre-submission, master instruction §49)
 
 | Check | Status |

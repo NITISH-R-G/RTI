@@ -4,6 +4,36 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
+## 2026-08-26 — Session 2 — Authenticated audit of RTI Online
+
+**Agent:** Claude (Opus 5), Claude Code, driving the owner's real Chrome. **Authentication performed manually by the project owner** (email + mobile + CAPTCHA + OTP); the agent entered no credentials.
+
+**Discovered and persisted:**
+- The authenticated **Online RTI Request Form** (`request/request.php`) in full — 40 visible inputs with names, types, maxlengths, conditionals and verbatim instructional text. New file `docs/research/rti-online/authenticated-form-structure.md`.
+- The journey end-to-end up to the irreversible boundary. New file `authenticated-flow-map.md`. **Submission and payment were never crossed and are marked as deliberately not observed.**
+- Ten reproducible friction points with citizen impact and severity. New file `authenticated-friction-map.md`.
+- The 96-entry ministry list, 35 states, the Railways cascade sample and three search-behaviour experiments. New file `ministries.json`.
+- Screenshot inventory plus an honest record that image files **cannot be persisted** in this environment. New file `screenshots/README.md`.
+
+**Headline finding** `[O]`: typing `my pension has not been paid` into `Search Public Authority` returns **`No such Public Authority available in this portal !`**, while `Department of Pensions & Pensioners Welfare` sits in the ministry cascade on the same screen. The portal requires citizens to translate a problem into institutional vocabulary before it will help, and refuses them when they cannot.
+
+**Corrections to Session 1 — kept visible, not deleted:**
+1. The authority picker is **not** a flat 2,900-item dropdown. It is a searchable two-level cascade (96 ministries → cascaded authorities). The 2,904 figure describes the separate `allpa.php` catalogue page.
+2. Accessibility findings A1 (no viewport meta) and A2 (no `lang`) are **page-scoped, not portal-wide** — `/index.php` lacks both; the authenticated form has both.
+3. An intermediate hypothesis during this session that the form never discloses the fee was **wrong**: `BPL = No` reveals "You are required to pay the RTI fee of ₹ 10" and relabels the button to "Make Payment".
+
+**Re-ranked** the candidate problems in `04-user-problem.md` against the new evidence: C1 rises 27 → 29 and its problem statement is sharpened; C4 falls 18 → 17.
+
+**Privacy:** the authenticated form arrived pre-filled with the owner's real email and mobile. Both were replaced with synthetic values in the DOM before any capture or further interaction. No personal data entered the repository.
+
+**Tested:** no application code exists, so no test suite was run. All findings carry evidence tags and reproduction steps.
+
+**Not done / outstanding:** exact validation dialog text, the 360 px mobile audit, and the `Country = Other` branch (KI-009).
+
+**Process correction:** the owner identified that findings were being reported in chat before being written to the repository. This session's checkpoint persisted everything discovered before the audit resumed. The rule now stands: discover → write → verify → continue.
+
+---
+
 ## 2026-08-26 — Session 1 — Research and memory foundation
 
 **Agent:** Claude (Opus 5), Claude Code.
