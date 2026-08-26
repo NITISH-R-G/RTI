@@ -1,6 +1,6 @@
 # 04 — The User Problem
 
-**Status:** RECOMMENDED, 2026-08-26. **Re-ranked 2026-08-26 after the authenticated audit; C1 strengthened.** Not yet formally ratified by the project owner.
+**Status: SETTLED.** Re-ranked after the authenticated audit (C1: 27 → 29) and **ratified as the final product thesis in PD-010** (`05-product-decisions.md`), which supersedes PD-002. The refined problem statement, alternatives reconsidered, what is explicitly not being solved, success criteria and reversibility all live in PD-010. This file remains the ranking evidence.
 **Evidence base:** `03-rti-site-inventory.md`, `docs/research/rti-online/authenticated-friction-map.md`, `authenticated-form-structure.md`, `authenticated-flow-map.md`.
 
 > ## Re-ranking after the authenticated audit (2026-08-26)
@@ -84,6 +84,6 @@ Real submission to any government system · real payment · real OTP · login/ac
 
 ## Open questions for the project owner
 
-1. Ratify C1? (Everything downstream assumes it.)
+1. ~~Ratify C1?~~ **Done — PD-010.**
 2. Product name — a working name is needed that cannot be mistaken for an official government service. Placeholder in use: **"RTI Sarathi"** (`sarathi` = guide/charioteer). Change freely; it is referenced only in `01-product-context.md`.
 3. ~~Is an OpenAI API key available for the deployed build?~~ **Resolved 2026-08-26:** no runtime LLM. R1 is satisfied through Codex-assisted development. See PD-009 and `19-codex-contribution-log.md`.

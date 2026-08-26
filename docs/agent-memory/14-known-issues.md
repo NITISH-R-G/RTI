@@ -22,8 +22,10 @@ The browser tooling captured screenshots into the agent's analysis context, but 
 ### KI-002 — The stack is proposed, not decided
 `07-technical-architecture.md` and `docs/adr/0002-stack.md` are marked *proposed*. Ratify or replace before writing application code (master instruction §34).
 
-### KI-008 — The domain taxonomy does not exist
-PD-009 makes the rule-based assistant the product, not a fallback. It needs a curated domain taxonomy (provident fund, passport, pension, scholarship, railways, banking, municipal…), one request template per domain, and a mapping from domain to likely authorities. This is now the single largest piece of design work in the project and nothing about the journey's quality can be judged until it exists. See `09-ai-behavior.md`.
+### KI-008 — The domain taxonomy is **designed but not built**
+**Updated 2026-08-26 (Phase 2).** The taxonomy is no longer undefined: `docs/design/mvp-spec.md` v1.0 freezes **five domains** — pension, provident fund, passport, railways, income tax refund — each with a documented reason, plus explicit unsupported-case handling and a record shape. What remains is **authoring the content**: keywords, synonyms and common misspellings; the clarifying questions (each of which must change the outcome); information-type options; authority mappings taken verbatim from `public-authorities.json`; reasoning strings; and one request template per domain.
+
+This is still the largest remaining piece of work, and the journey's quality cannot be judged until it exists.
 
 ### KI-003 — The public-authority dataset is raw, and now has a better-shaped sibling
 2,904 names in `public-authorities.json`, unenriched: no category, no plain-language description, no keywords, no central-vs-state flag. 175 are prefixed "UT ", a starting signal but not a complete classification.
@@ -33,8 +35,8 @@ PD-009 makes the rule-based assistant the product, not a fallback. It needs a cu
 ### KI-012 — The RTI research baseline is now FROZEN
 The authenticated audit is complete. **Do not explore new parts of the production portal** unless a specific, named unknown blocks a decision — and if you must, record why first. The persisted evidence in `docs/research/rti-online/` is the baseline the product is designed against and measured against.
 
-### KI-011 — The dead-end case must be reproducible in our evaluation set
-The observed failure (`my pension has not been paid` → `No such Public Authority available in this portal !`) is the project's central piece of evidence. It must exist as a named case in `docs/evals/` so our own product is measured against it, not merely inspired by it.
+### KI-011 — ~~The dead-end case must be reproducible in our evaluation set~~ **CLOSED 2026-08-26**
+Now **S1** in `docs/evals/citizen-scenarios.md`, using the exact observed string, designated a permanent regression test.
 
 ### KI-004 — R1 evidence does not exist yet
 **Resolved into a different issue.** PD-009 settled the compliance route: no runtime LLM; rule R1 is satisfied through Codex-assisted development. The live issue is now that `19-codex-contribution-log.md` is **empty**. It is the submission's R1 evidence, so it must be filled in by real Codex sessions as they happen — not reconstructed at the end, and never fabricated. See R-01/R-01b in `15-risk-register.md`.

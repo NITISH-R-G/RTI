@@ -1,7 +1,7 @@
 # 00 — Project State
 
 **Last updated:** 2026-08-26 (Session 1)
-**Phase:** Research complete. Problem recommended. **No application code exists yet.**
+**Phase:** Research complete and **frozen**. Product specification complete and **frozen**. **No application code exists yet.** Awaiting owner review of Phase 2 before implementation.
 
 ## Where the project stands
 
@@ -9,8 +9,11 @@
 |---|---|
 | Repository | Initialised, remote `https://github.com/NITISH-R-G/RTI` (was empty before this session) |
 | RTI Online audit | **Done** — `03-rti-site-inventory.md` |
-| Problem selection | **Recommended (C1)**, awaiting owner ratification — `04-user-problem.md` |
-| MVP definition + acceptance criteria | **Done** — `docs/design/mvp-spec.md` |
+| Problem selection | **SETTLED** — PD-010; re-argued against authenticated evidence |
+| Authenticated audit | **Done and FROZEN** — `docs/research/rti-online/` |
+| MVP definition + acceptance criteria | **FROZEN** — `docs/design/mvp-spec.md` v1.0 |
+| Evidence chains | **Done** — `docs/design/evidence-to-design.md`, 14 chains |
+| IA, user flow, scenarios, demo | **Done** — `docs/design/`, `docs/evals/citizen-scenarios.md` |
 | Compliance route (R1) | **Decided** — built with Codex, no runtime LLM (PD-009). Evidence file `19-codex-contribution-log.md` exists but is **empty** |
 | Technical stack | **Proposed, not decided** — `07-technical-architecture.md`, `docs/adr/0002-...` is still a draft, and PD-009 changed its premises |
 | Application code | **None** |
@@ -23,14 +26,20 @@ Not available yet. There is nothing to run. This section becomes real the moment
 
 Planned entry point once built: the deployed public URL, landing on `/` with an empty description box.
 
-## DEMO FLOW (planned — see `docs/design/mvp-spec.md`)
+## DEMO FLOW (frozen — `docs/design/demo-journey.md`)
 
-1. Citizen types their problem in plain language ("My EPF withdrawal has been stuck since March and nobody replies").
-2. The app tells them whether RTI is the right tool, in plain language, and says so honestly when it is not.
-3. The app drafts a specific, answerable request and explains why each part is there. The citizen edits it.
-4. The app proposes the public authority to send it to, with its reasoning and ranked alternatives.
-5. The app shows a review screen: exactly what will be filed, the fee, and the date the citizen becomes free to appeal.
-6. The citizen "files" it (simulated) and gets a tracking view plus a downloadable/copyable request they could file for real.
+**Minute 1 — the problem.** On the real portal, type `my pension has not been paid` into Search Public Authority. It answers **"No such Public Authority available in this portal !"** — while `Department of Pensions & Pensioners Welfare` sits in the ministry dropdown on the same screen. `[O]`
+
+**Minute 2 — our journey**, with the same sentence:
+
+1. `/` — "What happened?"
+2. `/clarify` — at most 3 questions, each one chosen because it changes the outcome
+3. `/request` — what you're asking for + the full editable draft, validated live
+4. `/authority` — one recommendation + reasoning + alternatives + search + state/UT no-refund warning
+5. `/review` — the text, the office, the ₹10 fee, and **the date** you may appeal
+6. `/filed/[ref]` — a visibly fake reference, a plain-language timeline, and the exact text to file for real
+
+She never typed an institution's name.
 
 ## EXPECTED FINAL STATE
 

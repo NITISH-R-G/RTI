@@ -4,16 +4,35 @@ A journey may **never** be marked complete without evidence: a passing test, or 
 
 Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence · `FAIL` known broken.
 
-| Journey | UI | Logic | Unit tests | E2E | Manual | Mobile 360 | A11y (axe) | Status |
-|---|---|---|---|---|---|---|---|---|
-| J1 — Describe a problem in plain language | — | — | — | — | — | — | — | Not started |
-| J2 — Get an honest RTI-suitability verdict (including "this is not an RTI matter") | — | — | — | — | — | — | — | Not started |
-| J3 — Get a drafted request, understand it, edit it | — | — | — | — | — | — | — | Not started |
-| J4 — Get the right public authority, with reasoning and alternatives | — | — | — | — | — | — | — | Not started |
-| J5 — Review: what will be filed, the fee, the appeal date | — | — | — | — | — | — | — | Not started |
-| J6 — File (simulated) and understand what happens next | — | — | — | — | — | — | — | Not started |
-| J7 — Complete the whole journey on input the domain taxonomy does not cover | — | — | — | — | — | — | — | Not started |
-| J8 — Understand what is real and what is simulated | — | — | — | — | — | — | — | Not started |
+| Journey | Route(s) | Scenarios | UI | Logic | Unit | E2E | Manual | Mobile 360 | A11y | Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| J1 — Describe a problem in plain language | `/` | S1–S10 | — | — | — | — | — | — | — | Not started |
+| J2 — Honest suitability verdict, including "not an RTI matter" | `/clarify`, `/not-rti` | S5, S6, S7 | — | — | — | — | — | — | — | Not started |
+| J3 — Drafted request: understand it, edit it, validated live | `/request` | S10, S13 | — | — | — | — | — | — | — | Not started |
+| J4 — Right authority, with reasoning and alternatives | `/authority` | S1–S4, S12 | — | — | — | — | — | — | — | Not started |
+| J5 — Review: what will be filed, fee, appeal date | `/review` | S11, S12 | — | — | — | — | — | — | — | Not started |
+| J6 — File (simulated) and understand what happens next | `/filed/[ref]` | ref-format | — | — | — | — | — | — | — | Not started |
+| J7 — Out-of-coverage input still reaches somewhere useful | `/clarify`→`/authority` | S6, S9 | — | — | — | — | — | — | — | Not started |
+| J8 — Understand what is real and what is simulated | `/about` | link check | — | — | — | — | — | — | — | Not started |
+| J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | — | — | — | — | — | — | — | Not started |
+| J10 — Journey completes with the network blocked entirely | all | — | — | — | — | — | — | — | — | Not started |
+
+### Frozen metrics (from `docs/design/mvp-spec.md`) — none verified
+
+| Metric | Target | Baseline | Verified? |
+|---|---|---|---|
+| Screens before describing the problem | 0 | 4 | — |
+| Total input fields | ≤7 | 40 | — |
+| Points requiring institutional knowledge | 0 | 2 | — |
+| Demographic fields | 0 | 3 (+4) | — |
+| Identity fields | 0 | 8 | — |
+| Validation before any network call | Yes | No | — |
+| Horizontal overflow at 360 px | 0 px | 625 px | — |
+| Touch targets under 44 px | 0 | 30 | — |
+| Inputs with a programmatic label | 100% | 0 of 40 | — |
+| axe serious/critical | 0 | n/a | — |
+| Dead ends | 0 | 1 | — |
+| Completes with no network | Yes | n/a | — |
 
 ## Baseline audit of RTI Online (research verification, 2026-08-26) — **COMPLETE AND FROZEN**
 

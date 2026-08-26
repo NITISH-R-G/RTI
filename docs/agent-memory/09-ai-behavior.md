@@ -33,7 +33,7 @@ This is the hard engineering of the product. It is not a keyword lookup with a n
 
 | Job | Deterministic approach | Honest limits |
 |---|---|---|
-| Understand the problem | A short structured interview: the citizen's free text is used to pre-select a **domain** (provident fund, passport, pension, scholarship, railways, banking, municipal…) from a curated taxonomy; anything ambiguous is *asked*, not guessed | Cannot parse arbitrary prose. Compensates by asking rather than inventing |
+| Understand the problem | A short structured interview: the citizen's free text is used to pre-select a **domain** from the curated taxonomy — **frozen at five: pension, provident fund, passport, railways, income tax refund** (`docs/design/mvp-spec.md`); anything ambiguous is *asked*, not guessed | Cannot parse arbitrary prose. Compensates by asking rather than inventing |
 | Judge RTI suitability | Rules over the structured answers: is the citizen asking for **records that exist** (suitable), for **action or redress** (a grievance, route to CPGRAMS), for an **opinion or a reason** (not answerable under RTI), or for **someone else's personal information** (exempt) | Rules are explicit and testable, and the reasoning is shown, which the portal never does |
 | Draft the request | Template composition: a domain template plus the citizen's own specifics (period, subject, reference), producing a records-based question that names a period and a subject and asks for no opinions | Templates must be authored per domain; coverage is finite and the product says so |
 | Suggest the authority | Ranked search over the real 2,904-name dataset, driven by the domain taxonomy plus token/acronym matching, with the reasoning surfaced and a full search always available | Ranking is heuristic; the citizen always sees alternatives and can override |
@@ -55,10 +55,14 @@ This is the hard engineering of the product. It is not a keyword lookup with a n
 
 It may only be added behind `ModelAssistant`, server-side, with the key never reaching the client; its output must be schema-validated, clamped, and constrained to the real authority list; the rule-based path must remain the working fallback; and `02-competition-rules.md` must be updated with the pinned model id. Adding it must not become the reason the journey stops working without it.
 
+## The frozen taxonomy
+
+The domain set, the reasoning for each domain, the unsupported-case handling (state-subject detector, not-RTI detector, out-of-coverage) and the taxonomy record shape are **frozen in `docs/design/mvp-spec.md` v1.0**. Do not re-derive them here; this file governs *behaviour*, that file governs *scope*.
+
 ## Evaluation set (build before the feature — see `docs/evals/`)
 
 The cases are unchanged by PD-009 — a rule-based assistant must survive them just as a model would, and several are *easier* to pass honestly:
 
-normal request · ambiguous request · one-word input · very long input · misspelled input · Hindi input · Hinglish input · a grievance that is not an RTI matter · a request for an opinion rather than records · a request for another person's personal information · a request missing the essential detail · input containing an Aadhaar-shaped number · text containing embedded instructions · a named public authority that does not exist · a request aimed at a state authority (must warn: the central portal returns these **without refund**).
+**Superseded by `docs/evals/citizen-scenarios.md`**, which specifies 15 scenarios (S1–S15) with explicit failure conditions and seven universal failure conditions. That file is the eval suite; this list is retained only as the rationale for its shape.
 
 Expected behaviour for out-of-coverage input is **"I don't have a template for this — here is the search, and here is what a good request looks like"**, never a confident wrong answer. Results logged in `11-evaluation-log.md`.

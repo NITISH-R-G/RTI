@@ -1,6 +1,27 @@
 # 07 — Technical Architecture
 
-**Status: PROPOSED, NOT DECIDED.** No code exists. The next agent should either ratify this as `docs/adr/0002-stack.md` or replace it with a better-argued alternative — but must do so *before* writing application code, not after.
+**Status: PROPOSED, NOT DECIDED** — but now constrained by the frozen MVP (`docs/design/mvp-spec.md` v1.0). Ratify or replace before writing application code.
+
+## What Phase 2 settled
+
+The MVP needs **no server at runtime**: no LLM (PD-009), no identity collection (ED-014), no persistence beyond `localStorage`, and reference data bundled at build time. That makes a **fully static build viable**, and static is the fastest thing to load on a slow connection (master instruction §32). The remaining question for ADR-0002 is only which tool produces that static build.
+
+Required modules, regardless of framework:
+
+| Module | Contents | Purity |
+|---|---|---|
+| `rules/` | fee, appeal date, 3,000-char limit, allowed character set, sanitisation | Pure, unit-tested, no imports from UI |
+| `taxonomy/` | the 5 domains, keywords/synonyms/misspellings, clarifying questions, info types, authority mappings, templates | Data + pure selectors |
+| `authorities/` | the bundled 2,904-name dataset + ranked local search | Pure |
+| `assistant/` | the `Assistant` interface with `RuleAssistant` shipping | Pure; `ModelAssistant` is FUTURE only |
+| `state/` | journey state + `localStorage`, try/catch wrapped | Side-effecting, isolated |
+| `ui/` | the 8 routes in `information-architecture.md` | No business logic |
+
+**Non-negotiable:** an authority name may only be rendered if it exists verbatim in the bundled dataset. Enforced in `authorities/`, not by convention.
+
+**Original proposal follows.**
+
+ No code exists. The next agent should either ratify this as `docs/adr/0002-stack.md` or replace it with a better-argued alternative — but must do so *before* writing application code, not after.
 
 ## Proposal
 
