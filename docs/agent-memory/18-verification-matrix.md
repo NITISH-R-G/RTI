@@ -12,7 +12,7 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | J4 — Get the right public authority, with reasoning and alternatives | — | — | — | — | — | — | — | Not started |
 | J5 — Review: what will be filed, the fee, the appeal date | — | — | — | — | — | — | — | Not started |
 | J6 — File (simulated) and understand what happens next | — | — | — | — | — | — | — | Not started |
-| J7 — Complete the whole journey with the AI unavailable | — | — | — | — | — | — | — | Not started |
+| J7 — Complete the whole journey on input the domain taxonomy does not cover | — | — | — | — | — | — | — | Not started |
 | J8 — Understand what is real and what is simulated | — | — | — | — | — | — | — | Not started |
 
 ## Release audit (pre-submission, master instruction §49)
@@ -29,7 +29,7 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | No secrets committed | — |
 | No runtime interaction with any government system | — |
 | Competition requirements satisfied (`02-competition-rules.md`) | — |
-| AI role is meaningful, and the model is OpenAI | — |
+| R1 evidence in place: `19-codex-contribution-log.md` filled in and checkable against `git log` | — |
 | Mocked limitations disclosed in-product | — |
 | README and agent memory current | — |
 | Everything committed and pushed | — |

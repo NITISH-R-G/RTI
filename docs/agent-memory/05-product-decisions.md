@@ -47,3 +47,11 @@ Where the RTI Act's own phrasing carries legal meaning, we keep it in the genera
 **Date:** 2026-08-26 · **Status:** Active
 Every route must pass its accessibility criteria before it is marked complete in `18-verification-matrix.md`. The baseline portal fails WCAG on labels, viewport, landmarks and moving content; matching it is not the bar.
 **Evidence:** `03-rti-site-inventory.md` §7.
+
+### PD-009 — No LLM at runtime; competition rule R1 satisfied via Codex-assisted development
+**Date:** 2026-08-26 · **Status:** Active · **Decided by:** project owner
+The brief allows either "built with Codex" **or** "powered by an OpenAI model". We take the first branch. The deployed prototype makes no LLM call; the complete citizen journey runs on deterministic local logic. Codex's contribution is evidenced per-commit in `19-codex-contribution-log.md`.
+**Supersedes:** the runtime-OpenAI assumption written into `02`, `07` and `09` earlier the same day.
+**Rationale:** no paid API dependency in the demo; no key to leak; no latency; no hallucination risk; nothing the citizen types leaves their browser. The cost is that intent understanding must be earned with a structured interview and authored templates rather than borrowed from a model.
+**Consequences:** the assistant sits behind one interface (`09-ai-behavior.md`) with a rule-based implementation shipping and a model implementation possible later; the product must never imply a model is reasoning when none is; `19-codex-contribution-log.md` must stay truthful, because it is the R1 evidence.
+**Do not revisit without:** the project owner's decision.

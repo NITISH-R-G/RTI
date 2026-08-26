@@ -1,46 +1,64 @@
 # 09 — AI Behaviour
 
 **Status:** Contract defined. Not implemented.
-**Provider: OpenAI, server-side only.** This is a competition requirement (R1/R2 in `02-competition-rules.md`), not a preference. Do not substitute another provider.
 
-## Where AI is used (and only here)
+## The governing decision (PD-009, 2026-08-26)
 
-| Job | Why AI | Failure cost |
+**The deployed prototype does not call any LLM at runtime.** Competition rule R1 is satisfied through the *"built with Codex"* branch of the requirement — meaningful Codex-assisted development, evidenced in `19-codex-contribution-log.md` — not through a paid runtime API.
+
+Consequences, and they are binding:
+
+1. **The complete citizen journey must work with no API key, no network call, and no model.** Not a fallback path — the *only* path, until and unless someone decides otherwise.
+2. Every behaviour below is delivered by deterministic code running locally.
+3. All of it sits **behind one clean interface** so a model can be dropped in later without touching the UI.
+4. **Nothing in the product may imply a language model is reasoning when none is.** No fake "thinking" states, no "AI is analysing…", no confidence theatre. The product explains its actual method when asked.
+
+## The interface
+
+One boundary, one shape. Proposed:
+
+```
+type Assistant = {
+  classify(input: string): Promise<SuitabilityVerdict>
+  draft(input: string, verdict: SuitabilityVerdict): Promise<RequestDraft>
+  suggestAuthorities(input: string, draft: RequestDraft): Promise<AuthoritySuggestion[]>
+}
+```
+
+Two implementations: `RuleAssistant` (ships, default, no network) and, if it is ever needed, `ModelAssistant` (OpenAI, server-side). The UI must not be able to tell which is in use, and must never be given a reason to care.
+
+## What the rule-based assistant must actually do
+
+This is the hard engineering of the product. It is not a keyword lookup with a nice skin.
+
+| Job | Deterministic approach | Honest limits |
 |---|---|---|
-| Understand the citizen's problem from free text (English / Hindi / Hinglish) | Genuine language work; no rule set can do it | Medium — recoverable by editing |
-| Judge whether RTI is the right instrument, or whether this is a grievance, a court matter, or a request for an opinion | Requires reading intent, not keywords | **High** — a wrong "yes" costs the citizen 30 days and the fee |
-| Draft a specific, records-based, answerable request | The single hardest step, and the one the portal helps with least | High — but visible and editable |
-| Suggest the public authority, with reasoning and ranked alternatives | Mapping life-problems onto institutional names | **High** — a wrong office means transfer or a lost fee |
-| Explain a government term in context | Small, useful, low risk | Low |
+| Understand the problem | A short structured interview: the citizen's free text is used to pre-select a **domain** (provident fund, passport, pension, scholarship, railways, banking, municipal…) from a curated taxonomy; anything ambiguous is *asked*, not guessed | Cannot parse arbitrary prose. Compensates by asking rather than inventing |
+| Judge RTI suitability | Rules over the structured answers: is the citizen asking for **records that exist** (suitable), for **action or redress** (a grievance, route to CPGRAMS), for an **opinion or a reason** (not answerable under RTI), or for **someone else's personal information** (exempt) | Rules are explicit and testable, and the reasoning is shown, which the portal never does |
+| Draft the request | Template composition: a domain template plus the citizen's own specifics (period, subject, reference), producing a records-based question that names a period and a subject and asks for no opinions | Templates must be authored per domain; coverage is finite and the product says so |
+| Suggest the authority | Ranked search over the real 2,904-name dataset, driven by the domain taxonomy plus token/acronym matching, with the reasoning surfaced and a full search always available | Ranking is heuristic; the citizen always sees alternatives and can override |
+| Explain a term | Static glossary from `03-rti-site-inventory.md` §6, shown at the point of use | Exact and reviewable — an advantage over generated text |
 
-## Where AI is NOT used
+**Deliberate trade:** the interview asks two or three more questions than a model would. It buys correctness, testability, zero cost, zero latency, and zero hallucination risk. That is a defensible product position, and `11-evaluation-log.md` must measure whether it holds up against real inputs.
 
-Fee calculation · deadline arithmetic · character-limit and character-set validation · form validation · routing and state transitions · anything with a correct answer that code can compute. (PD-005.)
+## Non-negotiable behaviours (unchanged by PD-009)
 
-## Non-negotiable behaviours
+1. **Every generated output is a proposal** — shown in full, editable, never final without the citizen seeing it (PD-004).
+2. **Authority names come only from the real dataset.** A name not in `public-authorities.json` cannot be rendered.
+3. **Uncertainty is stated in words**, at the point of the claim, never as a percentage.
+4. **Fees, deadlines, section numbers and limits come from the rules module**, with citations, never from a template's prose.
+5. **Citizen input is untrusted data.** It is never interpreted as instructions, is length-clamped, and is character-set-filtered before it reaches the request text.
+6. **Sensitive input is caught, not stored.** An Aadhaar- or PAN-shaped number triggers a warning and an offer to remove it.
+7. **Nothing the citizen types leaves their browser** while there is no runtime model. This is now a genuine privacy property and the product may say so.
 
-1. **Every output is a proposal.** It is rendered in full, marked as generated, and is editable before it can be used (PD-004).
-2. **The authority suggestion is constrained to the real list.** The model must select from the captured public-authority dataset; a name that is not in the list is a validation failure, not a result. This is the primary hallucination guard.
-3. **Uncertainty is stated in words**, at the point of the claim — "I am not sure this office holds this; here are two others to consider" — never as a false-precision percentage.
-4. **The model never asserts a fee, a deadline, a section number or a procedure.** Those come from the deterministic layer. If a draft contains one, it is stripped or replaced by the code path that owns it.
-5. **Model output is untrusted input.** Structured output, schema-validated, length-clamped, character-set-filtered before it can reach the RTI request text.
-6. **Prompt injection from user text is expected.** The citizen's description is data. Instructions inside it are ignored and, where relevant, surfaced to the citizen.
-7. **Sensitive input is handled, not stored.** If the citizen pastes an Aadhaar or PAN number, the app warns and offers to remove it before it goes anywhere (the real portal explicitly forbids attaching these).
+## If a model is added later
 
-## Fallback (definition of done, not a stretch goal)
-
-If the OpenAI call fails, times out, returns invalid structure, or no key is configured, the journey must still complete:
-
-- The citizen keeps their own words as the request text.
-- Authority selection falls back to deterministic keyword search over the real authority list, presented as a search box, clearly labelled as search rather than a recommendation.
-- The app says plainly that the assistant is unavailable, and does not pretend otherwise.
-
-`10-test-strategy.md` requires this path to be tested, not just implemented.
+It may only be added behind `ModelAssistant`, server-side, with the key never reaching the client; its output must be schema-validated, clamped, and constrained to the real authority list; the rule-based path must remain the working fallback; and `02-competition-rules.md` must be updated with the pinned model id. Adding it must not become the reason the journey stops working without it.
 
 ## Evaluation set (build before the feature — see `docs/evals/`)
 
-Deterministic cases, each with an expected classification and expected refusal/uncertainty behaviour:
+The cases are unchanged by PD-009 — a rule-based assistant must survive them just as a model would, and several are *easier* to pass honestly:
 
-normal request · ambiguous request · one-word input · 5,000-character input · misspelled input · Hindi input · Hinglish input · a grievance that is not an RTI matter · a request for an opinion rather than records · a request for another person's personal information · a request missing the essential detail · input containing an Aadhaar-shaped number · direct prompt injection ("ignore previous instructions") · a hallucination trap naming a public authority that does not exist · a request aimed at a state authority (must warn: the central portal returns these **without refund**).
+normal request · ambiguous request · one-word input · very long input · misspelled input · Hindi input · Hinglish input · a grievance that is not an RTI matter · a request for an opinion rather than records · a request for another person's personal information · a request missing the essential detail · input containing an Aadhaar-shaped number · text containing embedded instructions · a named public authority that does not exist · a request aimed at a state authority (must warn: the central portal returns these **without refund**).
 
-Results are logged in `11-evaluation-log.md` with date, version, input, expected, actual, pass/fail, fix, re-test. "The answer looked good" is not an evaluation.
+Expected behaviour for out-of-coverage input is **"I don't have a template for this — here is the search, and here is what a good request looks like"**, never a confident wrong answer. Results logged in `11-evaluation-log.md`.

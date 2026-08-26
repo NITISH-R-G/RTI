@@ -1,7 +1,7 @@
 # 11 — Evaluation Log
 
 Every entry: date · version · scenario · input · expected · actual · pass/fail · failure reason · fix · re-test result.
-"It looked good" is not an evaluation. Product evaluations (steps, confusion, clarity) belong here alongside AI evaluations.
+"It looked good" is not an evaluation. Product evaluations (steps, confusion, clarity) belong here alongside assistant evaluations.
 
 ---
 
@@ -29,8 +29,8 @@ Not an evaluation of our product (none exists). This is the **benchmark** every 
 
 ## Pending evaluations (to run once the product exists)
 
-- The AI evaluation case set in `09-ai-behavior.md`.
+- The assistant evaluation case set in `09-ai-behavior.md`, plus the taxonomy-coverage figure.
 - Task completion and step count for the primary journey, against the baseline above.
 - Mobile usability at 360 px.
-- Recovery from a wrong AI interpretation.
-- The AI-unavailable fallback journey.
+- Recovery from a wrong interpretation by the app.
+- The out-of-coverage journey: does the product decline honestly and still get the citizen somewhere useful?

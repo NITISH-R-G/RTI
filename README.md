@@ -45,18 +45,18 @@ Built mobile-first, WCAG 2.2 AA as an acceptance criterion rather than a review 
 
 ## What is real and what is simulated
 
-**Real:** the 2,904 public authority names (captured read-only from the portal's own public listing on 2026-08-26), the fee and 30-day appeal rules, the 3,000-character and allowed-character-set constraints, and the AI reasoning.
+**Real:** the 2,904 public authority names (captured read-only from the portal's own public listing on 2026-08-26), the fee and 30-day appeal rules, and the 3,000-character and allowed-character-set constraints. The guidance is produced by deterministic logic running in your browser — there is no language model at runtime, and nothing you type is sent anywhere.
 
 **Simulated:** identity, filing, payment, OTP, registration numbers, and case status. Nothing is ever sent to any government system.
 
 ## Repository map
 
 ```
-docs/agent-memory/   persistent project memory, 00-18 — read this first
+docs/agent-memory/   persistent project memory, 00-19 — read this first
 docs/research/       the RTI Online audit and captured reference data
 docs/design/         specifications and acceptance criteria
 docs/adr/            architecture decision records
-docs/evals/          AI evaluation cases
+docs/evals/          assistant evaluation cases
 docs/testing/        test plans and results
 ```
 
@@ -74,7 +74,7 @@ npm run test:e2e
 npm run eval
 ```
 
-The OpenAI API key is server-side only and is never committed. See `.env.example` (to be added with the first application commit).
+No API key or environment variable is required to run the product. Competition rule R1 is satisfied through Codex-assisted development, evidenced in [`docs/agent-memory/19-codex-contribution-log.md`](docs/agent-memory/19-codex-contribution-log.md); see ADR/PD-009 in [`docs/agent-memory/05-product-decisions.md`](docs/agent-memory/05-product-decisions.md).
 
 ## Research ethics
 

@@ -11,7 +11,8 @@
 | RTI Online audit | **Done** — `03-rti-site-inventory.md` |
 | Problem selection | **Recommended (C1)**, awaiting owner ratification — `04-user-problem.md` |
 | MVP definition + acceptance criteria | **Done** — `docs/design/mvp-spec.md` |
-| Technical stack | **Proposed, not decided** — `07-technical-architecture.md`, `docs/adr/0002-...` is still a draft |
+| Compliance route (R1) | **Decided** — built with Codex, no runtime LLM (PD-009). Evidence file `19-codex-contribution-log.md` exists but is **empty** |
+| Technical stack | **Proposed, not decided** — `07-technical-architecture.md`, `docs/adr/0002-...` is still a draft, and PD-009 changed its premises |
 | Application code | **None** |
 | Tests | **None** |
 | Public URL | **None** |
@@ -41,7 +42,7 @@ Identity, submission, payment, OTP, registration numbers, case status and timeli
 
 ## REAL
 
-The public-authority list (2,904 real institutional names captured from the portal's own public listing), the fee and time-limit rules, the character-set and length constraints, and the AI reasoning.
+The public-authority list (2,904 real institutional names captured from the portal's own public listing), the fee and time-limit rules, the character-set and length constraints, and the app's own reasoning — which is deterministic and runs entirely in the browser (PD-009).
 
 ## KNOWN LIMITATIONS
 

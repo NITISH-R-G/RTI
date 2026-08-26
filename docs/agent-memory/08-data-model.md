@@ -27,6 +27,6 @@ All synthetic data lives under a single module (proposed `src/data/`). No fake g
 ## Hard rules
 
 1. No real Aadhaar, PAN, password, OTP, card, health or identity data anywhere in the repo, tests, fixtures or seed files (R12).
-2. Nothing the citizen types is transmitted anywhere except the server route that calls OpenAI, and it is not persisted server-side.
+2. **Nothing the citizen types leaves their browser.** There is no runtime model and no server-side persistence (PD-009). This is a real privacy property of the product and must not be quietly broken.
 3. Mock registration numbers must be visually distinguishable from real ones, so a screenshot of the prototype can never be mistaken for a real filing receipt (R13).
 4. The public-authority dataset may be enriched with descriptions we write, but the **names must not be edited** — they are the citizen's link back to the real portal's dropdown.

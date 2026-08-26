@@ -27,7 +27,7 @@ Each was drawn from an observed friction point (F-codes refer to `03-rti-site-in
 1. **It is where the failure actually originates.** Tracking (C3) and appeals (C6) are downstream repairs for a request that was mis-aimed or mis-worded at the start. Fix the start and the downstream pain shrinks.
 2. **It is provably unserved.** The portal's own FAQ asks "How do I write my application for seeking the information as per RTI Act 2005?" and answers it with nothing but a character limit. That is the whole of the official guidance on the hardest step. [O]
 3. **The penalty for getting it wrong is documented by the government itself**, not inferred by us: transfer under s.6(3) with a new registration number, or return **without refund** for a state authority. [D]
-4. **AI earns its place.** Mapping "my EPF withdrawal has been stuck since March" onto (a) is-this-RTI-or-a-grievance, (b) the right public authority, and (c) a specific, records-based, answerable question is genuine language and reasoning work. Everything else in the journey — fee rules, character limits, the 30-day clock — is deterministic and belongs in ordinary code.
+4. **The reasoning work is real and can be built deterministically.** Mapping "my EPF withdrawal has been stuck since March" onto (a) is-this-RTI-or-a-grievance, (b) the right public authority, and (c) a specific, records-based, answerable question is the hard part. Under PD-009 it is delivered by a structured interview, a domain taxonomy, authored templates and ranked search over the real authority list — not by a runtime model. See `09-ai-behavior.md`.
 5. **It demos in 90 seconds** and the before/after is self-evident to a judge who has never filed an RTI.
 6. **It needs almost no mocking.** The public-authority list is real public institutional data. Only identity, payment, OTP and submission are simulated.
 
@@ -61,4 +61,4 @@ Real submission to any government system · real payment · real OTP · login/ac
 
 1. Ratify C1? (Everything downstream assumes it.)
 2. Product name — a working name is needed that cannot be mistaken for an official government service. Placeholder in use: **"RTI Sarathi"** (`sarathi` = guide/charioteer). Change freely; it is referenced only in `01-product-context.md`.
-3. Is an OpenAI API key available for the deployed build? R1/R2 in `02-competition-rules.md` depend on it, and the deterministic fallback (`09-ai-behavior.md`) only covers outages, not a missing key for the whole demo.
+3. ~~Is an OpenAI API key available for the deployed build?~~ **Resolved 2026-08-26:** no runtime LLM. R1 is satisfied through Codex-assisted development. See PD-009 and `19-codex-contribution-log.md`.

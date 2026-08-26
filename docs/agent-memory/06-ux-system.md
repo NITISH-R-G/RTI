@@ -28,7 +28,7 @@ Every transition must answer: *what does the citizen need to know to move forwar
 ## Principles
 
 1. **One decision per screen.** The baseline portal asks a first-time user to choose among 2,900 authorities, judge RTI applicability, and compose legal prose on a single page. We never do that.
-2. **Nothing is asked that can be inferred, and nothing inferred is hidden.** Every AI inference is displayed with its reasoning and is editable (PD-004).
+2. **Nothing is asked that can be inferred, and nothing inferred is hidden.** Every inference the app makes is displayed with its reasoning and is editable (PD-004). Where the app cannot infer, it asks — it never guesses (PD-009).
 3. **Plain language first, legal wording glossed.** Never "Enter particulars of information sought"; always "What do you want to know?" — with the formal phrasing visible in the generated request, explained.
 4. **Progress is always visible, and going back never destroys work.**
 5. **Errors say what to do next**, are tied to their field programmatically, and never require restarting.
@@ -51,7 +51,7 @@ Every transition must answer: *what does the citizen need to know to move forwar
 
 - Sentences short. Second person. Active voice.
 - Any government term appears with its gloss the first time on the screen (source of glosses: `03-rti-site-inventory.md` §6).
-- Never state a government fact the app cannot support. Where the model is uncertain, the UI says so in words, not in a percentage.
+- Never state a government fact the app cannot support. Where the app is uncertain, the UI says so in words, not in a percentage. Never imply a language model is reasoning when none is (PD-009).
 - Every mocked action is labelled as simulated at the point of action, not only in a footer.
 
 ## Visual system
