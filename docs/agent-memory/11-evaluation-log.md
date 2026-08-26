@@ -73,6 +73,34 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 
 **Not yet verified:** axe-core (Playwright not installed yet), screen-reader behaviour, colour contrast measurement.
 
+## 2026-08-27 — Phase 3 Work Unit 2 — Landing screen
+
+**Automated:** 24 unit/component tests passing (16 rules + 8 Landing), plus the 62 reasoning tests. Build and typecheck clean.
+
+**Citizen scenarios exercised at this screen:**
+
+| Scenario | Expected | Actual | Pass |
+|---|---|---|---|
+| S1 pension (founding case) | routes onward, no dead end | `my pension has not been paid` → `/clarify` | Pass |
+| S5 grievance | routes to the not-RTI path | `I want to complain about my neighbour` → `/not-rti` | Pass |
+| S9 very short input | advisory, not a hard block | `pension` → advice shown; pressing Continue again proceeds | Pass |
+| S10 very long input | told it is long, nothing silently deleted | warning shown above 5,000 chars, text retained | Pass |
+| Empty input | error tied to the field | `aria-invalid="true"`, error joined into `aria-describedby` | Pass |
+| Example buttons | fill the field, do not submit | fills and moves focus to end of text | Pass |
+| Fee disclosed before effort | ₹10 + BPL exemption visible on screen 1 | both present | Pass |
+| Return to screen | work restored | text restored from journey state | Pass |
+
+**Browser verification (real Chrome + 360 px viewport):**
+
+| Check | Result |
+|---|---|
+| Horizontal overflow @ 360 px | **0** (scrollWidth 360 = innerWidth 360) |
+| Controls past the right edge | **0 of 9** |
+| Controls under 44 px | 2 — skip link before focus (51 px focused) and the inline disclosure link in a sentence (38 px, WCAG 2.5.8 inline exception) |
+| Visual check, desktop + mobile | Calm, single-column, one primary action; examples read as options rather than decoration |
+
+**Still not verified:** axe-core (Playwright not yet installed), screen reader, colour contrast.
+
 ## Pending evaluations (to run once the product exists)
 
 - The assistant evaluation case set in `09-ai-behavior.md`, plus the taxonomy-coverage figure.

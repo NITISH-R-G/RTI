@@ -1,14 +1,154 @@
-import { PageTitle, Card } from '../ui/primitives';
+import { useState, useRef, useId } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PageTitle, Button, Card, Notice } from '../ui/primitives';
+import { useJourney } from '../state/journey';
+import { run } from '../reasoning/pipeline';
+import { RTI_FEE_RUPEES } from '../rules';
+
+const MIN_USEFUL = 15;
+const SOFT_MAX = 5000;
+
+/**
+ * The whole thesis lives on this screen: the citizen starts with what happened,
+ * not with which office they think is responsible (ED-001, ED-002).
+ */
+const EXAMPLES = [
+  'My pension has not been paid for three months.',
+  'My PF withdrawal has been stuck since March and nobody replies.',
+  'I applied for a passport two months ago and it still shows under review.',
+];
 
 export function Landing() {
+  const { state, update } = useJourney();
+  const navigate = useNavigate();
+  const [text, setText] = useState(state.problem);
+  const [error, setError] = useState<string | null>(null);
+  const [advice, setAdvice] = useState<string | null>(null);
+  const areaRef = useRef<HTMLTextAreaElement>(null);
+  const id = useId();
+  const errorId = `${id}-error`;
+  const helpId = `${id}-help`;
+
+  const tooLong = text.length > SOFT_MAX;
+
+  function useExample(example: string) {
+    setText(example);
+    setError(null);
+    setAdvice(null);
+    const el = areaRef.current;
+    if (el) {
+      el.focus();
+      requestAnimationFrame(() => el.setSelectionRange(example.length, example.length));
+    }
+  }
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const value = text.trim();
+
+    if (!value) {
+      setError('Tell us what happened, in your own words. Even one sentence helps.');
+      areaRef.current?.focus();
+      return;
+    }
+    if (value.length < MIN_USEFUL && !advice) {
+      // Advisory, not a block — the citizen may continue by pressing again (S9).
+      setAdvice('That is quite short. A little more detail helps us point you the right way — or press Continue again to carry on.');
+      return;
+    }
+
+    // Deterministic, local, instant. No network call happens here (ED-003).
+    const result = run(value);
+    update({ problem: value, result, answers: {}, draft: '', draftEdited: false, authority: null });
+    navigate(result.classification === 'not_rti' ? '/not-rti' : '/clarify');
+  }
+
   return (
     <>
-      <PageTitle lede="Tell us what happened and we will help you ask the government for the records — you do not need to know which office is responsible.">
+      <PageTitle lede="Describe your situation in your own words. You do not need to know which government office is responsible — that is the part we work out with you.">
         What happened?
       </PageTitle>
-      <Card>
-        <p className="text-ink-700">Not built yet — Phase 3 work unit 2.</p>
-      </Card>
+
+      <form onSubmit={onSubmit} noValidate>
+        <Card>
+          <label htmlFor={`${id}-problem`} className="block font-medium">
+            Tell us about your problem
+          </label>
+          <p id={helpId} className="mt-1 text-sm text-ink-500">
+            For example, what you were expecting, and how long you have been waiting.
+          </p>
+
+          <textarea
+            id={`${id}-problem`}
+            ref={areaRef}
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (error) setError(null);
+            }}
+            rows={5}
+            aria-describedby={error ? `${errorId} ${helpId}` : helpId}
+            aria-invalid={error ? true : undefined}
+            className={`mt-3 w-full rounded-xl border bg-paper-0 p-3 text-ink-900 placeholder:text-ink-300 ${
+              error ? 'border-danger-700' : 'border-paper-200'
+            }`}
+            placeholder="My pension has not been paid for three months."
+          />
+
+          <div className="mt-2 min-h-6 text-sm" aria-live="polite">
+            {error && (
+              <p id={errorId} className="font-medium text-danger-700">
+                {error}
+              </p>
+            )}
+            {!error && advice && <p className="text-warn-700">{advice}</p>}
+            {!error && !advice && tooLong && (
+              <p className="text-warn-700">
+                That is very long ({text.length.toLocaleString('en-IN')} characters). We will use the
+                first part — nothing you typed is deleted.
+              </p>
+            )}
+          </div>
+
+          <div className="mt-4">
+            <Button type="submit" className="w-full sm:w-auto">
+              Continue
+            </Button>
+          </div>
+        </Card>
+
+        <section className="mt-6" aria-labelledby={`${id}-examples`}>
+          <h2 id={`${id}-examples`} className="text-sm font-medium text-ink-700">
+            Or start from an example
+          </h2>
+          <ul className="mt-2 grid gap-2" role="list">
+            {EXAMPLES.map((ex) => (
+              <li key={ex}>
+                <button
+                  type="button"
+                  onClick={() => useExample(ex)}
+                  className="tap w-full rounded-xl bg-paper-0 px-4 py-3 text-left text-ink-700 ring-1 ring-paper-200 hover:bg-brand-50 hover:ring-brand-100"
+                >
+                  {ex}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </form>
+
+      <div className="mt-8 grid gap-3">
+        <Notice title="Before you start">
+          <p>
+            Filing a real RTI costs <strong>₹{RTI_FEE_RUPEES}</strong>. It is free if you hold a Below
+            Poverty Line certificate. The office has 30 days to reply.
+          </p>
+        </Notice>
+        <p className="text-sm text-ink-500">
+          Nothing you type here leaves your browser, and this prototype cannot file anything with the
+          government.
+        </p>
+      </div>
     </>
   );
 }

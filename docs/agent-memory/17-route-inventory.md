@@ -6,7 +6,7 @@ Adding a route that is not in this table requires an evidence chain in `docs/des
 
 | Path | Purpose | Entry | Citizen's goal | Data | Mock/Live | A11y | Tests | Status |
 |---|---|---|---|---|---|---|---|---|
-| `/` | **What happened?** — the problem in the citizen's own words | Public URL | "Say what I want to know" | none | Deterministic, no network | — | S1–S10 | **Not built** |
+| `/` | **What happened?** — the problem in the citizen's own words | Public URL | "Say what I want to know" | reasoning engine | Deterministic, no network | Labelled textarea, error via `aria-describedby`, `aria-invalid`, live region, 0 overflow @360px | 8 component tests | **Built + verified** |
 | `/clarify` | ≤3 clarifying questions, then the suitability verdict | from `/` | "Answer a couple of things so you can help" | taxonomy | Deterministic, no network | — | S1–S9, S11 | **Not built** |
 | `/not-rti` | Honest verdict + where to actually go | from `/clarify` | "Don't waste my ₹10 and 30 days" | suitability rules | Deterministic | — | S5, S7 | **Not built** |
 | `/request` | Information types + editable draft + live validation | from `/clarify` | "Ask it properly" | templates + character rules | Deterministic, no network | — | S10, S13 | **Not built** |
