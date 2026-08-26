@@ -1,169 +1,147 @@
-# MVP Specification
+# MVP Specification — FROZEN
 
-**Version:** 0.2 (Session 1, 2026-08-26) · **Status:** Draft, awaiting ratification of PD-002
-**Assistant:** deterministic, no runtime LLM (PD-009). Read `docs/agent-memory/09-ai-behavior.md` before implementing F2–F4.
-**Problem:** `docs/agent-memory/04-user-problem.md`
+**Version:** 1.0 · **Date:** 2026-08-26 · **Status: FROZEN for implementation.**
+**Thesis:** PD-010 · **Evidence:** `evidence-to-design.md` · **Baseline:** the frozen audit in `docs/research/rti-online/`
+**Supersedes** MVP spec v0.2, which was written before the authenticated audit and assumed a flat 2,900-authority dropdown.
+
+Changing anything in this document requires a new entry in `docs/agent-memory/05-product-decisions.md` explaining why, with evidence.
 
 ---
 
 ## The MVP in one sentence
 
-A citizen describes their problem in their own words on a phone and leaves with a correctly worded RTI request, aimed at a real public authority, with the reasoning shown, the fee and appeal date stated, and an honest account of what this prototype did and did not do.
+A citizen describes what happened in their own words and leaves with a correctly worded RTI request, aimed at a real public authority, with the reasoning shown, the fee and appeal date stated — on a phone, with no account, no LLM and nothing transmitted anywhere.
+
+---
 
 ## Scope
 
-**In:** the six screens in `docs/agent-memory/17-route-inventory.md`, plus the disclosure page.
+### IN SCOPE
 
-**Out:** real filing · real payment · real OTP · accounts and login · first appeals · second appeals to the CIC · state RTI portals · CPIO/admin views · multi-language UI beyond input handling · file attachments.
+| # | Capability | Chain |
+|---|---|---|
+| 1 | Free-text problem entry in the citizen's own words | ED-001 |
+| 2 | Up to 3 clarifying questions, each of which changes the outcome | ED-001, ED-013 |
+| 3 | RTI-suitability verdict, including an honest "this is not an RTI matter" with an onward route | ED-013 |
+| 4 | Selection of what information is being sought, from domain-specific options | ED-001 |
+| 5 | An editable, explained RTI request draft, validated live | ED-004, ED-005 |
+| 6 | One authority recommendation + reasoning + ranked alternatives + full search over the real list | ED-001, ED-002, ED-012 |
+| 7 | State/UT warning: the central portal returns these **without refund** | ED-012 |
+| 8 | Review screen: what will be filed, the fee, the date you may appeal | ED-009 |
+| 9 | Simulated filing → a visibly fake reference + the exact text to file for real | PD-003 |
+| 10 | Honesty page: what is real, what is simulated, that this is not a government service | R13, R15 |
+| 11 | Full keyboard + screen-reader operation, 360 px up, 44 px targets | ED-006, ED-007 |
+| 12 | Every step reversible; state preserved | ED-008 |
 
-*File attachments are out deliberately: the real portal's 1 MB PDF rule matters only at actual filing time, and building an upload adds surface area the judges do not score.*
+### OUT OF SCOPE — do not build
 
----
+Real filing · real payment · real OTP · accounts or login · identity collection (ED-014) · first appeals · second appeals to the CIC · state RTI portals · CPIO or admin views · file attachments · multi-language UI (input tolerance only) · a general-purpose RTI chatbot · full coverage of all RTI subjects · PDF export · email delivery.
 
-## F1 — Describe the problem
+*File attachments and PDF export are excluded deliberately: the real portal's 1 MB PDF rule matters only at actual filing time, and neither is scored by the judging criteria.*
 
-**Route:** `/`
+### MOCKED `[M]` — and labelled as such in the product
 
-The citizen types what they want to know, in English, Hindi or Hinglish. One input, one button, no account, no CAPTCHA, no guidelines wall.
+Filing · the reference number (visibly fake, never the real `AAAAA/B/C/DD/EEEEE` format) · payment state · case status and timeline dates · any "what happens next" progression.
 
-**Acceptance criteria**
-- A single, clearly labelled multi-line input is the first focusable element after the skip link.
-- Empty or whitespace-only input is rejected with a message that says what to do, tied to the field with `aria-describedby`.
-- Input under ~15 characters prompts for more detail rather than proceeding on nothing.
-- Very long input is handled without crashing: the citizen is told it is long and offered a trim, and nothing is silently truncated behind their back.
-- Devanagari and Latin script both accepted at this stage. (The *generated request* is separately constrained — see F3.)
-- Three example problems are offered as one-tap starting points, and using one is not required.
-- Works at 360 px with no horizontal overflow; the input is at least 44 px tall.
-- The page states, above the fold, that this is an independent prototype and not a government service.
+### REAL
 
-**Edge cases:** paste of many thousands of characters · emoji and unusual punctuation · input that is only a question mark · input in a language we do not handle (say so; do not guess).
+The 96-entry ministry list and the 2,904-name authority list, captured from the portal itself · the ₹10 fee and BPL exemption · the 30-day appeal rule · the 3,000-character limit · the exact allowed character set · the taxonomy and reasoning we author.
 
----
+### DETERMINISTIC — no LLM anywhere (PD-009)
 
-## F2 — Is this an RTI matter?
+Domain classification · clarifying-question selection · suitability rules · template composition · authority ranking · fee and date arithmetic · every validation. All pure functions, unit-tested, running in the browser.
 
-**Route:** `/check`
+### FUTURE — explicitly not now
 
-The app classifies the situation and gives a plain-language verdict with its reasoning. Classification is rule-based over a short structured interview: the citizen's free text pre-selects a **domain** where it can, and anything ambiguous is **asked**, never guessed (PD-009).
-
-**Verdicts:** `suitable` · `needs-reframing` (it can become an RTI question, and here is how) · `not-rti` (this is a grievance, a court matter, a request for an opinion, or someone else's personal data — here is where to go instead).
-
-**Acceptance criteria**
-- The verdict is one sentence a first-time reader understands, followed by the reasoning.
-- A `not-rti` verdict names the better route in plain language and does not dead-end the citizen.
-- Uncertainty is expressed in words at the point of the claim; no confidence percentages.
-- The citizen can disagree and continue anyway — with the consequence stated ("you would spend Rs 10 and 30 days on a request the office can refuse").
-- No fee, deadline or section number appears in generated text; those are rendered by the deterministic layer.
-- Requests for another identifiable person's personal information are flagged, with the reason.
-- Every question the interview asks must earn its place: if the answer does not change the verdict, the draft or the authority, do not ask it. Target no more than three questions.
-- When the input falls outside the domain taxonomy, the app says so plainly, explains what makes a good RTI question, and lets the citizen proceed on their own words. It does **not** fabricate a verdict.
-- The screen never implies a language model is reasoning. If it describes its method, it describes the real one.
+A `ModelAssistant` implementation behind the existing interface · more domains · Hindi UI · appeal drafting · real-portal deep-linking with prefilled fields.
 
 ---
 
-## F3 — Draft the request
+## The domain taxonomy
 
-**Route:** `/draft`
+Designing a "general intelligence" over 2,904 authorities is not possible deterministically, and pretending otherwise would be dishonest. Instead: a **curated taxonomy over a deliberately chosen set of domains**, with everything outside it failing helpfully (ED-013).
 
-The app produces the request text the citizen would actually file, shows it in full, explains why each part is there, and lets them edit it.
+### Supported domains, and why each exists
 
-**Acceptance criteria**
-- The draft is visible in full without expanding anything. It is never summarised or hidden behind a preview.
-- It is marked as generated by the app (not by the citizen), and is editable in place.
-- It asks for **records**, specifies a period and a subject, and does not ask for opinions, reasons or justifications — the three things a CPIO may lawfully refuse.
-- Live character count against the real 3,000-character limit.
-- Characters outside the portal's real allowed set (`A-Z a-z 0-9 , . - _ ( ) / @ : & ? \ %`) are flagged with the specific offending characters named, and a one-tap fix is offered. This rule is deterministic code with unit tests, not model behaviour.
-- Editing the draft never loses the citizen's original description; it remains visible or recoverable.
-- The draft is composed from a domain template plus the citizen's own specifics. Where no template covers the input, the citizen's own words are carried forward, clearly labelled as un-assisted, and every deterministic check still runs.
-- Template coverage is finite and the product admits it rather than stretching a template to fit.
-- The request never contains an Aadhaar, PAN or similar identifier; if one is detected in the citizen's input, they are warned and offered removal before anything is sent anywhere.
+| Domain | Why it is in the set | Primary authority | Evidence |
+|---|---|---|---|
+| **Pension** | The observed dead-end case. `my pension has not been paid` → *"No such Public Authority available in this portal !"*. This domain **is** the demo. | Department of Pensions & Pensioners Welfare | `[O]` F-A1 |
+| **Provident fund (EPF)** | The control case: the portal's search *works* here (`provident fund` → 2 clean results), so it proves our value is not merely "their search is broken" — it is the ordering and the guidance. | Employees Provident Fund Organisation | `[O]` F-A1 |
+| **Passport** | The noisy-search case: `passport` returns 3 irrelevant results of 4. Demonstrates precision. | MEA – Consular, Passport & Visa Division (CPV) | `[O]` F-A1 |
+| **Railways** | The cascade case: one ministry, **183** public authorities. Shows that even a correct ministry leaves an impossible choice. | Ministry of Railways → division-level bodies | `[O]` form-structure §3 |
+| **Income tax refund** | A high-frequency citizen problem with a clean central owner; broadens the demo beyond three edge cases. | Department of Revenue | `[I]` — mapping authored by us, not observed |
 
----
+Five domains. Not more: each needs authored clarifying questions, templates and authority mappings, and thin coverage across many domains is worse than solid coverage across few (R-02).
 
-## F4 — Which office?
+### Deliberately unsupported, and handled explicitly
 
-**Route:** `/authority`
+**State-subject detector.** Police, land records, municipal services, ration cards, school admissions, electricity, water, state transport, local roads. These are **not** mapped to any central authority. They produce a warning built from `[D]` evidence — *the central portal returns applications for state public authorities without refunding the fee* — plus a pointer to the citizen's own state RTI route. This is the highest-value unsupported case, because getting it wrong on the real portal costs money.
 
-One recommendation, its reasoning, ranked alternatives, and a search box over the real list.
+**Not-RTI detector.** Requests for action or redress (a grievance → CPGRAMS), for opinions or reasons rather than records, for another identifiable person's personal information, or for matters before a court.
 
-**Acceptance criteria**
-- The recommendation is a name that exists **verbatim** in `docs/research/rti-online/public-authorities.json` — selection is *from* the dataset, so a non-existent authority is impossible by construction.
-- The reasoning is shown ("this office holds employee provident fund records").
-- At least two ranked alternatives are offered, each with one line of reasoning.
-- The citizen can search all 2,904 authorities and override the recommendation. Search is the always-available floor beneath the recommendation, never a hidden fallback.
-- If the best match is a **state or UT** authority, the screen warns that the central portal returns such applications **without refunding the fee**, and points to the state's own route. *(Depends on KI-003: the dataset needs a central/state flag.)*
-- When ranking confidence is low, the screen says so in words and leads with alternatives and search rather than a false single answer.
-- The list is never dumped raw: results are filtered, chunked and keyboard-navigable, and the control is a labelled combobox with proper `aria` semantics.
+**Everything else.** Out-of-coverage input reaches `/authority` with the full 2,904-name search, an explanation of what makes a good RTI request, and the citizen's own wording carried forward — clearly labelled as un-assisted. **Never a flat refusal. Never a fabricated match.**
 
----
+### Taxonomy record shape
 
-## F5 — Review
+```
+domain
+  subdomain
+  keywords + synonyms + common misspellings
+  clarifying questions      (each must change the outcome)
+  information-type options  (what records could be asked for)
+  candidate authorities     (verbatim names from public-authorities.json)
+  reasoning string          (why this office holds this)
+  request template
+```
 
-**Route:** `/review`
-
-Everything that would be filed, on one screen, before anything happens.
-
-**Acceptance criteria**
-- Shows the final request text, the chosen authority, the fee (Rs 10, or Rs 0 with a BPL certificate — sourced from the deterministic rules module with its citation), and **the date the citizen becomes free to file a first appeal** (filing date + 30 days), as a date, not as "30 days".
-- Every field is editable via a link back to the screen that owns it, and returning preserves all other work.
-- States plainly, adjacent to the action button, that filing here is simulated.
+Authority names are **selected from** `docs/research/rti-online/public-authorities.json`. A name absent from that file cannot be rendered — hallucination is impossible by construction, not by discipline.
 
 ---
 
-## F6 — Filed (simulated)
+## The journey — 6 screens
 
-**Route:** `/filed/[id]`
+The 14-step sequence proposed in the Phase 2 brief was refined down. Three changes, each with a reason:
 
-**Acceptance criteria**
-- Produces a mock reference that is visibly not a real registration number.
-- Shows a timeline in plain language: filed, forwarded to the officer, reply due by *date*, appeal possible from *date*.
-- Offers the exact request text to copy, so the citizen can file it for real on the actual portal, with a link to it.
-- The simulated nature of the reference is stated on the screen itself, not only in a footer.
-- Reloading the page does not lose the result within the session.
+1. **Suitability is not its own screen.** It is the *outcome* of clarification. A separate screen would add a step whose only content is a verdict the citizen never asked for. Unsuitable cases branch to `/not-rti`.
+2. **"Identify the type of information sought" merges into `/request`.** Choosing what you want and seeing it drafted are one act; splitting them makes the citizen approve an abstraction before seeing the concrete text.
+3. **Authority comes after the draft, not before.** This is ED-002 and the founding inversion.
 
----
+```
+/                → What happened?
+/clarify         → ≤3 questions, then the suitability verdict
+   ├─ /not-rti   → honest verdict + where to actually go
+/request         → what you're asking for + editable draft + live validation
+/authority       → recommendation + why + alternatives + search + state warning
+/review          → what will be filed · fee · appeal date
+/filed/[ref]     → simulated reference + tracking + text to file for real
+/about           → what is real, what is simulated
+```
 
-## F7 — Honesty page
-
-**Route:** `/about`
-
-**Acceptance criteria**
-- Lists what is real (the authority list and its capture date, the fee and deadline rules and their source) and what is simulated (identity, filing, payment, OTP, reference numbers, status).
-- States how the guidance is actually produced — deterministic logic in the browser, no language model, nothing transmitted — without overclaiming in either direction.
-- States that this is an independent prototype, not affiliated with or endorsed by the Government of India, and that it cannot file an RTI.
-- Reachable from every screen.
+Full detail: `information-architecture.md`. Every transition: `user-flow.md`.
 
 ---
 
-## First test plan
+## Frozen metrics — the build must hit these
 
-Written before implementation, per master instruction §11–12.
+| Metric | Target | Baseline (observed) |
+|---|---|---|
+| Screens before describing the problem | **0** | 4 |
+| Total input fields across the journey | **≤ 7** | 40 |
+| Points requiring institutional knowledge | **0 required** | 2 mandatory |
+| Demographic fields | **0** | 3 (+4 conditional) |
+| Personal identity fields | **0** | 8 |
+| Validation before any network call | **Yes** | No |
+| Horizontal overflow at 360 px | **0 px** | 625 px |
+| Touch targets under 44 px | **0** | 30 |
+| Inputs with a programmatic label | **100%** | 0 of 40 |
+| axe serious/critical violations | **0** | not measured; 0 labels present |
+| Dead ends | **0** | 1 reproducible |
+| Journey completes with no network | **Yes** | n/a |
 
-**Unit (Vitest)**
-1. `appealAvailableFrom(filedOn)` returns filing date + 30 days, across month and year boundaries.
-2. `feeFor({ bpl })` returns Rs 10 / Rs 0 and never anything else.
-3. `validateRequestText` rejects text over 3,000 characters and names every disallowed character present.
-4. `sanitiseRequestText` maps common offenders (curly quotes, en dashes, the rupee sign) to allowed equivalents and never introduces a disallowed character.
-5. `findAuthorities(query)` returns ranked matches over the real dataset, is case- and acronym-tolerant, and returns an empty array rather than throwing on nonsense.
-6. `parseAiResult` rejects invalid JSON, missing fields, unexpected enum values, over-long strings, and an authority name absent from the dataset — each with a distinct, testable failure.
-7. Aadhaar/PAN-shaped patterns are detected in citizen input.
+None of these may be reported as achieved until its verification in `before-after-journey.md` §5 has actually run.
 
-**Component**
-8. Every input has an associated label; every error is announced and tied to its field.
-9. The empty-input and AI-unavailable states render the specified copy.
+---
 
-**End-to-end (Playwright)**
-10. J1→J6 happy path completes and reaches a simulated reference.
-11. The `not-rti` path reaches an honest verdict and an onward route.
-12. The out-of-coverage path (input no template matches) completes the whole journey honestly, with search and un-assisted drafting.
-13. An edited draft survives navigating back and forward.
-14. axe reports zero serious or critical violations on every route.
-15. No horizontal overflow at 360, 390, 430, 768, 1024, 1440 px.
+## Definition of done for the MVP
 
-**Assistant evaluation (`docs/evals/`)**
-16. The full case list in `docs/agent-memory/09-ai-behavior.md`, run as deterministic fixtures with recorded expectations — including the cases the rule-based assistant is *expected to decline*, which must decline honestly rather than answer wrongly.
-17. Coverage measurement: what proportion of the eval inputs the domain taxonomy actually handles. This number is reported in `11-evaluation-log.md`, not hidden.
-
-## Risks specific to this MVP
-
-`R-02` the rule-based assistant feels rigid on real input · `R-03` wrong authority · `R-08` half-built journey · `R-13` implying a model is reasoning when none is. See `docs/agent-memory/15-risk-register.md`.
+All twelve IN SCOPE capabilities built · all fifteen scenarios in `docs/evals/citizen-scenarios.md` passing · every frozen metric verified · `build`, `typecheck`, `lint`, `test`, `test:e2e`, `eval` all green · deployed at a public URL with no auth wall · `19-codex-contribution-log.md` populated with real Codex work · memory files current · pushed.
