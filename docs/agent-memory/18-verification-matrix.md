@@ -17,6 +17,23 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | — | — | — | — | — | — | — | Not started |
 | J10 — Journey completes with the network blocked entirely | all | — | — | — | — | — | — | — | — | Not started |
 
+### Phase 2.5 — deterministic reasoning, VERIFIED 2026-08-26
+
+| Item | Result | Evidence |
+|---|---|---|
+| Corpus written before implementation | **Yes** — commit `8dabb86` precedes `src/reasoning/` | git history |
+| Corpus cases with an automated test | **60 / 60** (62 tests inc. regression + sweep) | `test/corpus.test.js` |
+| Full corpus evaluation run | **60 / 60 (100%)** | `docs/evals/taxonomy-evaluation.md` |
+| Supported-domain cases correct | **42 / 42** | same |
+| Must-be-ambiguous cases handled safely | **3 / 3** | same |
+| Unsupported / state cases handled safely | **6 / 6** | same |
+| Not-RTI cases handled safely | **6 / 6** | same |
+| Dead ends | **0** | same |
+| Fabricated authorities | **0** — impossible by construction, asserted | same |
+| Deterministic repeatability | **Verified** — every case run twice and compared | `test/corpus.test.js` |
+| Held-out generalisation | **93.8% (15/16) before the final fix**; set now burned | `scripts/holdout.js` |
+| Founding regression (`my pension has not been paid`) | **Passing** | named test |
+
 ### Frozen metrics (from `docs/design/mvp-spec.md`) — none verified
 
 | Metric | Target | Baseline | Verified? |

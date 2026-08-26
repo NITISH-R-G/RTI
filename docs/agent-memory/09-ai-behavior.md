@@ -1,6 +1,6 @@
 # 09 — AI Behaviour
 
-**Status:** Contract defined. Not implemented.
+**Status: IMPLEMENTED AND VALIDATED (Phase 2.5, 2026-08-26).** The reasoning pipeline exists as pure functions in `src/reasoning/`, is validated against a 60-case corpus written before it, and scores 60/60 with 0 dead ends and 0 fabricated authorities. Architecture: `docs/design/deterministic-reasoning.md`. Results and full tuning history: `docs/evals/taxonomy-evaluation.md`. **Held-out generalisation measured 93.8% before the final fix; that set is now burned and a future session needs fresh inputs.**
 
 ## The governing decision (PD-009, 2026-08-26)
 
@@ -13,19 +13,21 @@ Consequences, and they are binding:
 3. All of it sits **behind one clean interface** so a model can be dropped in later without touching the UI.
 4. **Nothing in the product may imply a language model is reasoning when none is.** No fake "thinking" states, no "AI is analysing…", no confidence theatre. The product explains its actual method when asked.
 
-## The interface
+## The interface — as built
 
-One boundary, one shape. Proposed:
+`src/reasoning/pipeline.js` exports a single synchronous entry point:
 
 ```
-type Assistant = {
-  classify(input: string): Promise<SuitabilityVerdict>
-  draft(input: string, verdict: SuitabilityVerdict): Promise<RequestDraft>
-  suggestAuthorities(input: string, draft: RequestDraft): Promise<AuthoritySuggestion[]>
+run(rawInput) -> {
+  classification, domain, confidence, confidence_band, next_action,
+  candidate_authorities, reasoning, required_questions,
+  information_types, warnings, trace
 }
 ```
 
-Two implementations: `RuleAssistant` (ships, default, no network) and, if it is ever needed, `ModelAssistant` (OpenAI, server-side). The UI must not be able to tell which is in use, and must never be given a reason to care.
+Synchronous and pure — no Promise, because there is nothing to await. A future `ModelAssistant` would wrap this shape behind an async facade; the UI must not be able to tell which is in use.
+
+Domains are **data** (`src/reasoning/taxonomy.js`); the pipeline is generic. Adding a domain means adding a record, not editing control flow.
 
 ## What the rule-based assistant must actually do
 

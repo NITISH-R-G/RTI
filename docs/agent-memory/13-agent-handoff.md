@@ -1,12 +1,31 @@
 # 13 — Agent Handoff
 
-**Last updated:** 2026-08-26, Session 2 (Claude Opus 5, Claude Code) — **audit FROZEN; PHASE 2 (product specification) COMPLETE. Awaiting owner review before implementation.**
+**Last updated:** 2026-08-26, Session 2 (Claude Opus 5, Claude Code) — **audit FROZEN · Phase 2 spec FROZEN · PHASE 2.5 (deterministic reasoning) VALIDATED. Awaiting owner review before Phase 3 UI work.**
 
 > **Read two things first:** PD-009 (no runtime LLM; competition rule R1 is satisfied through Codex-assisted development) and the **Context Recovery Snapshot** immediately below.
 
 ## Context Recovery Snapshot
 
 **Assume the previous agent's context is gone. This section is the recovery point.**
+
+### Phase 2.5 outcome — the brain works
+
+The core product risk was whether a deterministic taxonomy can bridge citizen problem-language to institutions without reproducing the observed portal failure. **It was tested before any UI was built.**
+
+| | |
+|---|---|
+| Corpus | 60 cases, **committed before the classifier existed** (commit `8dabb86`) |
+| Corpus result | **60 / 60 (100%)** — 0 dead ends, 0 fabricated authorities |
+| Held-out generalisation | **93.8% (15/16) before the final fix.** That set is now burned — see KI-013 |
+| Unit tests | 62 passing |
+| Code | `src/reasoning/` — pure functions, no network, no LLM, no UI imports |
+| Run it | `node scripts/evaluate.js` · `node scripts/holdout.js` · `node --test test/corpus.test.js` |
+
+**The founding regression test passes:** `my pension has not been paid` → supported / pension / Department of Pensions & Pensioners Welfare, where RTI Online returns *"No such Public Authority available in this portal !"*.
+
+Full tuning history — six fixes, one failure category at a time, full corpus re-run after each — is in `docs/evals/taxonomy-evaluation.md`. Architecture and **seven documented known weaknesses** are in `docs/design/deterministic-reasoning.md`.
+
+**Do not treat 100% as proof.** The corpus was written by the same agent that built the classifier. Corpus-first ordering and the held-out set mitigate that; they do not eliminate it.
 
 ### Phase 2 outcome (read this before anything else)
 
@@ -56,7 +75,7 @@ The owner's Chrome, tab `1398493818`, is on the authenticated request form and r
 **Nothing.** The three items previously blocked on a human were resolved without further authentication — see "What was discovered".
 
 ### What is pending
-**Owner review of Phase 2.** After that: implementation, starting with ADR-0002 ratification and the pure rules module. Nothing else is outstanding.
+**Owner review of Phase 2.5.** After that, Phase 3 UI work. The reasoning layer is done and validated; the remaining code is the rules module (fee, dates, character rules), the request templates per domain (KI-008b), and the eight routes.
 
 ### Important assumptions
 - The observed form is representative of what all citizens see. Only one session, one browser and one authenticated identity were observed. `[I]`
@@ -108,11 +127,11 @@ Nothing. The modal dialog that blocked the earlier session is gone and every pre
 3. **Wait for owner review of Phase 2.** Implementation is gated on it.
 
 **After review, in this order:**
-1. **Ratify or replace `docs/adr/0002-stack.md`** and flip its status. Phase 2 established the MVP needs **no server at runtime**, so a fully static build is viable — re-examine whether Next.js is still the right answer (`07-technical-architecture.md`, Open decisions).
-2. **Scaffold with the test runner in the same commit** — the command contract in `10-test-strategy.md` must work from day one.
-3. **Build `rules/` first, test-first**: fee, appeal date, 3,000-char limit, allowed character set, sanitisation. Pure functions, no UI imports.
-4. **Author the taxonomy content** (KI-008) — the five domains are chosen; the keywords, clarifying questions, info types, authority mappings, reasoning strings and templates are not yet written. This is the largest remaining task.
-5. **Then the journey**, thinnest end-to-end version first, keeping a working demo path at every commit.
+1. **Ratify or replace `docs/adr/0002-stack.md`** and flip its status. The MVP needs **no server at runtime**, so a fully static build is viable — re-examine whether Next.js is warranted (`07-technical-architecture.md`, Open decisions). Note `src/reasoning/` is dependency-free ESM and will port to any stack unchanged.
+2. **Scaffold with the test runner in the same commit.** `package.json` already runs `npm test` and `npm run eval` with **zero dependencies** (Node's built-in test runner) — keep those command names working.
+3. **Build `rules/` test-first**: fee, appeal date, 3,000-char limit, allowed character set, sanitisation. Pure, no UI imports.
+4. **Write the request templates per domain** (KI-008b) — the taxonomy is built; the drafting templates are not.
+5. **Then the eight routes**, thinnest end-to-end first, keeping a working demo path at every commit.
 
 **If you are Codex:** log what you build in `19-codex-contribution-log.md` — it is the R1 evidence and it is still empty. Non-Codex agents log to `12-change-log.md`.
 

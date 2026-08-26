@@ -22,7 +22,16 @@ The browser tooling captured screenshots into the agent's analysis context, but 
 ### KI-002 — The stack is proposed, not decided
 `07-technical-architecture.md` and `docs/adr/0002-stack.md` are marked *proposed*. Ratify or replace before writing application code (master instruction §34).
 
-### KI-008 — The domain taxonomy is **designed but not built**
+### KI-013 — The held-out generalisation set is burned
+`scripts/holdout.js` was used to find Fix F, so its 16 inputs are no longer an independent measurement. The honest generalisation figure is **93.8%, measured before that fix**. A future session must write fresh held-out inputs — ideally sourced from outside this project, since every input so far was authored by the same agent that built the classifier.
+
+### KI-014 — The reasoning pipeline is English-centric
+Devanagari input normalises to nothing and lands on "no signal". Hinglish works only where Latin-script keywords survive. Documented in `docs/design/deterministic-reasoning.md` as known weakness 3; Hindi is FUTURE, not MVP.
+
+### KI-008 — ~~The domain taxonomy is designed but not built~~ **CLOSED 2026-08-26**
+Built and validated in Phase 2.5: `src/reasoning/taxonomy.js` carries all five domains with keywords, synonyms, misspellings, negative signals, clarifying questions, information types, authority mappings and reasoning strings. 60/60 on the corpus. What remains for Phase 3 is the **request templates** per domain, which the drafting screen needs.
+
+### KI-008b — Request templates are not written
 **Updated 2026-08-26 (Phase 2).** The taxonomy is no longer undefined: `docs/design/mvp-spec.md` v1.0 freezes **five domains** — pension, provident fund, passport, railways, income tax refund — each with a documented reason, plus explicit unsupported-case handling and a record shape. What remains is **authoring the content**: keywords, synonyms and common misspellings; the clarifying questions (each of which must change the outcome); information-type options; authority mappings taken verbatim from `public-authorities.json`; reasoning strings; and one request template per domain.
 
 This is still the largest remaining piece of work, and the journey's quality cannot be judged until it exists.

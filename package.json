@@ -1,0 +1,11 @@
+{
+  "name": "rti-sarathi",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Phase 2.5 deterministic reasoning prototype. No dependencies, no network, no LLM.",
+  "scripts": {
+    "test": "node --test test/",
+    "eval": "node scripts/evaluate.js"
+  }
+}
