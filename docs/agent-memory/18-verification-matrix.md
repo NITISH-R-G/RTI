@@ -15,7 +15,7 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | J7 — Complete the whole journey on input the domain taxonomy does not cover | — | — | — | — | — | — | — | Not started |
 | J8 — Understand what is real and what is simulated | — | — | — | — | — | — | — | Not started |
 
-## Baseline audit of RTI Online (research verification, 2026-08-26)
+## Baseline audit of RTI Online (research verification, 2026-08-26) — **COMPLETE AND FROZEN**
 
 Separate from our product's journeys. Tracks what was actually observed versus documented, inferred, unknown, or deliberately not crossed.
 
@@ -33,9 +33,11 @@ Separate from our product's journeys. Tracks what was actually observed versus d
 | Request-text limit, absent counter, no input-time filtering | **OBSERVED** | `authenticated-form-structure.md` §5 |
 | Accessibility measures on the authenticated form | **OBSERVED** | `authenticated-form-structure.md` §6 |
 | Back-navigation breaking the OTP token | **OBSERVED** | `authenticated-flow-map.md` STEP 3 |
-| Exact validation dialog text | **NOT YET OBSERVED** — native `alert()`, unreadable by automation; requested from owner | KI-009 |
-| 360 px mobile behaviour of the authenticated form | **NOT YET TESTED** | KI-009 |
-| `Country = Other` branch | **NOT YET TESTED** | KI-009 |
+| Complete client-side validation inventory (2 dialogs; no field validation) | **OBSERVED** — via validation-function source inspection | `authenticated-form-structure.md` §7a |
+| Reflow at a 360 px constraint (985 px content, 32 controls overflowing, 30 sub-44 px targets) | **OBSERVED** — direct measurement; device emulation was unavailable | `authenticated-form-structure.md` §7b |
+| `Country = Other` branch (no branching occurs) | **OBSERVED** | `authenticated-friction-map.md` F-A13 |
+| Colour contrast | **NEVER MEASURED** `[U]` | KI-009 residual |
+| Real device / real screen reader | **NEVER USED** `[U]` | KI-009 residual |
 | Screenshot image files | **NOT PERSISTABLE** in this environment | KI-010 |
 | Payment gateway, submission, registration number, post-submission status | **INTENTIONALLY NOT OBSERVED** — stopped at the irreversible boundary | `authenticated-flow-map.md` |
 

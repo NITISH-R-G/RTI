@@ -146,6 +146,49 @@ Every entry carries reproduction steps and an evidence tag. "The search was bad"
 
 ---
 
+## F-A11 — No client-side validation; the only "confirmation" cannot be cancelled `[O]` — **SEVERITY: HIGH**
+
+**Route:** `request/request.php` · **Authenticated:** Yes
+**Reproduction:** enumerate every global function containing `alert(` and extract its dialog literals via `Function.prototype.toString` (no submission needed). Complete results in `authenticated-form-structure.md` §7a.
+
+**Observed:** exactly two dialog messages exist in the entire page:
+- `Only Indian citizens can file RTI Request application.`
+- `Your request will be filed with 
+
+` + the selected public authority
+
+**What this means:**
+- **No field-level client-side validation exists.** No HTML `required` attributes either (§1). A citizen who leaves a mandatory field blank learns about it only after a server round trip.
+- The public-authority step uses **`alert()`, not `confirm()`** — the citizen acknowledges, they do not confirm. There is no Cancel and no statement of consequence.
+
+**Citizen impact:** on a slow connection, discovering a missed field costs a full page load — and the observed portal pattern is to re-render with loose error text and a regenerated CAPTCHA, so the citizen re-solves the CAPTCHA to fix a typo. Meanwhile the one moment the portal *could* warn about a wrong authority — the "will be filed with" dialog — is a dead acknowledgement.
+
+**Can our prototype reduce it:** Yes. Validate inline as the citizen types, tie every error to its field programmatically, and make the authority step a genuine, reversible decision that states the consequence (transfer under s.6(3), or return without refund for a state body) rather than an unskippable notice.
+
+---
+
+## F-A12 — The authenticated form does not reflow; it is ~2.7x too wide for a phone `[O]` — **SEVERITY: CRITICAL**
+
+**Route:** `request/request.php` · **Authenticated:** Yes
+**Method + limitation:** device emulation was unavailable for the authenticated tab (`resize_window` left `innerWidth` at 1536). Reflow was measured directly: `body` was constrained to 360 px and the resulting minimum content width read back. A real phone was not used.
+
+**Observed at a 360 px constraint:** `body.scrollWidth` = **985 px** (overflow **625 px**); widest layout table **888 px**; **32** form controls extend past the right edge; **30** controls are under the 44 px touch-target minimum (mostly 24-28 px).
+
+**Citizen impact:** India files RTIs on phones. The form has a viewport meta, so it will not zoom out — instead the citizen scrolls horizontally on every one of ~40 rows, with ~26 px tap targets. Labels sit in a left table cell and inputs in a right one, so at 360 px the label and its field can be off-screen from each other.
+
+**Can our prototype reduce it:** Yes, and it is an acceptance criterion (PD-008): no horizontal overflow at 360/390/430/768/1024/1440, all targets at least 44 px.
+
+---
+
+## F-A13 — `Country = Other` produces no branching `[O]` — **SEVERITY: LOW**
+
+**Reproduction:** click the `Other` radio for `Country` (`chkCountry` value `999`).
+**Observed:** `chkCountry` becomes `999`, and the India `State` dropdown and the free-text `txtCountry` box **both stay visible and enabled**. Nothing is hidden, disabled, relabelled or explained.
+**Citizen impact:** a non-resident sees an Indian-state selector and a country text box simultaneously with no guidance. Minor, but it is the same pattern as the BPL fields (F-A6): the form shows every branch at once rather than the one that applies.
+**Can our prototype reduce it:** Yes — show only the branch that applies.
+
+---
+
 ## Severity summary
 
 | ID | Friction | Severity | Prototype can reduce |
@@ -159,11 +202,15 @@ Every entry carries reproduction steps and an evidence tag. "The search was bad"
 | F-A5 | Demographic disclosure to exercise a right | Medium | Yes |
 | F-A7 | Fee hidden until BPL answered | Medium | Yes |
 | F-A8 | Three authentication challenges | Medium | Partly — must not overstate |
+| F-A12 | Form does not reflow — ~2.7x too wide at 360 px; 30 sub-44 px targets | **Critical** | Yes |
+| F-A11 | No client-side validation; "confirmation" cannot be cancelled | High | Yes |
 | F-A6 | BPL fields always visible | Low-Medium | Yes |
+| F-A13 | `Country = Other` produces no branching | Low | Yes |
 
 ## Pending / unverified
 
-- Exact client-side validation dialog text — `[U]`, native `alert()` unreadable by CDP; requested from the project owner.
-- `Country = Other` branch — `[U]`, not re-tested with a real click.
-- 360 px mobile behaviour of the authenticated form — **not yet run**.
+- ~~Exact client-side validation dialog text~~ — **RESOLVED** by source inspection, see F-A11. No dialog text remains unknown.
+- ~~`Country = Other` branch~~ — **RESOLVED**, see F-A13.
+- ~~360 px mobile behaviour~~ — **RESOLVED by direct reflow measurement**, see F-A12. Note the limitation: no real device or emulated viewport was used.
+- Colour contrast — still `[U]`, never measured.
 - Everything past `Make Payment` — intentionally not observed.

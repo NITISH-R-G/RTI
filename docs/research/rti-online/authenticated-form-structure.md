@@ -82,7 +82,7 @@ Session 1 claimed the citizen must pick from *"one flat, ungrouped dropdown of ~
 | `Educational Status` = `Literate` | Reveals four previously `display:none` radios: Below 12th Standard / 12th Standard Pass / Graduate / Above Graduate |
 | `Educational Status` = `Illiterate` | Those four remain hidden |
 | `bplCardNo`, `YearOfUssue`, `IssuAuthority` | **Never hidden or disabled** in any BPL state — always visible, always enabled |
-| `Country` = `Other` | Not verified — synthetic `click()` events did not fire the handler and the branch was not re-tested with a real click. `[U]` |
+| `Country` = `Other` | **No conditional behaviour whatsoever** `[O]`. Verified with a real click: `chkCountry` becomes `999`, and both the India `State` dropdown **and** the free-text `txtCountry` box remain visible and enabled side by side. Nothing is hidden, disabled or explained — a citizen abroad sees an Indian-state selector and a country text box at once, with no guidance on which to use |
 
 ## 5. Request-text handling `[O]`
 
@@ -114,11 +114,61 @@ Measured on `request/request.php` only. **Do not generalise to other pages** —
 
 Session 1 recorded A1 (no viewport meta) and A2 (no `lang`) as portal-wide. **They are page-scoped.** The home page `/index.php` genuinely lacks both; this authenticated form page has both. The portal is **inconsistent between pages**, which is a finding in its own right. A3 (no labels), A4 (layout tables), A7 (no landmarks) and A8 (no heading structure) are confirmed on this page too.
 
+## 7a. Client-side validation — complete inventory `[O]`
+
+**Method:** rather than triggering native dialogs (which browser automation cannot read or dismiss), the page's own validation functions were enumerated and their dialog string literals extracted via `Function.prototype.toString`. This is exhaustive for client-side dialogs, and it required no submission.
+
+`form[name=frmRequest]` has `onsubmit="return chkFrmCitizenship();"`.
+
+Every global function on the page containing an `alert(` call — **all of them**:
+
+| Function | Dialog | Exact text |
+|---|---|---|
+| `chkFrmCitizenship` | `alert` | `Only Indian citizens can file RTI Request application.` |
+| `chkCitizenship` | `alert` | `Only Indian citizens can file RTI Request application.` |
+| `chkPAname` | `alert` | `Your request will be filed with 
+
+` + the selected public authority name |
+| `confirmPAname` | `alert` | `Your request will be filed with 
+
+` + the selected public authority name |
+
+Other page functions (`getDepartmentList`, `preset`) contain no dialogs. **No `confirm()` or `prompt()` is used anywhere.**
+
+### What this means — three findings
+
+1. **There is no client-side validation of required fields at all.** `[O]` No dialog, and no inline message, exists for a missing name, address, public authority, request text or CAPTCHA. Combined with the absence of any HTML `required` attribute (§1), **every mandatory-field check must be server-side** — i.e. the citizen submits, waits for a round trip, and the page re-renders. This matches the behaviour observed on the pre-auth page, where errors returned as loose text after a full reload.
+2. **The public-authority confirmation is an `alert()`, not a `confirm()`.** `[O]` The citizen is *told* "Your request will be filed with …" and can only acknowledge it. There is no Cancel, no chance to change their mind at the dialog, and no statement of what happens if the choice is wrong.
+3. **The only true client-side gate is citizenship.** `[O]` Everything else that could be caught in the browser is not.
+
+### Which dialog blocked the audit
+
+The modal that halted automation during the validation test was `Your request will be filed with 
+
+…` from the public-authority confirmation path — not a field-validation message. Resolved by source inspection; **no dialog text remains unknown.**
+
+## 7b. Mobile / reflow behaviour `[O]`
+
+**Limitation first:** true device emulation was **not available** for the authenticated tab in this environment — `resize_window` did not change the viewport (`innerWidth` stayed 1536). So reflow was measured directly instead, by constraining `body` to 360 px and reading the resulting minimum content width. That is a legitimate reflow measurement, not a simulation of a phone, and it is reported as such.
+
+| Measure | Value |
+|---|---|
+| `meta[name=viewport]` | **present** (`width=device-width, initial-scale=1.0`) |
+| Body constrained to | 360 px |
+| Resulting `body.scrollWidth` | **985 px** |
+| Horizontal overflow at 360 px | **625 px** — content is ~2.7× the screen width |
+| Widest single layout `<table>` | 888 px |
+| Form controls extending past the right edge at 360 px | **32** |
+| Form controls shorter than the 44 px minimum touch target | **30** (most are 24–28 px tall) |
+
+**Interpretation.** The viewport meta means a phone will *not* zoom the page out the way `/index.php` does — but the 6 nested layout tables have a minimum width near 900 px and **do not reflow**. The citizen therefore gets a page they must scroll horizontally across every row of a 40-field form, with touch targets around 26 px. This is a **WCAG 2.2 1.4.10 Reflow failure** and a 2.5.8 Target Size (Minimum) failure.
+
+This nuances — and partly reverses the comfort of — the Session 1 correction: having the viewport meta is not the same as being usable on a phone. On this page it may be worse than the home page's zoom-out, because horizontal scrolling is per-row rather than a single pinch.
+
 ## 8. Not verified / pending
 
 | Item | Status |
 |---|---|
-| Exact text of the client-side validation dialog | **Pending** `[U]` — a native `alert()` opened on submit-with-missing-fields. Native dialogs are outside the page, so CDP could not read or dismiss it. Requested from the project owner; not yet supplied |
 | `Country = Other` branch | `[U]` — not re-tested with a real click |
 | Behaviour past `Make Payment` | **Intentionally not observed.** We stopped at the irreversible boundary |
 | Server-side validation rules | `[U]` |

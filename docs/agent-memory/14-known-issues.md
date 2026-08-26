@@ -4,13 +4,13 @@
 
 ## Open
 
-### KI-009 — Authenticated audit is incomplete (3 items outstanding)
-Paused mid-audit at the mandatory persistence checkpoint. Outstanding, all `[U]`:
-1. **Exact client-side validation dialog text** on `request/request.php`. A native `alert()` fired on submit-with-missing-fields; native dialogs sit outside the page, so browser automation can neither read nor dismiss it. Requested from the project owner; **not yet supplied**. A submit guard (`preventDefault` + `stopImmediatePropagation`, capture phase) was installed first, so no submission was possible.
-2. **360 px mobile audit** of the authenticated form — not run.
-3. **`Country = Other`** conditional branch — not re-tested with a real click.
+### KI-009 — ~~Authenticated audit incomplete~~ **CLOSED 2026-08-26**
+All three outstanding items were resolved without further human authentication:
+1. **Validation dialog text** — resolved by enumerating the page's own validation functions and extracting their dialog literals (`Function.prototype.toString`), rather than triggering native dialogs. Result: only two dialogs exist on the whole form, and **there is no client-side field validation at all**. See `authenticated-friction-map.md` F-A11.
+2. **`Country = Other`** — resolved with a real click. No branching occurs. F-A13.
+3. **360 px mobile** — resolved by direct reflow measurement (device emulation was unavailable). The form does not reflow: 985 px minimum content width at a 360 px constraint. F-A12.
 
-Re-running items 1–3 requires a human to complete email + mobile + CAPTCHA + OTP again; the OTP token is single-use and the session does not survive back-navigation.
+**Residual `[U]`:** colour contrast was never measured, and no real device or screen reader was used.
 
 ### KI-010 — Screenshots cannot be persisted in this environment
 The browser tooling captured screenshots into the agent's analysis context, but `save_to_disk` wrote no file and none was found in Downloads or the session temp directories. **No image evidence exists in the repository.** Visual findings are preserved as verbatim on-screen text, measured DOM structure and reproduction steps. See `docs/research/rti-online/screenshots/README.md`.
@@ -29,6 +29,9 @@ PD-009 makes the rule-based assistant the product, not a fallback. It needs a cu
 2,904 names in `public-authorities.json`, unenriched: no category, no plain-language description, no keywords, no central-vs-state flag. 175 are prefixed "UT ", a starting signal but not a complete classification.
 
 **Updated by the authenticated audit:** the real form uses a **two-level cascade**, and the 96-entry ministry list is now captured in `docs/research/rti-online/ministries.json`. That list is a far better spine for our taxonomy than the flat 2,904 — enrich *it* first (what each ministry covers, in citizen words), then map ministries to authorities.
+
+### KI-012 — The RTI research baseline is now FROZEN
+The authenticated audit is complete. **Do not explore new parts of the production portal** unless a specific, named unknown blocks a decision — and if you must, record why first. The persisted evidence in `docs/research/rti-online/` is the baseline the product is designed against and measured against.
 
 ### KI-011 — The dead-end case must be reproducible in our evaluation set
 The observed failure (`my pension has not been paid` → `No such Public Authority available in this portal !`) is the project's central piece of evidence. It must exist as a named case in `docs/evals/` so our own product is measured against it, not merely inspired by it.

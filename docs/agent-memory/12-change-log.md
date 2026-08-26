@@ -28,7 +28,16 @@ Newest first. One entry per meaningful change, with what was tested.
 
 **Tested:** no application code exists, so no test suite was run. All findings carry evidence tags and reproduction steps.
 
-**Not done / outstanding:** exact validation dialog text, the 360 px mobile audit, and the `Country = Other` branch (KI-009).
+**Audit closed later the same session — all three outstanding items resolved without further human authentication:**
+- **Validation inventory** `[O]`: enumerated every page function containing `alert(` and extracted its dialog literals via `Function.prototype.toString`, avoiding native dialogs entirely. Only two dialog messages exist on the whole form — `Only Indian citizens can file RTI Request application.` and `Your request will be filed with 
+
+<authority>`. **There is no client-side field validation at all**, and the public-authority "confirmation" is an `alert()` with no Cancel. New friction point F-A11.
+- **`Country = Other`** `[O]`: no branching. The India State dropdown and the free-text country box stay visible and enabled together. New friction point F-A13.
+- **Reflow at 360 px** `[O]`: device emulation was unavailable for the authenticated tab, so reflow was measured directly — constraining `body` to 360 px yields a 985 px minimum content width (625 px overflow), 32 controls past the right edge, and 30 controls under the 44 px touch target. The form has a viewport meta but **does not reflow**. New friction point F-A12, severity Critical.
+
+**Baseline now frozen** (KI-012). Residual `[U]`: colour contrast never measured; no real device or screen reader used.
+
+**Not done:** the before/after journey document and evidence chains — deliberately left for the next step, at the owner's instruction not to begin implementation.
 
 **Process correction:** the owner identified that findings were being reported in chat before being written to the repository. This session's checkpoint persisted everything discovered before the audit resumed. The rule now stands: discover → write → verify → continue.
 
