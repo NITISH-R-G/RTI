@@ -55,3 +55,32 @@ The brief allows either "built with Codex" **or** "powered by an OpenAI model". 
 **Rationale:** no paid API dependency in the demo; no key to leak; no latency; no hallucination risk; nothing the citizen types leaves their browser. The cost is that intent understanding must be earned with a structured interview and authored templates rather than borrowed from a model.
 **Consequences:** the assistant sits behind one interface (`09-ai-behavior.md`) with a rule-based implementation shipping and a model implementation possible later; the product must never imply a model is reasoning when none is; `19-codex-contribution-log.md` must stay truthful, because it is the R1 evidence.
 **Do not revisit without:** the project owner's decision.
+
+### PD-010 — Final product thesis: bridge problem-language to institutional language
+**Date:** 2026-08-26 · **Status:** Active · **Supersedes:** PD-002 (which was a pre-authentication recommendation)
+
+**Problem.** RTI Online requires citizens to translate a real-world problem into institutional terminology before the system will help them — and refuses them outright when they cannot.
+
+**Evidence** `[O]`, authenticated, route `request/request.php`: typing `my pension has not been paid` into `Search Public Authority` returns **"No such Public Authority available in this portal !"**, while `Department of Pensions & Pensioners Welfare` exists in the ministry cascade on the same screen. Supporting: the two required authority dropdowns (96 → 184) sit above any question about what the citizen wants; `passport` returns 3 irrelevant results of 4. Full chains in `docs/design/evidence-to-design.md`.
+
+**Alternatives reconsidered against the authenticated evidence** (not merely inherited from the Session 1 ranking):
+- *C2, routing only.* Rose 22 → 24 on the new evidence, but still leaves the citizen to word a request the portal gives no help with. Rejected as a strict subset of C1.
+- *C3, tracking and the appeal clock.* Unchanged at 19. It repairs downstream what C1 prevents upstream, and needs heavy fake case data.
+- *C4, accessible mobile re-skin.* Fell 18 → 17 when the authenticated form turned out to carry `lang` and a viewport meta — then partly recovered when it proved not to reflow (985 px at a 360 px constraint). Still rejected as a standalone product: it fixes presentation, not the dead end. Its substance is absorbed into C1 as acceptance criteria (ED-006, ED-007).
+- *C5 payment anxiety, C6 appeal drafting.* Unchanged; no new evidence.
+
+**Why C1 wins, restated on observed grounds.** It is the only candidate whose central failure we watched happen, reproducibly, with a verbatim government error message, on a request the system was capable of answering. Every other candidate is a repair downstream of it.
+
+**Explicitly not being solved.** Real filing · payment · OTP · accounts · first and second appeals · state RTI portals · CPIO/admin views · identity collection · general-purpose RTI question answering · full coverage of all RTI subjects.
+
+**Success criteria.**
+1. A participant reaches a relevant authority recommendation **without typing any institutional name** (S1–S4).
+2. Zero dead ends: every out-of-coverage input still reaches a useful onward route (S5–S7, S9).
+3. Zero horizontal overflow at 360 px; zero touch targets under 44 px; zero axe serious/critical violations.
+4. All validation completes with no network call.
+5. The complete journey runs with no LLM, no API key and no network (PD-009).
+6. Taxonomy coverage across the evaluation set is measured and reported, not hidden.
+
+**Risks.** R-02 (the rule-based assistant feels rigid on real free text) · R-17 (we dead-end citizens the same way) · R-16 (overstating the improvement) · R-08 (time runs out with a half-built journey).
+
+**Reversibility.** High for the taxonomy (add or remove domains without touching the journey). Medium for the screen order. **Low for the founding inversion** — problem before institution *is* the product; reversing it means abandoning the thesis.
