@@ -1,0 +1,1001 @@
+{
+ "version": 1,
+ "created": "2026-08-26",
+ "note": "Written BEFORE the classifier implementation existed - see git history. Expected behaviour is defined independently of any code. Where a case is genuinely borderline, several classifications are accepted and the reason is recorded in 'note'.",
+ "universal_failure_conditions": [
+  "dead end: a result with no next_action or no reasoning",
+  "any candidate authority name absent verbatim from docs/research/rti-online/public-authorities.json",
+  "a supported-domain input returning zero candidate authorities AND zero required_questions",
+  "non-deterministic output across repeated runs",
+  "a confidence value outside 0..1 or a band inconsistent with it"
+ ],
+ "cases": [
+  {
+   "id": "P01",
+   "input": "my pension has not been paid",
+   "group": "pension",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "THE observed baseline failure string. Permanent regression test."
+  },
+  {
+   "id": "P02",
+   "input": "pension hasn't come",
+   "group": "pension",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "Informal contraction."
+  },
+  {
+   "id": "P03",
+   "input": "I did not receive my pension",
+   "group": "pension",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "P04",
+   "input": "why is my pension delayed",
+   "group": "pension",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "Asks why - must still resolve to a records request."
+  },
+  {
+   "id": "P05",
+   "input": "pension pending for three months",
+   "group": "pension",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "P06",
+   "input": "old age pension money hasn't arrived",
+   "group": "pension",
+   "expect_classification": [
+    "ambiguous",
+    "unsupported"
+   ],
+   "expect_domain": [
+    "pension",
+    null
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit"
+   ],
+   "note": "Old-age/social pension is usually delivered by STATE governments. Must NOT confidently route to the central department."
+  },
+  {
+   "id": "P07",
+   "input": "retirement pension issue",
+   "group": "pension",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "P08",
+   "input": "when will my pension be credited",
+   "group": "pension",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "Future-looking; must reframe to records held on file."
+  },
+  {
+   "id": "P09",
+   "input": "my father's pension stopped suddenly after he retired from the railways",
+   "group": "pension",
+   "expect_classification": [
+    "ambiguous",
+    "supported"
+   ],
+   "expect_domain": [
+    "pension",
+    "railways"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Multi-domain: pension + railways. Either is acceptable if clarification is offered."
+  },
+  {
+   "id": "P10",
+   "input": "pention has nt been paid sinc marchh",
+   "group": "pension",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Typo-heavy version of P01."
+  },
+  {
+   "id": "F01",
+   "input": "pf money is stuck",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "Abbreviation only."
+  },
+  {
+   "id": "F02",
+   "input": "my PF withdrawal has been stuck since March and nobody replies",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "F03",
+   "input": "epf claim rejected",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "F04",
+   "input": "provident fund transfer not done",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "F05",
+   "input": "pf withdrawal status",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "F06",
+   "input": "employees provident fund balance not updating",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "F07",
+   "input": "my pf claim has been pending for 2 months",
+   "group": "pf",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "F08",
+   "input": "eps pension",
+   "group": "pf",
+   "expect_classification": [
+    "ambiguous",
+    "supported"
+   ],
+   "expect_domain": [
+    "provident_fund",
+    "pension"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "EPS is a pension scheme run by EPFO. Genuine overlap - clarification is the safe answer."
+  },
+  {
+   "id": "T01",
+   "input": "passport still not received",
+   "group": "passport",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "T02",
+   "input": "applied for passport renewal two months ago, still showing under review",
+   "group": "passport",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "T03",
+   "input": "passport police verification pending",
+   "group": "passport",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Police verification involves state police but the record sits with the passport office."
+  },
+  {
+   "id": "T04",
+   "input": "when will my passport be dispatched",
+   "group": "passport",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "T05",
+   "input": "passport application rejected reason",
+   "group": "passport",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "T06",
+   "input": "tatkal passport delay",
+   "group": "passport",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "tatkal also appears in railways - must resolve to passport here."
+  },
+  {
+   "id": "T07",
+   "input": "passport",
+   "group": "passport",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Single word - must be accepted; clarification carries the load."
+  },
+  {
+   "id": "T08",
+   "input": "psprt not recvd",
+   "group": "passport",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "passport"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Heavy abbreviation/typo."
+  },
+  {
+   "id": "R01",
+   "input": "train refund not received",
+   "group": "railways",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "R02",
+   "input": "train was cancelled and my refund never came",
+   "group": "railways",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "R03",
+   "input": "railway ticket cancellation refund status",
+   "group": "railways",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "R04",
+   "input": "irctc refund pending",
+   "group": "railways",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "R05",
+   "input": "railway recruitment exam result",
+   "group": "railways",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Different subdomain of railways."
+  },
+  {
+   "id": "R06",
+   "input": "my luggage was lost on the train",
+   "group": "railways",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "R07",
+   "input": "tatkal ticket refund",
+   "group": "railways",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "tatkal overlaps with passport - ticket must disambiguate to railways."
+  },
+  {
+   "id": "R08",
+   "input": "rail refund nt recvd",
+   "group": "railways",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "railways"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Typos."
+  },
+  {
+   "id": "I01",
+   "input": "income tax refund not credited",
+   "group": "tax",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "income_tax"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "I02",
+   "input": "itr refund delayed",
+   "group": "tax",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "income_tax"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "Abbreviation."
+  },
+  {
+   "id": "I03",
+   "input": "my tax refund for last year has not come",
+   "group": "tax",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "income_tax"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "I04",
+   "input": "tds refund pending",
+   "group": "tax",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "income_tax"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "I05",
+   "input": "why was my income tax refund rejected",
+   "group": "tax",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "income_tax"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": ""
+  },
+  {
+   "id": "I06",
+   "input": "incom tax refnd nt recieved",
+   "group": "tax",
+   "expect_classification": [
+    "supported",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "income_tax"
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit",
+    "continue"
+   ],
+   "note": "Typos."
+  },
+  {
+   "id": "I07",
+   "input": "where is my refund",
+   "group": "tax",
+   "expect_classification": [
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "income_tax",
+    "railways",
+    "provident_fund",
+    null
+   ],
+   "expect_next_action": [
+    "clarify"
+   ],
+   "note": "refund alone spans tax, railways and PF. MUST ask; must not guess."
+  },
+  {
+   "id": "I08",
+   "input": "refund",
+   "group": "tax",
+   "expect_classification": [
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "income_tax",
+    "railways",
+    "provident_fund",
+    null
+   ],
+   "expect_next_action": [
+    "clarify"
+   ],
+   "note": "Single ambiguous word."
+  },
+  {
+   "id": "N01",
+   "input": "my bank stole my money",
+   "group": "not_rti",
+   "expect_classification": [
+    "not_rti",
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit",
+    "clarify"
+   ],
+   "note": "An allegation seeking redress, not records."
+  },
+  {
+   "id": "N02",
+   "input": "I want to complain about my neighbour",
+   "group": "not_rti",
+   "expect_classification": [
+    "not_rti"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Private dispute; RTI does not apply."
+  },
+  {
+   "id": "N03",
+   "input": "the officer in my area is rude and takes bribes",
+   "group": "not_rti",
+   "expect_classification": [
+    "not_rti"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Grievance seeking action; route to a grievance channel."
+  },
+  {
+   "id": "N04",
+   "input": "please release my pension immediately",
+   "group": "not_rti",
+   "expect_classification": [
+    "not_rti",
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "pension",
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit",
+    "clarify"
+   ],
+   "note": "Pension domain BUT asks for action. Must offer to reframe as a records request, not simply refuse."
+  },
+  {
+   "id": "N05",
+   "input": "what do you think about the government's pension policy",
+   "group": "not_rti",
+   "expect_classification": [
+    "not_rti"
+   ],
+   "expect_domain": [
+    "pension",
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Opinion, not a record."
+  },
+  {
+   "id": "N06",
+   "input": "give me my neighbour's pension details",
+   "group": "not_rti",
+   "expect_classification": [
+    "not_rti"
+   ],
+   "expect_domain": [
+    "pension",
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Third-party personal information; exempt."
+  },
+  {
+   "id": "U01",
+   "input": "the road outside my house has not been repaired for two years",
+   "group": "state",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "State subject. MUST surface the no-refund warning."
+  },
+  {
+   "id": "U02",
+   "input": "ration card not issued",
+   "group": "state",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "State subject."
+  },
+  {
+   "id": "U03",
+   "input": "my electricity bill is wrong",
+   "group": "state",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "State subject."
+  },
+  {
+   "id": "U04",
+   "input": "police did not file my FIR",
+   "group": "state",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "State subject."
+  },
+  {
+   "id": "U05",
+   "input": "school admission denied to my child",
+   "group": "state",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "State subject."
+  },
+  {
+   "id": "U06",
+   "input": "I want information about ISRO satellite launches",
+   "group": "out_of_scope",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Central but outside our five domains. Must fail helpfully and offer full search."
+  },
+  {
+   "id": "E01",
+   "input": "",
+   "group": "edge",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Empty input."
+  },
+  {
+   "id": "E02",
+   "input": "asdkjhaskjdh",
+   "group": "edge",
+   "expect_classification": [
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "explain_limit"
+   ],
+   "note": "Gibberish."
+  },
+  {
+   "id": "E03",
+   "input": "I need information",
+   "group": "edge",
+   "expect_classification": [
+    "ambiguous",
+    "unsupported"
+   ],
+   "expect_domain": [
+    null
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit"
+   ],
+   "note": "No signal at all."
+  },
+  {
+   "id": "E04",
+   "input": "my pension and passport are both delayed",
+   "group": "edge",
+   "expect_classification": [
+    "ambiguous"
+   ],
+   "expect_domain": [
+    "pension",
+    "passport"
+   ],
+   "expect_next_action": [
+    "clarify"
+   ],
+   "note": "Two supported domains at once. MUST ask which one."
+  },
+  {
+   "id": "E05",
+   "input": "PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS PENSION HAS NOT BEEN PAID FOR 3 MONTHS PLEASE HELP ME I AM 72 YEARS OLD AND I WORKED FOR THE CENTRAL GOVERNMENT FOR 35 YEARS ",
+   "group": "edge",
+   "expect_classification": [
+    "supported"
+   ],
+   "expect_domain": [
+    "pension"
+   ],
+   "expect_next_action": [
+    "continue",
+    "clarify"
+   ],
+   "note": "Very long input (~5000 chars)."
+  },
+  {
+   "id": "E06",
+   "input": "pensioner association meeting minutes",
+   "group": "edge",
+   "expect_classification": [
+    "ambiguous",
+    "supported",
+    "unsupported"
+   ],
+   "expect_domain": [
+    "pension",
+    null
+   ],
+   "expect_next_action": [
+    "clarify",
+    "explain_limit"
+   ],
+   "note": "Resembles pension but concerns an association's own records. Must not confidently route to the pension department."
+  }
+ ]
+}
