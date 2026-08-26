@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/*
+  Design tokens — RTI Sarathi
+  Calm, trustworthy, public-service. Deliberately NOT the saffron/blue of the
+  existing portal, and deliberately not a SaaS dashboard.
+
+  Typography: system font stack. No webfont — nothing to download on a slow
+  connection (master instruction §32), and no layout shift.
+*/
+
+@theme {
+  /* Ink — warm near-black, softer than pure #000 for long reading */
+  --color-ink-900: #14181c;
+  --color-ink-700: #333c45;
+  --color-ink-500: #5a6672;
+  --color-ink-300: #8e99a4;
+
+  /* Paper — warm off-white, easier than pure white under fluorescent light */
+  --color-paper-0: #ffffff;
+  --color-paper-50: #fbfaf8;
+  --color-paper-100: #f4f2ee;
+  --color-paper-200: #e6e3dd;
+
+  /* Primary — deep teal. Reads as civic and calm without imitating a government mark. */
+  --color-brand-900: #0a3f3d;
+  --color-brand-700: #0f5f5c;
+  --color-brand-500: #17807c;
+  --color-brand-100: #dcefee;
+  --color-brand-50: #eff8f7;
+
+  /* Caution — for the state/UT fee warning, which must be impossible to miss */
+  --color-warn-700: #8a4b09;
+  --color-warn-100: #fdf0dc;
+  --color-warn-500: #c26a0a;
+
+  /* Error */
+  --color-danger-700: #9a1c1c;
+  --color-danger-100: #fbe4e4;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+
+  --radius-card: 0.875rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper-50);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    /* No horizontal scroll, ever. ED-006. */
+    overflow-x: hidden;
+  }
+
+  /* Focus is never invisible. ED-007. */
+  :focus-visible {
+    outline: 3px solid var(--color-brand-700);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  h1, h2, h3 {
+    line-height: 1.25;
+    text-wrap: balance;
+    font-weight: 650;
+    letter-spacing: -0.011em;
+  }
+
+  /* Long words and pasted URLs must not force the page wide */
+  p, li, h1, h2, h3, label, td {
+    overflow-wrap: break-word;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Minimum 44px touch target — an observed failure on the real form (30 controls under 44px) */
+  .tap {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

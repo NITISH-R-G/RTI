@@ -4,6 +4,20 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
+## 2026-08-26 — Phase 3 WU1 — Application shell, design system, routing
+
+**Ratified ADR-0002 with an amendment.** Next.js replaced by **Vite + React + TypeScript**, static output. The original justification for Next.js was keeping an OpenAI key off the client in server routes; PD-009 removed the runtime LLM and ED-014 removed identity collection, so there is no server-side work left. A framework justified by its server is the wrong tool once the server is gone.
+
+**Built:** Vite + React + TS + Tailwind v4 scaffold; design tokens (deep-teal civic palette, warm paper, system font stack — no webfont, so nothing to download on a slow connection); shared primitives (Button, ButtonLink, Card, Notice, PageTitle) so screens share one visual language; `Layout` with skip link, landmarks, six-step progress indicator, persistent non-dismissible prototype disclosure, and an honest footer; `JourneyProvider` state with try/catch-wrapped `localStorage`; all eight routes wired with stub screens; TypeScript declarations for the frozen reasoning engine.
+
+**Verified in a real browser**, results in `11-evaluation-log.md`: 0 horizontal overflow at 360 px, skip link is the first tab stop with a visible focus ring, landmarks present, build and typecheck clean, 62 reasoning tests still passing.
+
+**Fixed during verification:** progress label had no visual separator (screen-reader-only colon is invisible to sighted users).
+
+**Not done:** no screen content yet beyond stubs; Playwright/axe not installed; no lint step yet.
+
+---
+
 ## 2026-08-26 — Session 2 — Authenticated audit of RTI Online
 
 **Agent:** Claude (Opus 5), Claude Code, driving the owner's real Chrome. **Authentication performed manually by the project owner** (email + mobile + CAPTCHA + OTP); the agent entered no credentials.

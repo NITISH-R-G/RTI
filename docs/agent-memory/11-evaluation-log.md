@@ -49,6 +49,30 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 
 **Pass/fail:** n/a (baseline). **Next:** re-measure each row against our build and record the delta. No row in `docs/design/before-after-journey.md` §1 may be reported as achieved before its verification has run.
 
+## 2026-08-26 — Phase 3 Work Unit 1 — Application shell, design system, routing
+
+**Verified in a real browser** (Chrome, `http://localhost:5173`), not by inspection alone.
+
+| Check | Expected | Actual | Pass |
+|---|---|---|---|
+| Build | passes | `vite build` OK — 235 kB JS / 75 kB gzip, 16.6 kB CSS / 4.3 kB gzip | Pass |
+| Typecheck | 0 errors | 0 | Pass |
+| Reasoning regression suite | 62 passing | 62 passing | Pass |
+| `<html lang>` | present | `en` | Pass |
+| Landmarks | header/nav/main/footer | all present | Pass |
+| Skip link | first tab stop, usable | first Tab focuses it; 51 px tall when focused; 3 px solid focus ring | Pass |
+| Horizontal overflow @ 375 px | 0 | 0 | Pass |
+| **Horizontal overflow @ 360 px** | 0 | **0** (scrollWidth 360 = innerWidth 360) | Pass |
+| Elements past the right edge @ 360 px | 0 | 0 | Pass |
+| Persistent prototype disclosure | visible on every screen | visible, non-dismissible, links to /about | Pass |
+| Touch targets under 44 px | 0, excluding inline text links | 2 — the skip link before focus (51 px when focused, so compliant in use) and the inline disclosure link inside a sentence (39 px, WCAG 2.5.8 inline exception) | Pass, with the exception noted |
+
+**Baseline for contrast:** the real RTI form needs 985 px at a 360 px constraint, with 32 controls off-screen and 30 under 44 px.
+
+**Fixed during verification:** the progress label rendered as "Step 1 of 6 What happened" with no visual separator — a screen-reader-only colon is invisible to sighted users. Added a visual `·` plus an `aria-hidden`/`sr-only` pair so both audiences get a separator.
+
+**Not yet verified:** axe-core (Playwright not installed yet), screen-reader behaviour, colour contrast measurement.
+
 ## Pending evaluations (to run once the product exists)
 
 - The assistant evaluation case set in `09-ai-behavior.md`, plus the taxonomy-coverage figure.

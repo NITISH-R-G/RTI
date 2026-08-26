@@ -1,8 +1,32 @@
 # ADR-0002 — Application stack
 
-**Date:** 2026-08-26 · **Status: PROPOSED — not yet accepted**
+**Date:** 2026-08-26 · **Status: ACCEPTED (amended)** — ratified at the start of Phase 3.
 
-The next agent must accept, amend, or replace this **before** writing application code, and update the status line either way.
+## Amendment on acceptance
+
+Phases 2 and 2.5 changed the premises this ADR was drafted under, so it is accepted **with one substantive change**:
+
+**Next.js is replaced by Vite + React + TypeScript, building to a static bundle.**
+
+*Why the change.* The original proposal chose Next.js so that server routes could keep an OpenAI key off the client. PD-009 removed the runtime LLM, ED-014 removed identity collection, and Phase 2 confirmed no server-side persistence is needed. **There is no server-side work left to do.** A framework whose main justification was its server is the wrong tool once the server is gone — it would add build weight and deploy complexity for nothing, against master instruction §32 (fast perceived performance on slow connections).
+
+*What is unchanged:* TypeScript, Tailwind with a token layer, Vitest, Playwright + axe, a public URL with no auth wall, and every boundary listed below.
+
+## Accepted stack
+
+| Layer | Choice |
+|---|---|
+| Build | Vite, static output |
+| UI | React + TypeScript |
+| Routing | React Router (client-side; the journey has no server routes) |
+| Styling | Tailwind + a small design-token layer |
+| Reasoning | `src/reasoning/` — already built, dependency-free ESM, ported unchanged |
+| State | React state + `localStorage`, try/catch wrapped |
+| Unit / component tests | Vitest + Testing Library |
+| E2E + accessibility | Playwright + axe-core |
+| Hosting | Any static host, public, no auth wall |
+
+`npm test` and `npm run eval` must keep working for the reasoning suite, which uses Node's built-in runner and needs no dependencies.
 
 ## Context
 
