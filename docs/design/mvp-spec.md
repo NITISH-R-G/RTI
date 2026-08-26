@@ -1,0 +1,163 @@
+# MVP Specification
+
+**Version:** 0.1 (Session 1, 2026-08-26) · **Status:** Draft, awaiting ratification of PD-002
+**Problem:** `docs/agent-memory/04-user-problem.md`
+
+---
+
+## The MVP in one sentence
+
+A citizen describes their problem in their own words on a phone and leaves with a correctly worded RTI request, aimed at a real public authority, with the reasoning shown, the fee and appeal date stated, and an honest account of what this prototype did and did not do.
+
+## Scope
+
+**In:** the six screens in `docs/agent-memory/17-route-inventory.md`, plus the disclosure page.
+
+**Out:** real filing · real payment · real OTP · accounts and login · first appeals · second appeals to the CIC · state RTI portals · CPIO/admin views · multi-language UI beyond input handling · file attachments.
+
+*File attachments are out deliberately: the real portal's 1 MB PDF rule matters only at actual filing time, and building an upload adds surface area the judges do not score.*
+
+---
+
+## F1 — Describe the problem
+
+**Route:** `/`
+
+The citizen types what they want to know, in English, Hindi or Hinglish. One input, one button, no account, no CAPTCHA, no guidelines wall.
+
+**Acceptance criteria**
+- A single, clearly labelled multi-line input is the first focusable element after the skip link.
+- Empty or whitespace-only input is rejected with a message that says what to do, tied to the field with `aria-describedby`.
+- Input under ~15 characters prompts for more detail rather than proceeding on nothing.
+- Input over the model's practical limit is handled without crashing: the citizen is told it is long and offered a trim, and nothing is silently truncated behind their back.
+- Devanagari and Latin script both accepted at this stage. (The *generated request* is separately constrained — see F3.)
+- Three example problems are offered as one-tap starting points, and using one is not required.
+- Works at 360 px with no horizontal overflow; the input is at least 44 px tall.
+- The page states, above the fold, that this is an independent prototype and not a government service.
+
+**Edge cases:** paste of many thousands of characters · emoji and unusual punctuation · input that is only a question mark · input in a language we do not handle (say so; do not guess).
+
+---
+
+## F2 — Is this an RTI matter?
+
+**Route:** `/check`
+
+The app classifies the situation and gives a plain-language verdict with its reasoning.
+
+**Verdicts:** `suitable` · `needs-reframing` (it can become an RTI question, and here is how) · `not-rti` (this is a grievance, a court matter, a request for an opinion, or someone else's personal data — here is where to go instead).
+
+**Acceptance criteria**
+- The verdict is one sentence a first-time reader understands, followed by the reasoning.
+- A `not-rti` verdict names the better route in plain language and does not dead-end the citizen.
+- Uncertainty is expressed in words at the point of the claim; no confidence percentages.
+- The citizen can disagree and continue anyway — with the consequence stated ("you would spend Rs 10 and 30 days on a request the office can refuse").
+- No fee, deadline or section number appears in generated text; those are rendered by the deterministic layer.
+- Requests for another identifiable person's personal information are flagged, with the reason.
+- If the AI is unavailable, the screen says so plainly and lets the citizen proceed to F3 with their own words. It does **not** fabricate a verdict.
+
+---
+
+## F3 — Draft the request
+
+**Route:** `/draft`
+
+The app produces the request text the citizen would actually file, shows it in full, explains why each part is there, and lets them edit it.
+
+**Acceptance criteria**
+- The draft is visible in full without expanding anything. It is never summarised or hidden behind a preview.
+- It is marked as generated, and is editable in place.
+- It asks for **records**, specifies a period and a subject, and does not ask for opinions, reasons or justifications — the three things a CPIO may lawfully refuse.
+- Live character count against the real 3,000-character limit.
+- Characters outside the portal's real allowed set (`A-Z a-z 0-9 , . - _ ( ) / @ : & ? \ %`) are flagged with the specific offending characters named, and a one-tap fix is offered. This rule is deterministic code with unit tests, not model behaviour.
+- Editing the draft never loses the citizen's original description; it remains visible or recoverable.
+- If the AI is unavailable, the citizen's own words are carried forward as the draft, clearly labelled as un-assisted, and every deterministic check still runs.
+- The request never contains an Aadhaar, PAN or similar identifier; if one is detected in the citizen's input, they are warned and offered removal before anything is sent anywhere.
+
+---
+
+## F4 — Which office?
+
+**Route:** `/authority`
+
+One recommendation, its reasoning, ranked alternatives, and a search box over the real list.
+
+**Acceptance criteria**
+- The recommendation is a name that exists **verbatim** in `docs/research/rti-online/public-authorities.json`. Anything else is a validation failure and falls back to search.
+- The reasoning is shown ("this office holds employee provident fund records").
+- At least two ranked alternatives are offered, each with one line of reasoning.
+- The citizen can search all 2,904 authorities and override the recommendation. Search works with the AI unavailable.
+- If the best match is a **state or UT** authority, the screen warns that the central portal returns such applications **without refunding the fee**, and points to the state's own route. *(Depends on KI-003: the dataset needs a central/state flag.)*
+- If the model is unsure, the screen says so and leads with the alternatives rather than a false single answer.
+- The list is never dumped raw: results are filtered, chunked and keyboard-navigable, and the control is a labelled combobox with proper `aria` semantics.
+
+---
+
+## F5 — Review
+
+**Route:** `/review`
+
+Everything that would be filed, on one screen, before anything happens.
+
+**Acceptance criteria**
+- Shows the final request text, the chosen authority, the fee (Rs 10, or Rs 0 with a BPL certificate — sourced from the deterministic rules module with its citation), and **the date the citizen becomes free to file a first appeal** (filing date + 30 days), as a date, not as "30 days".
+- Every field is editable via a link back to the screen that owns it, and returning preserves all other work.
+- States plainly, adjacent to the action button, that filing here is simulated.
+
+---
+
+## F6 — Filed (simulated)
+
+**Route:** `/filed/[id]`
+
+**Acceptance criteria**
+- Produces a mock reference that is visibly not a real registration number.
+- Shows a timeline in plain language: filed, forwarded to the officer, reply due by *date*, appeal possible from *date*.
+- Offers the exact request text to copy, so the citizen can file it for real on the actual portal, with a link to it.
+- The simulated nature of the reference is stated on the screen itself, not only in a footer.
+- Reloading the page does not lose the result within the session.
+
+---
+
+## F7 — Honesty page
+
+**Route:** `/about`
+
+**Acceptance criteria**
+- Lists what is real (the authority list and its capture date, the fee and deadline rules and their source, the AI reasoning) and what is simulated (identity, filing, payment, OTP, reference numbers, status).
+- States that this is an independent prototype, not affiliated with or endorsed by the Government of India, and that it cannot file an RTI.
+- Reachable from every screen.
+
+---
+
+## First test plan
+
+Written before implementation, per master instruction §11–12.
+
+**Unit (Vitest)**
+1. `appealAvailableFrom(filedOn)` returns filing date + 30 days, across month and year boundaries.
+2. `feeFor({ bpl })` returns Rs 10 / Rs 0 and never anything else.
+3. `validateRequestText` rejects text over 3,000 characters and names every disallowed character present.
+4. `sanitiseRequestText` maps common offenders (curly quotes, en dashes, the rupee sign) to allowed equivalents and never introduces a disallowed character.
+5. `findAuthorities(query)` returns ranked matches over the real dataset, is case- and acronym-tolerant, and returns an empty array rather than throwing on nonsense.
+6. `parseAiResult` rejects invalid JSON, missing fields, unexpected enum values, over-long strings, and an authority name absent from the dataset — each with a distinct, testable failure.
+7. Aadhaar/PAN-shaped patterns are detected in citizen input.
+
+**Component**
+8. Every input has an associated label; every error is announced and tied to its field.
+9. The empty-input and AI-unavailable states render the specified copy.
+
+**End-to-end (Playwright, AI stubbed)**
+10. J1→J6 happy path completes and reaches a simulated reference.
+11. The `not-rti` path reaches an honest verdict and an onward route.
+12. The AI-unavailable path completes the whole journey.
+13. An edited draft survives navigating back and forward.
+14. axe reports zero serious or critical violations on every route.
+15. No horizontal overflow at 360, 390, 430, 768, 1024, 1440 px.
+
+**AI evaluation (`docs/evals/`)**
+16. The full case list in `docs/agent-memory/09-ai-behavior.md`, including the injection and hallucination-trap cases, run as deterministic fixtures with recorded expectations.
+
+## Risks specific to this MVP
+
+`R-03` wrong authority · `R-04` fabricated government facts · `R-02` no API key · `R-08` half-built journey. See `docs/agent-memory/15-risk-register.md`.
