@@ -11,6 +11,20 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
+/**
+ * Our product must never itself produce the portal's refusal as an OUTCOME.
+ * The landing page deliberately quotes that refusal as evidence, inside a block
+ * marked data-evidence-quote, so the check excludes that block rather than being
+ * weakened or deleted.
+ */
+async function bodyTextExcludingEvidence(page: Page) {
+  return page.evaluate(() => {
+    const clone = document.body.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('[data-evidence-quote]').forEach((n) => n.remove());
+    return clone.textContent ?? '';
+  });
+}
+
 async function toAuthority(page: Page, problem: string, answer?: RegExp) {
   await page.getByLabel(/tell us about your problem/i).fill(problem);
   await page.getByRole('button', { name: /^continue$/i }).click();
@@ -136,7 +150,7 @@ test('AMBIGUOUS input asks instead of guessing', async ({ page }) => {
 test('UNSUPPORTED input fails helpfully with search available', async ({ page }) => {
   await page.getByLabel(/tell us about your problem/i).fill('I want information about ISRO satellite launches');
   await page.getByRole('button', { name: /^continue$/i }).click();
-  await expect(page.locator('body')).not.toContainText('No such Public Authority');
+  expect(await bodyTextExcludingEvidence(page)).not.toContain('No such Public Authority');
   // Either an honest not-rti screen or a clarify path — both must offer a way onward.
   const onward = page.getByRole('button', { name: /continue anyway|^continue$|search authorities/i });
   await expect(onward.first()).toBeVisible();

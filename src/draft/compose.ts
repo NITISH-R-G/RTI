@@ -19,6 +19,13 @@ export interface InfoOption {
   label: string;
   /** The line that goes into the request — records language a CPIO can answer. */
   line: string;
+  /**
+   * A noun phrase for use inside prose. Splicing the question-form label into a
+   * sentence produced "You are asking for when was my pension last paid", which
+   * reads as machine-generated on the screen that most needs to feel trustworthy
+   * (fresh-reviewer finding FR-2).
+   */
+  noun: string;
 }
 
 const GENERIC: InfoOption[] = [
@@ -26,31 +33,37 @@ const GENERIC: InfoOption[] = [
     id: 'status',
     label: 'What is the current status?',
     line: 'The current status of the matter described below, as recorded in your files.',
+    noun: 'the current status',
   },
   {
     id: 'reason',
     label: 'Why has it been delayed?',
     line: 'The reason for the delay as recorded on the file, including any noting or remark made by the dealing officer.',
+    noun: 'the reason for the delay',
   },
   {
     id: 'action',
     label: 'What action has been taken so far?',
     line: 'A list of the actions taken on this matter to date, with the date of each action.',
+    noun: 'what has been done so far',
   },
   {
     id: 'documents',
     label: 'Which documents or records explain this?',
     line: 'Copies of the documents, file notings and correspondence relating to this matter.',
+    noun: 'the documents on file',
   },
   {
     id: 'timeline',
     label: 'When can I expect it to be resolved?',
     line: 'The expected date of resolution or payment as recorded in your files, and the normal processing time prescribed for such cases.',
+    noun: 'the expected date',
   },
   {
     id: 'rules',
     label: 'What rules or criteria were applied?',
     line: 'The rules, circulars or criteria applied while deciding this matter, with their reference numbers.',
+    noun: 'the rules that were applied',
   },
 ];
 
@@ -61,11 +74,13 @@ const DOMAIN_EXTRA: Record<string, InfoOption[]> = {
       id: 'pension_last_paid',
       label: 'When was my pension last paid?',
       line: 'The date and amount of the last pension payment released in this case, and the mode of payment.',
+      noun: 'the date of the last payment',
     },
     {
       id: 'pension_ppo',
       label: 'What does my pension file record?',
       line: 'The details recorded in the pension payment order relating to this case, and the date it was authorised.',
+      noun: 'what the pension file records',
     },
   ],
   provident_fund: [
@@ -73,11 +88,13 @@ const DOMAIN_EXTRA: Record<string, InfoOption[]> = {
       id: 'pf_claim_dates',
       label: 'When was my claim received and processed?',
       line: 'The date the claim was received, the dates of each stage of processing, and the officer who dealt with it.',
+      noun: 'the claim processing dates',
     },
     {
       id: 'pf_employer',
       label: 'What has my employer deposited?',
       line: 'The contribution records held for this account, showing amounts received and the periods they relate to.',
+      noun: 'the employer contribution records',
     },
   ],
   passport: [
@@ -85,11 +102,13 @@ const DOMAIN_EXTRA: Record<string, InfoOption[]> = {
       id: 'passport_verification',
       label: 'What is the police verification status?',
       line: 'The date the police verification report was requested, the date it was received, and its recorded outcome.',
+      noun: 'the police verification status',
     },
     {
       id: 'passport_dispatch',
       label: 'Has it been printed or dispatched?',
       line: 'The printing and dispatch status of the passport booklet, with dates and any despatch reference recorded.',
+      noun: 'the printing and dispatch status',
     },
   ],
   railways: [
@@ -97,11 +116,13 @@ const DOMAIN_EXTRA: Record<string, InfoOption[]> = {
       id: 'rail_refund_amount',
       label: 'What refund was sanctioned?',
       line: 'The amount of refund sanctioned in this case, the date it was sanctioned, and the date it was released.',
+      noun: 'the refund sanctioned',
     },
     {
       id: 'rail_rules',
       label: 'What refund rules applied?',
       line: 'The refund rules applied to this class of ticket, with the circular reference under which they were applied.',
+      noun: 'the refund rules applied',
     },
   ],
   income_tax: [
@@ -109,11 +130,13 @@ const DOMAIN_EXTRA: Record<string, InfoOption[]> = {
       id: 'tax_processing',
       label: 'When was my return processed?',
       line: 'The date the return was processed, and the date any refund was determined and issued.',
+      noun: 'when the return was processed',
     },
     {
       id: 'tax_adjustment',
       label: 'Was my refund adjusted against a demand?',
       line: 'Details of any outstanding demand adjusted against the refund, with the assessment year and the order under which it was raised.',
+      noun: 'any demand adjusted against the refund',
     },
   ],
 };

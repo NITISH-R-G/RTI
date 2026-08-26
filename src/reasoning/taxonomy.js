@@ -8,6 +8,21 @@ export const ACTION_SIGNALS = [
   'arrest', 'compensate', 'refund me now', 'do something', 'help me get',
 ];
 
+/**
+ * Speculation about a decision that has not been taken yet. RTI obtains records
+ * that already exist, so no record can answer these.
+ * Guarded by FIRST_PERSON_CASE below: "when will MY pension be credited" asks for
+ * a date already on a file and is perfectly legitimate.
+ */
+export const SPECULATION_SIGNALS = [
+  'government will', 'will the government', 'will they increase', 'will increase',
+  'going to increase', 'in the future', 'next year', 'will there be', 'are they going to',
+  'do you think', 'is it likely',
+];
+
+/** If the citizen is asking about their own case, it is not policy speculation. */
+export const FIRST_PERSON_CASE = ['my ', 'mine', 'i applied', 'i filed', 'i submitted', 'our '];
+
 /** Words that indicate an OPINION is being sought rather than a record. */
 export const OPINION_SIGNALS = [
   'what do you think', 'your opinion', 'is it fair', 'should the government', 'do you agree',
@@ -204,7 +219,10 @@ export const DOMAINS = [
 ];
 
 /** Ambiguous words that appear across several supported domains and must never decide a domain alone. */
-export const CROSS_DOMAIN_WORDS = ['refund', 'status', 'delayed', 'pending', 'money', 'claim', 'not received'];
+export const CROSS_DOMAIN_WORDS = [
+  'refund', 'status', 'delayed', 'pending', 'money', 'claim', 'not received',
+  'transfer', // file transfer, job transfer, train transfer - cannot establish a domain alone
+];
 
 /** Abbreviation and shorthand expansion, applied during normalisation. */
 export const EXPANSIONS = {

@@ -5,6 +5,7 @@
 import {
   DOMAINS, STATE_SIGNALS, ACTION_SIGNALS, OPINION_SIGNALS,
   THIRD_PARTY_SIGNALS, GRIEVANCE_SIGNALS, CROSS_DOMAIN_WORDS, EXPANSIONS, PROBLEM_SIGNALS,
+  SPECULATION_SIGNALS, FIRST_PERSON_CASE,
 } from './taxonomy.js';
 
 export const MAX_INPUT = 5000;
@@ -54,7 +55,11 @@ export function withinEdits(a, b, max) {
 }
 
 function fuzzyHit(tokens, word) {
-  const max = word.length >= 8 ? 2 : 1;
+  // Two edits is too generous at this length: "password" is two edits from
+  // "passport", so an unrelated word routed a citizen to the passport domain
+  // (blind corpus B44). Allow two edits only for genuinely long keywords,
+  // where the ratio of edits to length stays small.
+  const max = word.length >= 10 ? 2 : 1;
   return tokens.some((t) => t.length >= 4 && withinEdits(t, word, max));
 }
 
@@ -62,6 +67,20 @@ function fuzzyHit(tokens, word) {
 
 function phraseHits(text, phrases) {
   return phrases.filter((p) => text.includes(p));
+}
+
+/**
+ * Keyword match.
+ *
+ * Short single-word keywords must match on word boundaries. Plain substring
+ * matching meant "pf" matched inside "helpful" and routed an unrelated sentence
+ * to the provident fund domain (found by blind corpus B44). Multi-word phrases
+ * like "provident fund" stay substring matches - they cannot collide.
+ */
+function keywordHit(text, keyword) {
+  if (keyword.includes(' ') || keyword.length > 6) return text.includes(keyword);
+  const safe = keyword.replace(/[.*+?^${}()|[\]\\]/g, (m) => '\\' + m);
+  return new RegExp('\\b' + safe + '\\b').test(text);
 }
 
 // ---------------------------------------------------------------- scoring
@@ -74,10 +93,10 @@ export function scoreDomains(norm) {
     let score = 0;
 
     for (const k of d.strong) {
-      if (norm.text.includes(k)) { hits.strong.push(k); score += W.strong; }
+      if (keywordHit(norm.text, k)) { hits.strong.push(k); score += W.strong; }
     }
     for (const k of d.weak) {
-      if (norm.text.includes(k)) { hits.weak.push(k); score += W.weak; }
+      if (keywordHit(norm.text, k)) { hits.weak.push(k); score += W.weak; }
     }
     // Fuzzy matching exists to rescue typos. If the domain already matched a keyword
     // exactly, fuzzy would double-count morphological variants of the same token
@@ -88,7 +107,7 @@ export function scoreDomains(norm) {
       }
     }
     for (const k of d.negative) {
-      if (norm.text.includes(k)) { hits.negative.push(k); score += W.negative; }
+      if (keywordHit(norm.text, k)) { hits.negative.push(k); score += W.negative; }
     }
 
     // A domain claimed only by cross-domain words has no real evidence.
@@ -187,6 +206,19 @@ export function run(rawInput) {
   const grievance = phraseHits(norm.text, GRIEVANCE_SIGNALS);
   const action = phraseHits(norm.text, ACTION_SIGNALS);
   const likelyDomain = top.score > 0 && top.distinctive > 0 ? top.id : null;
+
+  // Policy speculation: no record exists yet, so RTI cannot answer it. Only when
+  // the citizen is NOT asking about their own case (blind corpus B38).
+  const speculation = phraseHits(norm.text, SPECULATION_SIGNALS);
+  const ownCase = phraseHits(norm.text, FIRST_PERSON_CASE);
+  if (speculation.length && ownCase.length === 0) {
+    trace.stages.push('not-rti:speculation');
+    return result({
+      classification: 'not_rti', domain: likelyDomain, confidence: 0.7,
+      reasoning: 'This asks what may happen in future. RTI gets you records that already exist, so no office can answer it — a decision that has not been taken has no file. You can ask instead for the current rules, or for the file notings on a proposal already under consideration.',
+      next_action: 'explain_limit', trace,
+    });
+  }
 
   if (opinion.length) {
     trace.stages.push('not-rti:opinion');

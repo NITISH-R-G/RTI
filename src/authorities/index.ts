@@ -102,6 +102,7 @@ export function looksStateOrUt(name: string): boolean {
 export function reasonsFor(opts: {
   result: ReasoningResult;
   answers: Record<string, string>;
+  /** Noun phrases, not question labels — see InfoOption.noun (FR-2). */
   infoTypeLabels: string[];
   authorityReason: string;
 }): string[] {
@@ -114,8 +115,10 @@ export function reasonsFor(opts: {
   if (opts.answers.which_domain) out.push('You chose this subject when we asked which one your situation was about.');
 
   if (opts.infoTypeLabels.length) {
-    const list = opts.infoTypeLabels.slice(0, 3).map((l) => l.replace(/\?$/, '').toLowerCase());
-    out.push(`You are asking for ${list.join(', ')} — records of that kind are held by the office that processes the case.`);
+    const list = opts.infoTypeLabels.slice(0, 3);
+    const joined =
+      list.length === 1 ? list[0] : `${list.slice(0, -1).join(', ')} and ${list[list.length - 1]}`;
+    out.push(`You asked for ${joined}. Records of that kind sit with the office that processes the case.`);
   }
 
   if (opts.result.confidence_band !== 'high') {

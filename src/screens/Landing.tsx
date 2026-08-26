@@ -4,6 +4,7 @@ import { PageTitle, Button, Card, Notice } from '../ui/primitives';
 import { useJourney } from '../state/journey';
 import { run } from '../reasoning/pipeline';
 import { RTI_FEE_RUPEES } from '../rules';
+import { WhyThisExists } from '../ui/WhyThisExists';
 
 const MIN_USEFUL = 15;
 const SOFT_MAX = 5000;
@@ -137,7 +138,11 @@ export function Landing() {
         </section>
       </form>
 
-      <div className="mt-8 grid gap-3">
+      <div className="mt-8">
+        <WhyThisExists />
+      </div>
+
+      <div className="mt-6 grid gap-3">
         <Notice title="Before you start">
           <p>
             Filing a real RTI costs <strong>₹{RTI_FEE_RUPEES}</strong>. It is free if you hold a Below

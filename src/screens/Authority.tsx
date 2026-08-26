@@ -33,7 +33,7 @@ export function Authority() {
   const infoTypeLabels = useMemo(() => {
     const opts = optionsFor(result?.domain ?? null);
     return state.infoTypes
-      .map((sid) => opts.find((o) => o.id === sid)?.label)
+      .map((sid) => opts.find((o) => o.id === sid)?.noun)
       .filter(Boolean) as string[];
   }, [result?.domain, state.infoTypes]);
 
@@ -120,6 +120,12 @@ export function Authority() {
               </li>
             ))}
           </ul>
+
+          <p className="mt-4 text-sm text-ink-500">
+            This name comes from the list of 2,904 public authorities published by the RTI portal
+            itself, captured on 26 August 2026 — we cannot suggest an office that does not exist on
+            it. The reasoning above is rules we wrote, not a language model.
+          </p>
 
           {result.confidence_band !== 'high' && (
             <p className="mt-4 rounded-xl bg-paper-100 p-3 text-sm text-ink-700">

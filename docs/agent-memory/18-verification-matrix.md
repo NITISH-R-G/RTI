@@ -17,6 +17,21 @@ Legend: `—` not started · `WIP` in progress · `PASS` verified with evidence 
 | J9 — **State-subject warning fires; no central authority proposed** | `/not-rti`, `/authority` | S7 | Built | Built | pass | 62 pass | Chrome | pass | **axe + contrast 0** | **Working** |
 | J10 — Journey completes with the network blocked entirely | all | — | Built | Built | n/a | static build, no runtime fetch | Chrome | pass | pass | **Working** |
 
+### Phase 4 — independent evaluation, 2026-08-27
+
+| Item | Result |
+|---|---|
+| Blind corpus committed before being run | **Yes** — commit `a86821f`, 47 unseen cases |
+| **ORIGINAL blind result** | **44/47 (93.6%)**, 1 dangerous, 0 dead ends, 0 fabricated |
+| Post-fix blind result | 46/47 (97.9%), **0 dangerous** |
+| Development corpus after fixes | 60/60, no regression |
+| Adversarial suite | 21 tests x 2 viewports, **all passing** — incl. every stale-state attack |
+| Fresh-reviewer audit | Done before inspecting implementation; 6 findings, 4 fixed |
+| Judging audit | Done — top risk is **not yet deployed** |
+| Complexity audit | Done |
+| Visual quality audit | Done — one change made, rest recorded |
+| Full suite | 78 reasoning + 79 unit/component + **104 Playwright** = 261 passing |
+
 ### Phase 2.5 — deterministic reasoning, VERIFIED 2026-08-26
 
 | Item | Result | Evidence |

@@ -7,6 +7,20 @@ import { test, expect, type Page } from '@playwright/test';
  * breaks. It runs at desktop AND at 360px, from a fresh browser session.
  */
 
+/**
+ * Our product must never itself produce the portal's refusal as an OUTCOME.
+ * The landing page deliberately quotes that refusal as evidence, inside a block
+ * marked data-evidence-quote, so the check excludes that block rather than being
+ * weakened or deleted.
+ */
+async function bodyTextExcludingEvidence(page: Page) {
+  return page.evaluate(() => {
+    const clone = document.body.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('[data-evidence-quote]').forEach((n) => n.remove());
+    return clone.textContent ?? '';
+  });
+}
+
 const PROBLEM = 'my pension has not been paid';
 
 async function walk(page: Page) {
@@ -31,12 +45,12 @@ test('demo path: problem to authority, no dead end', async ({ page }) => {
   await expect(page.getByText(/why this may be the right place/i)).toBeVisible();
 
   // The failure we exist to eliminate must never appear.
-  await expect(page.locator('body')).not.toContainText('No such Public Authority');
+  expect(await bodyTextExcludingEvidence(page)).not.toContain('No such Public Authority');
 });
 
 test('the product never claims to be AI', async ({ page }) => {
   await walk(page);
-  const body = (await page.locator('body').textContent()) ?? '';
+  const body = await bodyTextExcludingEvidence(page);
   expect(body).not.toMatch(/\bAI\b/);
   expect(body).not.toMatch(/artificial intelligence/i);
   expect(body).not.toMatch(/\d+%\s*confiden/i);

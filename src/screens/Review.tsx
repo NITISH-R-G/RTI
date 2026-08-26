@@ -42,7 +42,7 @@ export function Review() {
 
   const infoLabels = useMemo(() => {
     const opts = optionsFor(state.result?.domain ?? null);
-    return state.infoTypes.map((id) => opts.find((o) => o.id === id)?.label).filter(Boolean) as string[];
+    return state.infoTypes.map((id) => opts.find((o) => o.id === id)?.noun).filter(Boolean) as string[];
   }, [state.result?.domain, state.infoTypes]);
 
   if (!state.result || !state.authority) return <Navigate to="/" replace />;

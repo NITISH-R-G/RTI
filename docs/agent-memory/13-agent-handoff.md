@@ -1,6 +1,17 @@
 # 13 — Agent Handoff
 
-**Last updated:** 2026-08-27 — **PHASE 3 COMPLETE.** Audit frozen, spec frozen, reasoning validated, full citizen journey built and verified. Next: Phase 4 integration and competition evaluation.
+**Last updated:** 2026-08-27 — **PHASE 4 COMPLETE.** Independently evaluated, adversarially tested, audited against the judging criteria. Next: deploy, then submission materials.
+
+| | |
+|---|---|
+| **Current phase** | Phase 4 complete |
+| **Current commit** | see `git log --oneline -1` |
+| **Product state** | Feature-complete, 8 routes, verified desktop + 360 px |
+| **Test counts** | 78 reasoning + 79 unit/component + 104 Playwright = **261 passing** |
+| **Blind evaluation** | **ORIGINAL 44/47 (93.6%)**, post-fix 46/47. Corpus committed before running (`a86821f`) |
+| **Top risk** | **Not deployed to a public URL** — competition requirement R7 |
+| **Second risk** | `19-codex-contribution-log.md` is empty — it is the R1 evidence |
+| **Next action** | Deploy the static build, fill the Codex log, then submission materials |
 
 ## Context Recovery Snapshot
 
@@ -57,7 +68,9 @@ Nothing.
 
 ### What is pending
 
-**Phase 4: integration and competition evaluation** — test the product as a fresh reviewer, deliberately try to break it, run every citizen scenario, build a **fresh blind reasoning set** (the current held-out set is burned), audit against the judging criteria, fix the highest-impact weaknesses. Then submission materials. **Do not start the video before Phase 4.**
+**Deployment**, then submission materials. Phase 4 is done. Previous text follows for context.
+
+**~~Phase 4: integration and competition evaluation~~ — DONE.** — test the product as a fresh reviewer, deliberately try to break it, run every citizen scenario, build a **fresh blind reasoning set** (the current held-out set is burned), audit against the judging criteria, fix the highest-impact weaknesses. Then submission materials. **Do not start the video before Phase 4.**
 
 ### Important decisions that must not be casually reversed
 

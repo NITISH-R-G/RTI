@@ -64,6 +64,39 @@ Note the near-miss risk: *"when will my pension be credited"* (development corpu
 
 ---
 
-## POST-FIX RESULT — recorded after the three fixes below
+## POST-FIX RESULT — 2026-08-27, after four fixes
 
-See the section added beneath this line after re-running. **The original 93.6% above stands regardless of what the post-fix number is.**
+```
+Acceptable behaviour        46 / 47  (97.9%)
+DANGEROUS outcomes           0   (was 1)
+Dead ends                    0
+Fabricated authorities       0
+Supported-domain intent     26 / 26
+Ambiguous                    5 / 5
+Unsupported                  5 / 5
+Not-RTI                      4 / 5   (was 3)
+Adversarial / colloquial     6 / 6   (was 5)
+```
+
+**The original 93.6% stands as the independent measurement.** 97.9% is a post-fix number and is labelled as such wherever it appears.
+
+Development corpus re-run after every fix: **still 60/60**, no regression at any step.
+
+### The four fixes
+
+| # | Category | Change | Blind after |
+|---|---|---|---|
+| G | Implementation over-reach | Fuzzy matching allowed 2 edits at 8+ characters, so **`password` matched `passport`**. Now 2 edits only at 10+ characters | 45/47, **dangerous → 0** |
+| H | Taxonomy gap | No notion of speculation about future policy. Added speculation signals, guarded by a first-person check so *"when will **my** pension be credited"* stays legitimate | 46/47 |
+| I | Incorrect domain boundary | `transfer` was a provident-fund keyword, but file/job/train transfers exist too. Moved to cross-domain | 46/47 |
+| J | Implementation over-reach | **`pf` matched inside `helpful`.** Short keywords were raw substring matches; single words of ≤6 characters now require word boundaries | 46/47 |
+
+Fix J is the most consequential of the four. It was invisible in 60 development cases and would have misrouted any citizen who typed a word containing a short keyword — `helpful`, `hopeful`, `steps`. Exactly the class of defect a blind corpus exists to find.
+
+### The one remaining failure: a corpus expectation that was too strict
+
+**B37** `please transfer my file to another officer, this one is useless` — the classification is acceptable (ambiguous) and the citizen is asked *"Which of these is your situation about?"* with a **None of these** escape. Only my `acceptable_domain: [null]` expectation fails, because the leading candidate is still reported while asking.
+
+Reporting the leading candidate while asking was a deliberate earlier decision: a blank tells the citizen nothing. **Categorised as a bad expected result, not an implementation defect.** The implementation was not contorted to satisfy it.
+
+---

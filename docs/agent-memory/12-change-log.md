@@ -4,6 +4,26 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
+## 2026-08-27 — Phase 4 — Integration, adversarial evaluation, blind corpus, competition audit
+
+**Fresh-reviewer audit** run against the running application before inspecting implementation, and opening with its own limitation stated: I built this, so I am not a genuinely fresh reviewer and do not claim to be. Six findings; the critical one was that **the differentiator was invisible on the main path** — the observed portal refusal lived only on `/about`, so a judge who never clicked it would see a well-made form and no reason for it to exist.
+
+**Blind corpus.** 47 new colloquial inputs, written without consulting the development corpus and **committed before being run once** (`a86821f`), replacing the burned Phase 2.5 held-out set. **Original independent result: 44/47 (93.6%), 1 dangerous outcome, 0 dead ends, 0 fabricated authorities.** All 26 supported-domain cases behaved acceptably on phrasing that resembles nothing in development.
+
+**Four reasoning fixes**, each re-running both corpora. The two that mattered were both keyword over-reach the development corpus could never have caught: `password` fuzzy-matched `passport`, and **`pf` matched inside `helpful`**. Post-fix 46/47 with zero dangerous outcomes; development corpus unchanged at 60/60. The original 93.6% is preserved and labelled.
+
+**Adversarial suite** — 21 tests covering 13 hostile inputs, deep links into every later route, refresh at each step, browser back/forward, and four stale-state attacks. The important one: changing the problem after an authority was chosen must leave no trace of the old office. All passing.
+
+**Four fresh-reviewer fixes.** An evidence block on the landing page showing the real observed exchange; authority-name provenance and the no-language-model statement moved onto the authority screen; and a genuinely ungrammatical reasoning sentence rewritten by giving each information option a noun phrase for prose.
+
+**A test sharpened rather than weakened.** Quoting the portal's refusal as evidence broke the assertion that our body never contains it. The block is now marked `data-evidence-quote` and the assertion excludes it, so it still catches our product *producing* that refusal.
+
+**Audits written:** judging (top risk: not yet deployed), complexity, visual quality, adversarial, fresh-reviewer, blind results.
+
+**Totals: 78 reasoning + 79 unit/component + 104 Playwright = 261 tests passing.** 0 axe serious/critical, 0 contrast violations.
+
+---
+
 ## 2026-08-27 — Phase 3 WU6-WU9 — Review, mock filing, not-RTI, about
 
 **Built:**
