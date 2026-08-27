@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { PageTitle, Button, Card, Notice } from '../ui/primitives';
+import { PageTitle, Button, Choice, Notice } from '../ui/primitives';
 import { useJourney } from '../state/journey';
 import { refine, pendingQuestions } from '../reasoning/refine';
 
@@ -57,18 +57,16 @@ export function Clarify() {
   if (!question) {
     return (
       <>
-        <PageTitle lede="We have what we need from what you already told us.">
-          A few questions
+        <PageTitle eyebrow="A few questions" lede="We have what we need from what you already told us.">
+          You are ready to continue
         </PageTitle>
-        <Card>
-          <p className="text-ink-700">{state.result.reasoning}</p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Button onClick={() => navigate('/request')}>Continue</Button>
-            <Button variant="secondary" onClick={() => navigate('/')}>
-              Back
-            </Button>
-          </div>
-        </Card>
+        <p className="text-ink-700">{state.result.reasoning}</p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button onClick={() => navigate('/request')}>Continue</Button>
+          <Button variant="secondary" onClick={() => navigate('/')}>
+            Back
+          </Button>
+        </div>
       </>
     );
   }
@@ -77,51 +75,33 @@ export function Clarify() {
 
   return (
     <>
-      <PageTitle lede="Only the questions whose answers change where your request should go. Nothing about your gender, income or education.">
-        A few questions
-      </PageTitle>
+      <PageTitle eyebrow={`Question ${index + 1} of ${queue.length}`}>{question.text}</PageTitle>
+      <p className="-mt-4 mb-6 text-ink-500">This decides which office holds your records.</p>
 
-      <Card>
-        <fieldset>
-          <legend id={legendId} className="text-lg font-semibold">
-            {question.text}
-          </legend>
-          <p className="mt-1 text-sm text-ink-500">
-            Question {index + 1} of {queue.length}. This decides which office holds your records.
-          </p>
-
-          <div className="mt-4 grid gap-2" role="radiogroup" aria-labelledby={legendId}>
-            {question.options.map((opt) => {
-              const selected = answers[question.id] === opt.value;
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  onClick={() => choose(question.id, opt.value)}
-                  className={`tap w-full rounded-xl px-4 py-3 text-left ring-1 transition-colors ${
-                    selected
-                      ? 'bg-brand-50 text-ink-900 ring-brand-700'
-                      : 'bg-paper-0 text-ink-900 ring-paper-200 hover:bg-brand-50 hover:ring-brand-100'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-
-        <div className="mt-5">
-          <Button variant="secondary" onClick={back}>
-            Back
-          </Button>
+      <fieldset>
+        <legend id={legendId} className="sr-only">
+          {question.text}
+        </legend>
+        <div className="grid gap-3" role="radiogroup" aria-labelledby={legendId}>
+          {question.options.map((opt) => {
+            const selected = answers[question.id] === opt.value;
+            return (
+              <Choice key={opt.value} selected={selected} onClick={() => choose(question.id, opt.value)}>
+                {opt.label}
+              </Choice>
+            );
+          })}
         </div>
-      </Card>
+      </fieldset>
 
       <div className="mt-6">
-        <Notice title="Why we are asking">
+        <Button variant="secondary" onClick={back}>
+          Back
+        </Button>
+      </div>
+
+      <div className="mt-8">
+        <Notice tone="warn" title="Why we are asking">
           <p>
             Choosing the wrong office is the most expensive mistake on the real portal. A central
             office will forward your request, but a <strong>state</strong> office returns it, and the

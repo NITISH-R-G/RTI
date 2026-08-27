@@ -12,7 +12,8 @@ const files = execSync('git ls-files', { encoding: 'utf8' })
   .filter(Boolean)
   .filter((f) => /\.(tsx?|jsx?|md|mdx|css|html)$/.test(f))
   .filter((f) => !f.startsWith('src/vendor/'))
-  .filter((f) => !f.includes('package-lock.json'));
+  .filter((f) => !f.includes('package-lock.json'))
+  .filter((f) => f !== 'scripts/check-em-dash.js');
 
 let violations = 0;
 for (const file of files) {
