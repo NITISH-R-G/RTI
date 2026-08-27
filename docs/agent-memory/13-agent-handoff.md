@@ -1,20 +1,22 @@
 # 13: Agent Handoff
 
-**Last updated:** 2026-08-27: **PHASE V (visual rebuild) IN PROGRESS, landing screen (P0) complete and verified. Authority and Clarify screens (P0) not yet visually rebuilt.** Next: continue the screen-by-screen visual rebuild in priority order, starting with Authority.
+**Last updated:** 2026-08-27 (final design sprint, second pass): **All three P1 screens (Clarify, Request builder, Authority) redesigned under visual-direction-v2 (grayscale-core palette) and pushed.** Next: P2 screens (Review, Mock filing, Tracking, Not-RTI), then P3 (About).
+
+The user issued a final, comprehensive design-sprint directive superseding the Phase V teal/amber decision below: core palette is now black/white/grayscale, colour spent only where meaning would otherwise be lost (the fee/wrong-office warning). See `docs/design/visual-direction-v2.md` for the full rationale. The "VISUAL REBUILD STATUS (Phase V)" section further down is now **superseded** by this directive; kept for its component-provenance history, not its colour/next-step conclusions.
 
 | | |
 |---|---|
-| **Current phase** | Phase V, one screen down of three P0 screens |
-| **Current commit** | see `git log --oneline -1` |
-| **Product state** | Feature-complete, 8 routes, functionally verified. Landing visually rebuilt; Clarify, Authority, Draft, Review, Filed, NotRti, About still on the original Phase 3 visual design (functional, tested, but not yet visually distinctive) |
-| **Test counts** | 78 reasoning + 79 unit/component + 114 Playwright = **271 passing** |
-| **Component provenance** | `docs/design/component-provenance.json`; mutation tests in `e2e/component-mutation.spec.ts`, 5 tests stable across repeats |
+| **Current phase** | Final design sprint, P1 screens done (Clarify, Request builder, Authority), P2 next |
+| **Current commit** | see `git log --oneline -1` (`5dd4c89` at last handoff write) |
+| **Product state** | Feature-complete, 8 routes, functionally verified. Landing (dark hero, Phase V), Clarify, Request builder, Authority visually rebuilt under visual-direction-v2. Review, Filed, NotRti, About still on the Phase 3 `Card`/`Notice` visual design |
+| **Test counts** | 78 reasoning + 79 unit/component + 114 Playwright = **271 passing**, re-verified after each of the three P1 redesigns (desktop 57/57, mobile-360 57/57) |
+| **Component provenance** | `docs/design/component-provenance.json` (Phase V) plus the new `Choice` primitive in `src/ui/primitives.tsx` (in-house, not externally sourced, so no provenance/mutation-test entry needed) |
 | **Bundle** | 123 kB to 166 kB gzipped (+43 kB for `motion`) |
-| **Em dash check** | `scripts/check-em-dash.js`, wired into `npm test`, 0 occurrences repo-wide (this was also retroactively fixed across all pre-existing docs and comments in this session) |
+| **Em dash check** | `scripts/check-em-dash.js`, wired into `npm test`. Fixed a self-referential bug where the checker flagged its own `EM_DASH` literal (excluded itself from the scanned file list) |
 | **Top risk** | **Not deployed to a public URL**: competition requirement R7 |
 | **Second risk** | `19-codex-contribution-log.md` is empty: it is the R1 evidence |
-| **Third risk** | Only 1 of 3 P0 screens (Landing, Clarify, Authority) has had its visual rebuild; a judge reaching Clarify or Authority sees the older, more generic design |
-| **Next action** | Rebuild Authority screen visually (the "proof" screen per the brief), then Clarify, then stop and re-review before touching P1/P2 screens |
+| **Third risk** | P2/P3 screens (Review, Filed, Tracking, NotRti, About) still read as the older, more generic `Card`-boxed design next to the now-editorial P1 screens |
+| **Next action** | Redesign Review (P2, "calm checkpoint grouped by mental model"), then Mock filing, Tracking, Not-RTI, then About (P3). Reuse `Choice`/`Eyebrow`/`PageTitle` from `src/ui/primitives.tsx`, drop the teal `Card` fills, keep amber `Notice` for warnings only |
 
 ## VISUAL REBUILD STATUS (Phase V)
 
@@ -71,9 +73,20 @@ Landing (`src/screens/Landing.tsx`) is done and verified: typecheck clean, 8 com
 - The Stepper concept for Authority was evaluated but not built. The brief explicitly calls Authority the most important screen to fix visually; this is the highest priority remaining gap.
 - Two mutation tests initially failed for reasons worth knowing before writing more: (a) `useInView`'s -10% margin means partial viewport visibility is not enough to trigger a reveal, so tests scrolling elements into view must center them, not just call `scrollIntoViewIfNeeded()`; (b) the library's own `sr-only` fallback mirrors the animating state, not a static final string, so assertions must wait for settlement before checking accessible text.
 
-### NEXT EXACT STEP
+### NEXT EXACT STEP (superseded, see top of file)
 
-Rebuild `src/screens/Authority.tsx` visually. Apply the same discipline: read the current file first, decide what genuinely needs a component versus what is already fine, prefer reusing `motion` (already a dependency) over adding a new one, add a `data-testid` before writing any new test, run the full suite (typecheck, unit, build, e2e) before considering it done, then stop and visually review in a real browser before moving to Clarify.
+~~Rebuild `src/screens/Authority.tsx` visually.~~ Done, along with Clarify and Request builder, under `visual-direction-v2.md` (grayscale core palette, not the teal/amber described above). Next exact step is now the P2 screens; see the status table at the top of this file.
+
+### WHAT visual-direction-v2 ACTUALLY CHANGED (2026-08-27, second pass)
+
+- Added `Eyebrow` and `Choice` (radio/checkbox/button-role variants) to `src/ui/primitives.tsx`. `Choice` gives grayscale ink-on-paper selected states (heavier border, filled dot/check) instead of the teal-wash `bg-brand-50 ring-brand-700` pattern, with `motion`'s `whileTap` for press feedback.
+- `Button`/`Card` primitives restyled: primary button is now `bg-ink-900`, not `bg-brand-700`; secondary is a bare ink ring, not a paper-boxed ring.
+- `src/screens/Clarify.tsx`: removed the `Card` wrapper, question renders as a Fraunces headline with an eyebrow step count (matching Landing's grammar), options are full-width `Choice` rows.
+- `src/screens/RequestDraft.tsx`: removed `Card` wrappers, checkbox list uses `Choice as="checkbox"`, the request textarea is restyled from monospace/bordered code-box to `font-serif text-lg` on a `bg-paper-100` paper block (still the same single editable textarea, since it already regenerates live from the checkboxes and so already functions as Baymard's "live preview" without needing a separate read-only step).
+- `src/screens/Authority.tsx`: removed `Card` wrappers, office name is now the page `<h1>` (recommendation first), reasons are a numbered `<ol>` with filled ink circles instead of teal bullet dots, alternative-office and search-hit rows use `Choice as="button"` (added a third `Choice` mode because these are pick-one-from-a-list actions, not real form controls in a fieldset, so `role="radio"` without a `radiogroup` wrapper would have been an a11y regression: `getByRole('button', ...)` tests confirmed this was previously a plain `<button>`).
+- Fixed `scripts/check-em-dash.js` flagging its own `EM_DASH` literal (pre-existing bug, unrelated to this pass, was blocking `npm test` for everyone).
+- Verification per screen: `npx tsc --noEmit` clean, full `npm test` (79 unit + 78 reasoning), Playwright `desktop` and `mobile-360` projects (57/57 each including `a11y.spec.ts` and `contrast.spec.ts`), real-Chrome screenshot via `mcp__claude-in-chrome__*` at desktop width (1536px window; the tool's `resize_window` does not reliably control the real Chrome window's viewport, so true 360/390px screenshots were not captured this pass — noted honestly rather than claimed).
+- Each screen committed and pushed separately: `9ca1d70` (Clarify), `9f2f461` (Request builder), `5dd4c89` (Authority).
 
 ---
 
