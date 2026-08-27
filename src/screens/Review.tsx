@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { PageTitle, Button, Card, Notice } from '../ui/primitives';
+import { PageTitle, Button, Choice, Notice } from '../ui/primitives';
 import { useJourney } from '../state/journey';
 import { optionsFor } from '../draft/compose';
 import { reasonsFor } from '../authorities';
@@ -18,19 +18,19 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <Card className="mb-4">
+    <div className="mb-6 border-b border-ink-900/10 pb-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="font-semibold">{title}</h2>
+        <h2 className="font-medium text-ink-900">{title}</h2>
         <button
           type="button"
           onClick={onEdit}
-          className="tap inline-flex items-center text-sm text-brand-700 underline underline-offset-4"
+          className="tap inline-flex items-center text-sm text-ink-700 underline underline-offset-4"
         >
           {editLabel}
         </button>
       </div>
       <div className="mt-2">{children}</div>
-    </Card>
+    </div>
   );
 }
 
@@ -69,7 +69,10 @@ export function Review() {
 
   return (
     <>
-      <PageTitle lede="Everything that would be filed, in one place. Change anything before you continue.">
+      <PageTitle
+        eyebrow="Step 5 of 6"
+        lede="Everything that would be filed, in one place. Change anything before you continue."
+      >
         Check before you finish
       </PageTitle>
 
@@ -86,7 +89,7 @@ export function Review() {
           <ul className="grid gap-1 text-ink-700">
             {infoLabels.map((l) => (
               <li key={l} className="flex gap-2">
-                <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-700" />
+                <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-300" />
                 <span>{l}</span>
               </li>
             ))}
@@ -95,12 +98,12 @@ export function Review() {
           <p className="text-ink-500">You wrote your request yourself.</p>
         )}
         <details className="mt-4">
-          <summary className="tap inline-flex cursor-pointer items-center text-sm text-brand-700 underline underline-offset-4">
+          <summary className="tap inline-flex cursor-pointer items-center text-sm text-ink-700 underline underline-offset-4">
             Read the full request text
           </summary>
-          <pre className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap rounded-xl bg-paper-100 p-3 font-mono text-sm text-ink-900">
+          <p className="mt-3 max-h-80 overflow-auto whitespace-pre-wrap rounded-xl bg-paper-100 p-5 font-serif text-base leading-relaxed text-ink-900">
             {state.draft}
-          </pre>
+          </p>
         </details>
       </Section>
 
@@ -114,38 +117,29 @@ export function Review() {
         <ul className="mt-1 grid gap-1 text-ink-700">
           {reasons.map((r) => (
             <li key={r} className="flex gap-2">
-              <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-700" />
+              <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-300" />
               <span>{r}</span>
             </li>
           ))}
         </ul>
       </Section>
 
-      <Card className="mb-4">
+      <div className="mb-6 border-b border-ink-900/10 pb-6">
         <fieldset>
-          <legend className="font-semibold">Would you pay the fee, or are you exempt?</legend>
+          <legend className="font-medium text-ink-900">Would you pay the fee, or are you exempt?</legend>
           <p className="mt-1 text-sm text-ink-500">
             This changes the fee only. We ask because the real portal hides it until you answer.
           </p>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
             {(
               [
                 ['no', 'I would pay the fee'],
                 ['yes', 'I have a Below Poverty Line certificate'],
               ] as const
             ).map(([value, label]) => (
-              <button
-                key={value}
-                type="button"
-                role="radio"
-                aria-checked={bpl === value}
-                onClick={() => setBpl(value)}
-                className={`tap rounded-xl px-4 py-3 text-left ring-1 ${
-                  bpl === value ? 'bg-brand-50 ring-brand-700' : 'bg-paper-0 ring-paper-200 hover:bg-brand-50'
-                }`}
-              >
+              <Choice key={value} selected={bpl === value} onClick={() => setBpl(value)}>
                 {label}
-              </button>
+              </Choice>
             ))}
           </div>
         </fieldset>
@@ -163,10 +157,10 @@ export function Review() {
             </p>
           )}
         </div>
-      </Card>
+      </div>
 
-      <Card className="mb-4">
-        <h2 className="font-semibold">What happens after a real filing</h2>
+      <div className="mb-6 border-b border-ink-900/10 pb-6">
+        <h2 className="font-medium text-ink-900">What happens after a real filing</h2>
         <dl className="mt-3 grid gap-3">
           <div>
             <dt className="text-sm text-ink-500">The office must reply within</dt>
@@ -181,9 +175,9 @@ export function Review() {
           The 30-day limit and the ₹10 fee are real rules of the RTI Act and Rules. The date above is
           calculated from today.
         </p>
-      </Card>
+      </div>
 
-      <div className="mb-4">
+      <div className="mb-6">
         <Notice tone="warn" title="Before you press the button">
           <p>
             <strong>Nothing here is sent to the government.</strong> This prototype cannot file an
@@ -194,8 +188,8 @@ export function Review() {
         </Notice>
       </div>
 
-      <Card>
-        <h2 className="font-semibold">What the real portal will also ask you for</h2>
+      <div>
+        <h2 className="font-medium text-ink-900">What the real portal will also ask you for</h2>
         <p className="mt-1 text-sm text-ink-500">
           We deliberately do not collect any of this. It never leaves your hands.
         </p>
@@ -214,7 +208,7 @@ export function Review() {
             Back
           </Button>
         </div>
-      </Card>
+      </div>
     </>
   );
 }
