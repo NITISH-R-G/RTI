@@ -1,22 +1,22 @@
 # 13: Agent Handoff
 
-**Last updated:** 2026-08-27 (final design sprint, second pass): **All three P1 screens (Clarify, Request builder, Authority) redesigned under visual-direction-v2 (grayscale-core palette) and pushed.** Next: P2 screens (Review, Mock filing, Tracking, Not-RTI), then P3 (About).
+**Last updated:** 2026-08-27 (final design sprint, complete): **All 8 screens redesigned under visual-direction-v2 (grayscale-core palette) and pushed.** Landing (Phase V dark hero) + Clarify, Request builder, Authority (P1) + Review, Filed/Tracking, Not-RTI (P2) + About (P3). AI-slop copy audit (`seamless`, `empower`, `revolutioniz`, `intelligent`, `effortless`, `smart`, `leverage`, etc.) ran clean across all screens. Next: a fresh-judge-style walkthrough of the whole journey, then whatever time remains goes to deployment (R7, still the top risk) and the R1 Codex contribution log (still empty).
 
 The user issued a final, comprehensive design-sprint directive superseding the Phase V teal/amber decision below: core palette is now black/white/grayscale, colour spent only where meaning would otherwise be lost (the fee/wrong-office warning). See `docs/design/visual-direction-v2.md` for the full rationale. The "VISUAL REBUILD STATUS (Phase V)" section further down is now **superseded** by this directive; kept for its component-provenance history, not its colour/next-step conclusions.
 
 | | |
 |---|---|
-| **Current phase** | Final design sprint, P1 screens done (Clarify, Request builder, Authority), P2 next |
-| **Current commit** | see `git log --oneline -1` (`5dd4c89` at last handoff write) |
-| **Product state** | Feature-complete, 8 routes, functionally verified. Landing (dark hero, Phase V), Clarify, Request builder, Authority visually rebuilt under visual-direction-v2. Review, Filed, NotRti, About still on the Phase 3 `Card`/`Notice` visual design |
-| **Test counts** | 78 reasoning + 79 unit/component + 114 Playwright = **271 passing**, re-verified after each of the three P1 redesigns (desktop 57/57, mobile-360 57/57) |
+| **Current phase** | Final design sprint, all 8 screens redesigned under visual-direction-v2 |
+| **Current commit** | see `git log --oneline -1` (`a06a816` at last handoff write) |
+| **Product state** | Feature-complete, 8 routes, functionally verified, visually consistent. Every screen now uses `PageTitle`/`Eyebrow`/`Choice` from `src/ui/primitives.tsx`, hairline `border-ink-900/10` section dividers instead of stacked `Card`s, and grayscale selection/list states, with colour reserved for the fee/wrong-office `Notice` |
+| **Test counts** | 78 reasoning + 79 unit/component + 114 Playwright = **271 passing**, re-verified after each of the 8 redesign commits (desktop 57/57, mobile-360 57/57 each time) |
 | **Component provenance** | `docs/design/component-provenance.json` (Phase V) plus the new `Choice` primitive in `src/ui/primitives.tsx` (in-house, not externally sourced, so no provenance/mutation-test entry needed) |
 | **Bundle** | 123 kB to 166 kB gzipped (+43 kB for `motion`) |
 | **Em dash check** | `scripts/check-em-dash.js`, wired into `npm test`. Fixed a self-referential bug where the checker flagged its own `EM_DASH` literal (excluded itself from the scanned file list) |
 | **Top risk** | **Not deployed to a public URL**: competition requirement R7 |
 | **Second risk** | `19-codex-contribution-log.md` is empty: it is the R1 evidence |
-| **Third risk** | P2/P3 screens (Review, Filed, Tracking, NotRti, About) still read as the older, more generic `Card`-boxed design next to the now-editorial P1 screens |
-| **Next action** | Redesign Review (P2, "calm checkpoint grouped by mental model"), then Mock filing, Tracking, Not-RTI, then About (P3). Reuse `Choice`/`Eyebrow`/`PageTitle` from `src/ui/primitives.tsx`, drop the teal `Card` fills, keep amber `Notice` for warnings only |
+| **Third risk** | `Card` primitive in `src/ui/primitives.tsx` is now unused by any screen (every screen was moved to hairline sections) but was deliberately not deleted, in case a future screen genuinely needs a boxed callout; worth a pass to confirm before final submission whether to remove it as dead code |
+| **Next action** | A fresh-judge-style full walkthrough (Landing through Filed, plus the Not-RTI branch) as a final self-review, per the brief's "definition of done" checklist. After that, remaining time should go to the two risks above: deployment (R7) and the empty Codex contribution log (R1) |
 
 ## VISUAL REBUILD STATUS (Phase V)
 
@@ -87,6 +87,18 @@ Landing (`src/screens/Landing.tsx`) is done and verified: typecheck clean, 8 com
 - Fixed `scripts/check-em-dash.js` flagging its own `EM_DASH` literal (pre-existing bug, unrelated to this pass, was blocking `npm test` for everyone).
 - Verification per screen: `npx tsc --noEmit` clean, full `npm test` (79 unit + 78 reasoning), Playwright `desktop` and `mobile-360` projects (57/57 each including `a11y.spec.ts` and `contrast.spec.ts`), real-Chrome screenshot via `mcp__claude-in-chrome__*` at desktop width (1536px window; the tool's `resize_window` does not reliably control the real Chrome window's viewport, so true 360/390px screenshots were not captured this pass, noted honestly rather than claimed).
 - Each screen committed and pushed separately: `9ca1d70` (Clarify), `9f2f461` (Request builder), `5dd4c89` (Authority).
+
+### P2/P3 SCREENS (Review, Filed/Tracking, Not-RTI, About), same session
+
+Once the three P1 screens were verified, the same hairline-section pattern (removing `Card`, adding `border-b border-ink-900/10 pb-6` between groups) was applied to the remaining four screens, since the brief's grayscale-core direction applies to the whole product, not just P1:
+
+- `src/screens/Review.tsx`: grouped sections (what happened, what you're asking, where it goes, fee, what happens next, what the real portal also asks) already matched the "group by mental model" requirement structurally; the change was purely the Card-to-hairline conversion, the fee choice moved to the `Choice` primitive, and the "read the full request" detail preview switched to the serif paper-block treatment.
+- `src/screens/Filed.tsx`: covers both mock filing AND tracking (there is no separate Tracking route). Timeline dots changed from `bg-brand-700`/teal to `bg-ink-900` filled (done) and an ink-ringed outline (not started), so nothing implies a live status feed. Request-text preview switched from a monospace `<pre>` to the serif document block.
+- `src/screens/NotRti.tsx`: heading text preserved exactly (`Let us point you somewhere better`, matched by both unit and Playwright tests) with a new eyebrow distinguishing the state-matter vs. non-RTI-matter case; all five Card sections converted to hairline sections.
+- `src/screens/About.tsx`: added a local `Section` helper (title + hairline) to avoid repeating the pattern seven times; the two evidence quotes (citizen sentence, portal refusal) moved from monospace code-block styling to the same serif paper-block treatment used for request text elsewhere; all three colour-coded bullet lists (amber "simulated", teal "privacy", gray "does not do") were flattened to a single grayscale `ink-300` dot, since colour is now reserved for the fee/wrong-office warning only.
+- A repo-wide grep for banned marketing language (`seamless`, `empower`, `revolutioniz`, `intelligent`, `effortless`, `smart`, `leverage`, etc.) across `src/screens/*.tsx` and `src/ui/*.tsx` returned zero matches; no copy changes were needed for the anti-slop language ban.
+- Verification per screen: same as the P1 pass, `tsc --noEmit`, 79-test unit suite, Playwright `desktop` and `mobile-360` (57/57 each), real-Chrome walkthrough via `mcp__claude-in-chrome__*`.
+- Commits: `dba2aea` (Review), `c9680f2` (Filed + Not-RTI, combined since both were small hairline-only conversions verified together), `a06a816` (About).
 
 ---
 
