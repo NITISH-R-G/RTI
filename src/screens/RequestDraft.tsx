@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { PageTitle, Button, Card, Notice } from '../ui/primitives';
+import { PageTitle, Button, Choice, Notice } from '../ui/primitives';
 import { useJourney } from '../state/journey';
 import { compose, defaultSelection, optionsFor } from '../draft/compose';
 import { validateRequestText, sanitiseRequestText, MAX_REQUEST_CHARS } from '../rules';
@@ -68,68 +68,59 @@ export function RequestDraft() {
 
   return (
     <>
-      <PageTitle lede="Choose what you want to know. We turn it into a request the office is obliged to answer, and you can change every word of it.">
+      <PageTitle
+        eyebrow="Your request"
+        lede="Choose what you want to know. We turn it into a request the office is obliged to answer, and you can change every word of it."
+      >
         Build your request
       </PageTitle>
 
       {/* 1: what they told us */}
-      <Card className="mb-4">
+      <div className="mb-8 border-b border-ink-900/10 pb-6">
         <h2 className="text-sm font-medium text-ink-500">What you told us</h2>
         <p className="mt-1 text-ink-900">{state.problem}</p>
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="tap mt-2 inline-flex items-center text-sm text-brand-700 underline underline-offset-4"
+          className="tap mt-2 inline-flex items-center text-sm text-ink-700 underline underline-offset-4"
         >
           Change this
         </button>
-      </Card>
+      </div>
 
       {/* 2: what to ask for */}
-      <Card className="mb-4">
-        <fieldset>
-          <legend className="font-semibold">What information do you want to get?</legend>
-          <p className="mt-1 text-sm text-ink-500">
-            Pick the ones that matter. Fewer, sharper questions get answered; you do not need to
-            fill the page.
-          </p>
-          <div className="mt-4 grid gap-2">
-            {options.map((opt) => {
-              const on = selected.includes(opt.id);
-              return (
-                <label
-                  key={opt.id}
-                  className={`tap flex cursor-pointer items-start gap-3 rounded-xl px-4 py-3 ring-1 transition-colors ${
-                    on ? 'bg-brand-50 ring-brand-700' : 'bg-paper-0 ring-paper-200 hover:bg-brand-50'
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={on}
-                    onChange={() => toggle(opt.id)}
-                    className="mt-1 size-5 shrink-0 accent-brand-700"
-                  />
-                  <span className="text-ink-900">{opt.label}</span>
-                </label>
-              );
-            })}
-          </div>
-        </fieldset>
+      <fieldset className="mb-8">
+        <legend className="text-lg font-semibold text-ink-900">
+          What information do you want to get?
+        </legend>
+        <p className="mt-1 text-ink-500">
+          Pick the ones that matter. Fewer, sharper questions get answered; you do not need to
+          fill the page.
+        </p>
+        <div className="mt-4 grid gap-3">
+          {options.map((opt) => (
+            <Choice key={opt.id} as="checkbox" selected={selected.includes(opt.id)} onClick={() => toggle(opt.id)}>
+              {opt.label}
+            </Choice>
+          ))}
+        </div>
         {selected.length === 0 && (
           <p className="mt-3 text-sm text-warn-700">
             Nothing selected. Your request will only describe your situation; pick at least one
             question so the office knows what to answer.
           </p>
         )}
-      </Card>
+      </fieldset>
 
-      {/* 3: the resulting request */}
-      <Card>
+      {/* 3: the resulting request. The textarea already regenerates live as the
+          questions above change, so it IS the live preview; it is styled as a
+          readable document, not a code box, rather than gated behind a toggle. */}
+      <div className="border-t border-ink-900/10 pt-6">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-semibold">
+          <h2 className="text-lg font-semibold text-ink-900">
             <label htmlFor={`${id}-draft`}>Your request</label>
           </h2>
-          <p className="text-sm text-ink-500">You can edit this before continuing.</p>
+          <p className="text-sm text-ink-500">Edit any word directly below.</p>
         </div>
 
         {edited && (
@@ -148,11 +139,11 @@ export function RequestDraft() {
             setDraft(e.target.value);
             setEdited(true);
           }}
-          rows={14}
+          rows={10}
           aria-describedby={`${countId}${touched && blocked ? ` ${errorId}` : ''}`}
           aria-invalid={touched && blocked ? true : undefined}
-          className={`mt-3 w-full rounded-xl border bg-paper-0 p-3 font-mono text-sm leading-relaxed text-ink-900 ${
-            touched && blocked ? 'border-danger-700' : 'border-paper-200'
+          className={`mt-3 w-full rounded-xl border bg-paper-100 p-5 font-serif text-lg leading-relaxed text-ink-900 ${
+            touched && blocked ? 'border-danger-700' : 'border-transparent'
           }`}
         />
 
@@ -206,9 +197,9 @@ export function RequestDraft() {
             Back
           </Button>
         </div>
-      </Card>
+      </div>
 
-      <p className="mt-4 text-sm text-ink-500">
+      <p className="mt-6 text-sm text-ink-500">
         Nothing here is sent anywhere. The next step works out which office holds these records.
       </p>
     </>
