@@ -1,5 +1,5 @@
 import { Navigate, useNavigate } from 'react-router-dom';
-import { PageTitle, Button, Card, Notice } from '../ui/primitives';
+import { PageTitle, Button, Notice } from '../ui/primitives';
 import { useJourney } from '../state/journey';
 
 /**
@@ -21,29 +21,32 @@ export function NotRti() {
 
   return (
     <>
-      <PageTitle lede="You have not done anything wrong. This route may just not be the one that gets you an answer.">
+      <PageTitle
+        eyebrow={isStateMatter ? 'This looks like a state matter' : 'This may not be an RTI matter'}
+        lede="You have not done anything wrong. This route may just not be the one that gets you an answer."
+      >
         Let us point you somewhere better
       </PageTitle>
 
-      <Card className="mb-4">
+      <div className="mb-6 border-b border-ink-900/10 pb-6">
         <h2 className="text-sm font-medium text-ink-500">What we understood</h2>
         <p className="mt-1 text-ink-900">{state.problem}</p>
         <button
           type="button"
           onClick={() => navigate('/')}
-          className="tap mt-2 inline-flex items-center text-sm text-brand-700 underline underline-offset-4"
+          className="tap mt-2 inline-flex items-center text-sm text-ink-700 underline underline-offset-4"
         >
           That is not quite right, let me rewrite it
         </button>
-      </Card>
+      </div>
 
-      <Card className="mb-4">
-        <h2 className="font-semibold">Why this may not be the right RTI path</h2>
+      <div className="mb-6 border-b border-ink-900/10 pb-6">
+        <h2 className="font-medium text-ink-900">Why this may not be the right RTI path</h2>
         <p className="mt-2 text-ink-700">{r.reasoning}</p>
-      </Card>
+      </div>
 
       {isStateMatter && (
-        <div className="mb-4">
+        <div className="mb-6">
           <Notice tone="warn" title="Central portal or state portal: this matters">
             {r.warnings.map((w) => (
               <p key={w} className="mb-2 last:mb-0">
@@ -59,8 +62,8 @@ export function NotRti() {
         </div>
       )}
 
-      <Card className="mb-4">
-        <h2 className="font-semibold">What you may need instead</h2>
+      <div className="mb-6 border-b border-ink-900/10 pb-6">
+        <h2 className="font-medium text-ink-900">What you may need instead</h2>
         <ul className="mt-3 grid gap-3 text-ink-700">
           {isStateMatter ? (
             <>
@@ -96,10 +99,10 @@ export function NotRti() {
           We are not linking you to a specific service, because we have not verified one for your
           situation and we would rather say so than send you somewhere wrong.
         </p>
-      </Card>
+      </div>
 
-      <Card className="mb-4">
-        <h2 className="font-semibold">What this prototype can and cannot help with</h2>
+      <div className="mb-6 border-b border-ink-900/10 pb-6">
+        <h2 className="font-medium text-ink-900">What this prototype can and cannot help with</h2>
         <div className="mt-3 grid gap-4 sm:grid-cols-2">
           <div>
             <h3 className="text-sm font-medium text-ink-500">It can help with</h3>
@@ -123,10 +126,10 @@ export function NotRti() {
             </ul>
           </div>
         </div>
-      </Card>
+      </div>
 
-      <Card>
-        <h2 className="font-semibold">You can still carry on</h2>
+      <div>
+        <h2 className="font-medium text-ink-900">You can still carry on</h2>
         <p className="mt-2 text-ink-700">
           This is our reading of your situation, not a ruling. If you believe an RTI to a central
           office is right, continue and we will help you write it.
@@ -137,7 +140,7 @@ export function NotRti() {
             Start again
           </Button>
         </div>
-      </Card>
+      </div>
     </>
   );
 }
