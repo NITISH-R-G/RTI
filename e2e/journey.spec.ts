@@ -75,9 +75,8 @@ test('no horizontal overflow on any screen of the demo path', async ({ page }) =
   await check('authority');
 });
 
-test('every interactive control meets the 44px target, except inline text links', async ({ page }) => {
-  await walk(page);
-  const small = await page.evaluate(() => {
+async function smallTargetsOnCurrentScreen(page: Page) {
+  return page.evaluate(() => {
     const out: string[] = [];
     for (const el of document.querySelectorAll('button, [role="radio"], input, textarea, a[href]')) {
       const r = el.getBoundingClientRect();
@@ -92,7 +91,30 @@ test('every interactive control meets the 44px target, except inline text links'
     }
     return out;
   });
-  expect(small).toEqual([]);
+}
+
+// Regression coverage for a real gap found during mutation testing
+// (docs/evals/visual-mutation-testing.md, mutation #1): checking only the
+// final screen after walk() completes let a shrunk tap target on an
+// earlier screen (Clarify) go undetected, because that screen's DOM was
+// already gone by the time the check ran. This now asserts after every
+// step of the walk, not just at the end.
+test('every interactive control meets the 44px target, except inline text links', async ({ page }) => {
+  await page.goto('/');
+  expect(await smallTargetsOnCurrentScreen(page)).toEqual([]);
+
+  await page.getByLabel(/tell us about your problem/i).fill(PROBLEM);
+  await page.getByRole('button', { name: /^continue$/i }).click();
+  await expect(page.getByRole('radiogroup')).toBeVisible();
+  expect(await smallTargetsOnCurrentScreen(page)).toEqual([]);
+
+  await page.getByRole('radio', { name: /central government service pension/i }).click();
+  await expect(page.getByRole('heading', { name: /build your request/i })).toBeVisible();
+  expect(await smallTargetsOnCurrentScreen(page)).toEqual([]);
+
+  await page.getByRole('button', { name: /find where to send it/i }).click();
+  await expect(page.getByText(/based on what you told us/i)).toBeVisible();
+  expect(await smallTargetsOnCurrentScreen(page)).toEqual([]);
 });
 
 test('the skip link meets the target size once focused', async ({ page }) => {
