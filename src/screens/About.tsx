@@ -1,11 +1,20 @@
-import { PageTitle, Card, Notice } from '../ui/primitives';
+import { PageTitle, Notice } from '../ui/primitives';
 import { ALL_AUTHORITIES, CAPTURED_ON } from '../authorities';
 
 function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="grid gap-1 border-t border-paper-200 py-3 first:border-0 first:pt-0 sm:grid-cols-[12rem_1fr] sm:gap-4">
+    <div className="grid gap-1 border-t border-ink-900/10 py-3 first:border-0 first:pt-0 sm:grid-cols-[12rem_1fr] sm:gap-4">
       <dt className="text-sm text-ink-500">{label}</dt>
       <dd className="text-ink-900">{value}</dd>
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-6 border-b border-ink-900/10 pb-6">
+      <h2 className="text-lg font-semibold text-ink-900">{title}</h2>
+      {children}
     </div>
   );
 }
@@ -15,11 +24,11 @@ export function About() {
 
   return (
     <>
-      <PageTitle lede="What this is, how it works, and everything it does not do.">
+      <PageTitle eyebrow="Independent prototype" lede="What this is, how it works, and everything it does not do.">
         What is real and what is simulated
       </PageTitle>
 
-      <div className="mb-4">
+      <div className="mb-6">
         <Notice tone="warn" title="Not a government service">
           <p>
             An independent prototype built for a hackathon. Not affiliated with, endorsed by, or
@@ -29,17 +38,16 @@ export function About() {
         </Notice>
       </div>
 
-      <Card className="mb-4">
-        <h2 className="text-lg font-semibold">The problem we watched happen</h2>
+      <Section title="The problem we watched happen">
         <p className="mt-3 text-ink-700">
           On the real RTI portal, we typed the sentence a citizen would actually say into the box
           that searches for the office to send a request to:
         </p>
-        <p className="mt-3 rounded-xl bg-paper-100 p-3 font-mono text-sm text-ink-900">
+        <p className="mt-3 rounded-xl bg-paper-100 p-4 font-serif text-base text-ink-900">
           my pension has not been paid
         </p>
         <p className="mt-3 text-ink-700">It answered:</p>
-        <p className="mt-3 rounded-xl bg-warn-100 p-3 font-mono text-sm text-warn-700">
+        <p className="mt-3 rounded-xl bg-warn-100 p-4 font-serif text-base text-warn-700">
           No such Public Authority available in this portal !
         </p>
         <p className="mt-3 text-ink-700">
@@ -52,19 +60,17 @@ export function About() {
           That is the whole reason this exists. Observed 26 August 2026, after a human completed the
           portal&apos;s own email and one-time-password checks. Nothing was ever submitted.
         </p>
-      </Card>
+      </Section>
 
-      <Card className="mb-4">
-        <h2 className="text-lg font-semibold">The change we made</h2>
+      <Section title="The change we made">
         <p className="mt-3 text-ink-700">
           The real portal asks <strong>which office?</strong> before it asks <strong>what do you
           want?</strong> We reversed that. You describe what happened; the office is worked out from
           your answers and from what you chose to ask for, and you can always overrule it.
         </p>
-      </Card>
+      </Section>
 
-      <Card className="mb-4">
-        <h2 className="text-lg font-semibold">How it actually works</h2>
+      <Section title="How it actually works">
         <p className="mt-3 text-ink-700">
           There is <strong>no artificial intelligence running here</strong>. Every suggestion comes
           from rules and lists you could read yourself.
@@ -87,10 +93,9 @@ export function About() {
             value="Fixed constants from the RTI Act and Rules: ₹10, free with a BPL certificate, 30 days to reply. Never generated text."
           />
         </dl>
-      </Card>
+      </Section>
 
-      <Card className="mb-4">
-        <h2 className="text-lg font-semibold">What is simulated</h2>
+      <Section title="What is simulated">
         <ul className="mt-3 grid gap-2 text-ink-700">
           {[
             'Filing. Nothing is sent to any government system, ever.',
@@ -99,15 +104,14 @@ export function About() {
             'Payment. No fee is taken and no payment screen exists.',
           ].map((x) => (
             <li key={x} className="flex gap-2">
-              <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-warn-500" />
+              <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-300" />
               <span>{x}</span>
             </li>
           ))}
         </ul>
-      </Card>
+      </Section>
 
-      <Card className="mb-4">
-        <h2 className="text-lg font-semibold">Your privacy</h2>
+      <Section title="Your privacy">
         <ul className="mt-3 grid gap-2 text-ink-700">
           {[
             'Nothing you type leaves your browser. There is no server to send it to.',
@@ -116,15 +120,14 @@ export function About() {
             'What you type is kept in your own browser so you can go back a step, and clearing it removes it.',
           ].map((x) => (
             <li key={x} className="flex gap-2">
-              <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-700" />
+              <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-ink-300" />
               <span>{x}</span>
             </li>
           ))}
         </ul>
-      </Card>
+      </Section>
 
-      <Card className="mb-4">
-        <h2 className="text-lg font-semibold">What it does not do</h2>
+      <Section title="What it does not do">
         <ul className="mt-3 grid gap-2 text-ink-700">
           {[
             'It covers five subjects in depth: central pensions, provident fund, passports, railways and income tax refunds. Everything else gets an honest answer, not a guess.',
@@ -138,17 +141,17 @@ export function About() {
             </li>
           ))}
         </ul>
-      </Card>
+      </Section>
 
-      <Card>
-        <h2 className="text-lg font-semibold">How we studied the portal</h2>
+      <div>
+        <h2 className="text-lg font-semibold text-ink-900">How we studied the portal</h2>
         <p className="mt-3 text-ink-700">
           Read-only. We never submitted an application, an appeal, a payment or a login. The one
           authenticated session was completed by a person using their own details, and we stopped
           before the payment step. We collected only public institutional names, never anyone&apos;s
           personal information.
         </p>
-      </Card>
+      </div>
     </>
   );
 }
