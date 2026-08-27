@@ -1,6 +1,6 @@
 import { useId, useMemo, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { PageTitle, Button, Card, Notice } from '../ui/primitives';
+import { PageTitle, Button, Choice, Notice } from '../ui/primitives';
 import { useJourney } from '../state/journey';
 import { search, reasonsFor, contextFor, looksStateOrUt } from '../authorities';
 import { optionsFor } from '../draft/compose';
@@ -61,13 +61,16 @@ export function Authority() {
 
   return (
     <>
-      <PageTitle lede="Worked out from what you told us and what you are asking for, not from a list you had to know your way around.">
-        Where this should go
+      <PageTitle
+        eyebrow={top ? 'Based on what you told us' : 'Where this should go'}
+        lede="Worked out from what you told us and what you are asking for, not from a list you had to know your way around."
+      >
+        {top ? (selected?.name ?? top.name) : 'We do not have a confident match for this'}
       </PageTitle>
 
       {/* No central office to propose: the expensive-mistake branch. */}
       {result.warnings.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-6">
           <Notice tone="warn" title="This may not belong to the central RTI portal">
             {result.warnings.map((w) => (
               <p key={w}>{w}</p>
@@ -77,9 +80,8 @@ export function Authority() {
       )}
 
       {!top && (
-        <Card className="mb-4">
-          <h2 className="font-semibold">We do not have a confident match for this</h2>
-          <p className="mt-2 text-ink-700">{result.reasoning}</p>
+        <div className="mb-6 border-b border-ink-900/10 pb-6">
+          <p className="text-ink-700">{result.reasoning}</p>
           <p className="mt-2 text-ink-700">
             You can still search all {new Intl.NumberFormat('en-IN').format(2904)} public authorities
             below, or go back and add a little more detail.
@@ -92,16 +94,13 @@ export function Authority() {
               Back
             </Button>
           </div>
-        </Card>
+        </div>
       )}
 
       {top && (
-        <Card className="mb-4">
-          <p className="text-sm text-ink-500">Based on what you told us</p>
-          <h2 className="mt-1 text-xl font-semibold text-ink-900">{selected?.name ?? top.name}</h2>
-
+        <div className="mb-6 border-b border-ink-900/10 pb-6">
           {looksStateOrUt(selected?.name ?? top.name) && (
-            <div className="mt-3">
+            <div className="mb-5">
               <Notice tone="warn" title="Check before you file">
                 <p>
                   This looks like a Union Territory or state body. The central RTI portal returns
@@ -111,17 +110,22 @@ export function Authority() {
             </div>
           )}
 
-          <h3 className="mt-5 font-medium">Why this may be the right place</h3>
-          <ul className="mt-2 grid gap-2 text-ink-700">
-            {reasons.map((r) => (
-              <li key={r} className="flex gap-2">
-                <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-brand-700" />
-                <span>{r}</span>
+          <h2 className="font-medium text-ink-900">Why this may be the right place</h2>
+          <ol className="mt-3 grid gap-3">
+            {reasons.map((r, i) => (
+              <li key={r} className="flex gap-3">
+                <span
+                  aria-hidden="true"
+                  className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-ink-900 text-xs font-medium text-paper-50"
+                >
+                  {i + 1}
+                </span>
+                <span className="text-ink-700">{r}</span>
               </li>
             ))}
-          </ul>
+          </ol>
 
-          <p className="mt-4 text-sm text-ink-500">
+          <p className="mt-5 text-sm text-ink-500">
             This name comes from the list of 2,904 public authorities published by the RTI portal
             itself, captured on 26 August 2026. We cannot suggest an office that does not exist on
             it. The reasoning above is rules we wrote, not a language model.
@@ -153,37 +157,26 @@ export function Authority() {
               Search manually
             </Button>
           </div>
-        </Card>
+        </div>
       )}
 
       {showAlternatives && alternatives.length > 0 && (
-        <Card className="mb-4">
-          <h2 className="font-semibold">Other offices that may hold these records</h2>
-          <ul className="mt-3 grid gap-2">
+        <div className="mb-6 border-b border-ink-900/10 pb-6">
+          <h2 className="font-medium text-ink-900">Other offices that may hold these records</h2>
+          <div className="mt-3 grid gap-3">
             {alternatives.map((a) => (
-              <li key={a.name}>
-                <button
-                  type="button"
-                  onClick={() => pick(a.name, a.reason)}
-                  aria-pressed={selected?.name === a.name}
-                  className={`tap w-full rounded-xl px-4 py-3 text-left ring-1 ${
-                    selected?.name === a.name
-                      ? 'bg-brand-50 ring-brand-700'
-                      : 'bg-paper-0 ring-paper-200 hover:bg-brand-50'
-                  }`}
-                >
-                  <span className="block font-medium text-ink-900">{a.name}</span>
-                  <span className="mt-0.5 block text-sm text-ink-500">{a.reason}</span>
-                </button>
-              </li>
+              <Choice key={a.name} as="button" selected={selected?.name === a.name} onClick={() => pick(a.name, a.reason)}>
+                <span className="block font-medium text-inherit">{a.name}</span>
+                <span className="mt-0.5 block text-sm opacity-70">{a.reason}</span>
+              </Choice>
             ))}
-          </ul>
-        </Card>
+          </div>
+        </div>
       )}
 
       {showSearch && (
-        <Card className="mb-4">
-          <label htmlFor={searchId} className="font-semibold">
+        <div className="mb-6 border-b border-ink-900/10 pb-6">
+          <label htmlFor={searchId} className="font-medium text-ink-900">
             Search all public authorities
           </label>
           <p className="mt-1 text-sm text-ink-500">
@@ -196,7 +189,7 @@ export function Authority() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="tap mt-3 w-full rounded-xl border border-paper-200 bg-paper-0 p-3"
+            className="tap mt-3 w-full rounded-xl border border-ink-900/15 bg-paper-0 p-3"
             placeholder="provident, passport, railway, revenue..."
           />
 
@@ -211,32 +204,26 @@ export function Authority() {
               </div>
             )}
             {hits.length > 0 && (
-              <ul className="grid gap-2">
+              <div className="grid gap-3">
                 {hits.map((h) => (
-                  <li key={h.name}>
-                    <button
-                      type="button"
-                      onClick={() => pick(h.name, contextFor(h.name).text)}
-                      aria-pressed={selected?.name === h.name}
-                      className={`tap w-full rounded-xl px-4 py-3 text-left ring-1 ${
-                        selected?.name === h.name
-                          ? 'bg-brand-50 ring-brand-700'
-                          : 'bg-paper-0 ring-paper-200 hover:bg-brand-50'
-                      }`}
-                    >
-                      <span className="block font-medium text-ink-900">{h.name}</span>
-                      <span className="mt-0.5 block text-sm text-ink-500">{h.context}</span>
-                    </button>
-                  </li>
+                  <Choice
+                    key={h.name}
+                    as="button"
+                    selected={selected?.name === h.name}
+                    onClick={() => pick(h.name, contextFor(h.name).text)}
+                  >
+                    <span className="block font-medium text-inherit">{h.name}</span>
+                    <span className="mt-0.5 block text-sm opacity-70">{h.context}</span>
+                  </Choice>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
-        </Card>
+        </div>
       )}
 
       {selected && (
-        <Card>
+        <div>
           <p className="text-sm text-ink-500">Your request will be addressed to</p>
           <p className="mt-1 font-semibold text-ink-900">{selected.name}</p>
           <div className="mt-4 flex flex-wrap gap-3">
@@ -245,7 +232,7 @@ export function Authority() {
               Back to your request
             </Button>
           </div>
-        </Card>
+        </div>
       )}
     </>
   );

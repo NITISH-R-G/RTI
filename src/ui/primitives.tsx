@@ -120,17 +120,23 @@ export function Choice({
   children,
   className = '',
 }: {
-  as?: 'radio' | 'checkbox';
+  /** 'radio'/'checkbox' render form-control semantics with a dot/check
+   * indicator. 'button' is a plain pick-one-from-a-list action (e.g. an
+   * authority name plus its reason) with no indicator, just the weight
+   * change, since it is not part of a fieldset. */
+  as?: 'radio' | 'checkbox' | 'button';
   selected: boolean;
   onClick: () => void;
   children: ReactNode;
   className?: string;
 }) {
+  const withIndicator = as !== 'button';
   return (
     <motion.button
       type="button"
-      role={as}
-      aria-checked={selected}
+      role={withIndicator ? as : undefined}
+      aria-checked={withIndicator ? selected : undefined}
+      aria-pressed={withIndicator ? undefined : selected}
       onClick={onClick}
       whileTap={{ scale: 0.98 }}
       className={`tap flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left transition-colors ${
@@ -139,18 +145,20 @@ export function Choice({
           : 'border-ink-900/15 bg-paper-0 text-ink-900 hover:border-ink-900/40'
       } ${className}`}
     >
-      <span
-        aria-hidden="true"
-        className={`flex size-5 shrink-0 items-center justify-center border ${
-          as === 'radio' ? 'rounded-full' : 'rounded'
-        } ${selected ? 'border-paper-50 bg-paper-50' : 'border-ink-900/30'}`}
-      >
-        {selected && (
-          <span
-            className={`bg-ink-900 ${as === 'radio' ? 'size-2.5 rounded-full' : 'size-3 rounded-[2px]'}`}
-          />
-        )}
-      </span>
+      {withIndicator && (
+        <span
+          aria-hidden="true"
+          className={`flex size-5 shrink-0 items-center justify-center border ${
+            as === 'radio' ? 'rounded-full' : 'rounded'
+          } ${selected ? 'border-paper-50 bg-paper-50' : 'border-ink-900/30'}`}
+        >
+          {selected && (
+            <span
+              className={`bg-ink-900 ${as === 'radio' ? 'size-2.5 rounded-full' : 'size-3 rounded-[2px]'}`}
+            />
+          )}
+        </span>
+      )}
       <span className="flex-1">{children}</span>
     </motion.button>
   );
