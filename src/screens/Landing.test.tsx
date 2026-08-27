@@ -26,7 +26,7 @@ describe('Landing', () => {
     renderLanding();
     const area = screen.getByLabelText(/tell us about your problem/i);
     expect(area).toBeInTheDocument();
-    expect(area).toHaveAccessibleDescription(/what you were expecting/i);
+    expect(area).toHaveAccessibleDescription(/tell a relative/i);
   });
 
   it('rejects empty input with an error tied to the field', async () => {
@@ -50,7 +50,7 @@ describe('Landing', () => {
     expect(screen.getByText(/quite short/i)).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: /clarify screen/i })).not.toBeInTheDocument();
 
-    // Pressing again carries on — advisory, never a hard block (S9).
+    // Pressing again carries on: advisory, never a hard block (S9).
     await user.click(screen.getByRole('button', { name: /continue/i }));
     expect(screen.getByRole('heading', { name: /clarify screen/i })).toBeInTheDocument();
   });

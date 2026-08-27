@@ -13,7 +13,7 @@
 **Weakness.** It rests on one authenticated session by one person. We have no data on how often citizens phrase searches this way.
 
 **Likely judge question.** *"Is this a real problem or one you found once?"*
-**Current answer.** The refusal is reproducible by anyone; the structural cause — authority selection before intent — is visible on the form regardless of phrasing. We do not claim frequency data, because we do not have it.
+**Current answer.** The refusal is reproducible by anyone; the structural cause: authority selection before intent: is visible on the form regardless of phrasing. We do not claim frequency data, because we do not have it.
 
 **Risk.** Low. **Action:** none; do not inflate it into a frequency claim.
 
@@ -25,12 +25,12 @@
 
 **Strength.** The journey completes from a cleared browser with no setup, no key, no account, no network.
 
-**Weakness.** **Not yet deployed to a public URL** — a competition requirement (R7).
+**Weakness.** **Not yet deployed to a public URL**: a competition requirement (R7).
 
 **Likely judge question.** *"Can I try it right now?"*
 **Current answer.** Locally yes; publicly not yet.
 
-**Risk. HIGH — this is the single largest outstanding competition risk.** **Action:** deploy before submission. It is a static bundle, so any static host works.
+**Risk. HIGH: this is the single largest outstanding competition risk.** **Action:** deploy before submission. It is a static bundle, so any static host works.
 
 ---
 
@@ -54,7 +54,7 @@
 **Weakness.** No real user testing. All usability evidence is structural.
 
 **Likely judge question.** *"Did you test this with actual citizens?"*
-**Current answer.** No — and we say so rather than implying otherwise.
+**Current answer.** No: and we say so rather than implying otherwise.
 
 **Risk.** Medium. **Action:** accept and state plainly. Do not manufacture a user-testing claim.
 
@@ -66,13 +66,13 @@
 
 | Decision | Visible to a judge? |
 |---|---|
-| Authority comes after the request | **Yes** — screen order, plus the lede "Worked out from what you told us and what you are asking for" |
-| Ambiguity asks instead of guessing | **Yes** — "Which of these is your situation about?" with "None of these" |
-| Citizens can override | **Yes** — alternatives and full search on the authority screen |
-| Social pension routed away from the central portal | **Yes** — and it carries the money consequence |
-| Manual search honestly scoped | **Yes** — "Describing your problem here will not work" |
-| Unsupported cases not forced into RTI | **Yes** — the not-RTI screen |
-| No runtime LLM, by choice | **Yes, since Phase 4** — stated on the authority screen and `/about` |
+| Authority comes after the request | **Yes**: screen order, plus the lede "Worked out from what you told us and what you are asking for" |
+| Ambiguity asks instead of guessing | **Yes**: "Which of these is your situation about?" with "None of these" |
+| Citizens can override | **Yes**: alternatives and full search on the authority screen |
+| Social pension routed away from the central portal | **Yes**: and it carries the money consequence |
+| Manual search honestly scoped | **Yes**: "Describing your problem here will not work" |
+| Unsupported cases not forced into RTI | **Yes**: the not-RTI screen |
+| No runtime LLM, by choice | **Yes, since Phase 4**: stated on the authority screen and `/about` |
 
 **Strength.** After the Phase 4 fixes, every one of these is visible in the product, not only in the repository.
 
@@ -84,7 +84,7 @@
 
 ## 5. END-TO-END THINKING
 
-**Current evidence.** The journey demonstrates authority routing, request composition, the fee and who is exempt, the consequence of a wrong route, the 30-day clock as a date, mock filing, mock tracking, the state/central boundary, and the privacy boundary — all inside the flow, not in a footnote.
+**Current evidence.** The journey demonstrates authority routing, request composition, the fee and who is exempt, the consequence of a wrong route, the 30-day clock as a date, mock filing, mock tracking, the state/central boundary, and the privacy boundary: all inside the flow, not in a footnote.
 
 **Strength.** The state-versus-central branch is genuine end-to-end thinking: it recognises when the product should route the citizen **away** from the thing it is built to do.
 
@@ -113,7 +113,7 @@
 | No screen-reader claim | KI-015 records that none happened; nothing in the product claims one | **Clean** |
 | No independent-testing claim | The fresh-reviewer audit opens by stating I built the product and cannot be a fresh reviewer | **Clean** |
 
-**Risk.** Low — this is the project's strongest dimension. **Action:** keep the claim inventory current if any submission copy is written later.
+**Risk.** Low: this is the project's strongest dimension. **Action:** keep the claim inventory current if any submission copy is written later.
 
 ---
 
@@ -122,8 +122,8 @@
 | # | Risk | Severity | Action |
 |---|---|---|---|
 | 1 | **Not deployed to a public URL** | **High** | Deploy before submission |
-| 2 | `19-codex-contribution-log.md` is empty — it is the R1 compliance evidence | **High** | Must be filled by real Codex work |
+| 2 | `19-codex-contribution-log.md` is empty: it is the R1 compliance evidence | **High** | Must be filled by real Codex work |
 | 3 | No real user testing | Medium | Accept, state plainly |
 | 4 | No real screen-reader test | Medium | Attempt if feasible; never claim otherwise |
 | 5 | Five domains only | Medium | By design; the honest-failure path covers the rest |
-| 6 | Judge may not open `/about` | Low, now | Fixed — the evidence is on the landing page |
+| 6 | Judge may not open `/about` | Low, now | Fixed: the evidence is on the landing page |

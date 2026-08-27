@@ -3,7 +3,7 @@ import { test, expect, type Page } from '@playwright/test';
 /**
  * Deliberate breakage.
  *
- * Not "does it crash" — that is the easy half. The question is whether stale or
+ * Not "does it crash": that is the easy half. The question is whether stale or
  * inconsistent state can quietly produce a MISLEADING citizen outcome: a request
  * about one thing addressed to the office for another.
  */

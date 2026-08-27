@@ -9,15 +9,15 @@ import { sanitiseRequestText, validateRequestText } from '../rules';
  *
  * Every template is authored inside the portal's real allowed character set:
  * no apostrophes, no #, no ;, no quotes, no rupee sign. That is why the prose
- * reads "the applicant" rather than "I'm" — a constraint imposed by the observed
+ * reads "the applicant" rather than "I'm": a constraint imposed by the observed
  * form, not a style choice (ED-004).
  */
 
 export interface InfoOption {
   id: string;
-  /** What the citizen sees — a question in their language. */
+  /** What the citizen sees: a question in their language. */
   label: string;
-  /** The line that goes into the request — records language a CPIO can answer. */
+  /** The line that goes into the request: records language a CPIO can answer. */
   line: string;
   /**
    * A noun phrase for use inside prose. Splicing the question-form label into a
@@ -67,7 +67,7 @@ const GENERIC: InfoOption[] = [
   },
 ];
 
-/** Domain-specific options come first — they are the ones worth asking for. */
+/** Domain-specific options come first: they are the ones worth asking for. */
 const DOMAIN_EXTRA: Record<string, InfoOption[]> = {
   pension: [
     {
@@ -146,7 +146,7 @@ export function optionsFor(domain: string | null): InfoOption[] {
   return [...extra, ...GENERIC];
 }
 
-/** Default selection — enough to be a useful request without overreaching. */
+/** Default selection: enough to be a useful request without overreaching. */
 export function defaultSelection(domain: string | null): string[] {
   const opts = optionsFor(domain);
   const preferred = ['status', 'reason', 'timeline'];
@@ -160,7 +160,7 @@ function domainLabel(domain: string | null): string {
 }
 
 /**
- * Builds the request. Deliberately concise — a short, specific request is answered;
+ * Builds the request. Deliberately concise: a short, specific request is answered;
  * a 3,000-character essay is not. We never pad toward the limit.
  */
 export function compose(opts: {

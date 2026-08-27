@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-27 · **Suite:** `e2e/adversarial.spec.ts`, 21 tests × 2 viewports · **Result: all passing**
 
-The bar was not "does it crash". It was: **can stale or inconsistent state quietly produce a misleading citizen outcome** — a request about one thing addressed to the office for another.
+The bar was not "does it crash". It was: **can stale or inconsistent state quietly produce a misleading citizen outcome**: a request about one thing addressed to the office for another.
 
 ## Inputs
 
@@ -21,7 +21,7 @@ whitespace only · one character · punctuation only · emoji only · repeated w
 | Browser back then forward | Journey intact, draft preserved |
 | Abandon and start again | Confirms, then clears |
 
-## Stale state — the part that actually matters
+## Stale state: the part that actually matters
 
 | Attack | Result |
 |---|---|
@@ -34,7 +34,7 @@ The strongest of these: starting a pension journey, reaching *Department of Pens
 
 ## A test that had to be sharpened rather than weakened
 
-Adding the evidence block to the landing page broke the assertion *"the body must never contain `No such Public Authority`"* — because the landing page now deliberately quotes that refusal as evidence.
+Adding the evidence block to the landing page broke the assertion *"the body must never contain `No such Public Authority`"*: because the landing page now deliberately quotes that refusal as evidence.
 
 The wrong fix would have been to delete or loosen the assertion. Instead the evidence block is marked `data-evidence-quote`, and the check now excludes that block. The assertion still catches exactly what it was written to catch: **our product producing that refusal as an outcome**, as opposed to quoting it as evidence.
 
@@ -42,4 +42,4 @@ The wrong fix would have been to delete or loosen the assertion. Instead the evi
 
 - Concurrent tabs sharing `localStorage`.
 - Storage quota exhaustion (the read/write path is try/caught, but the failure is not simulated).
-- Network conditions — there are no runtime network calls to degrade.
+- Network conditions: there are no runtime network calls to degrade.

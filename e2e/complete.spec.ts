@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 
 /**
  * The complete journey, from a genuinely fresh application state.
- * Every test here clears storage first — no test may depend on another.
+ * Every test here clears storage first: no test may depend on another.
  */
 
 test.beforeEach(async ({ page }) => {
@@ -60,7 +60,7 @@ test('FULL DEMO PATH: pension, fresh session, through to mock tracking', async (
   await expect(page.getByText(/why this office was suggested/i)).toBeVisible();
   await expect(page.getByText(/nothing here is sent to the government/i)).toBeVisible();
 
-  // Fee is only shown once answered — mirroring, then fixing, the observed portal
+  // Fee is only shown once answered: mirroring, then fixing, the observed portal
   await page.getByRole('radio', { name: /i would pay the fee/i }).click();
   await expect(page.getByText('₹10', { exact: true })).toBeVisible();
 
@@ -151,7 +151,7 @@ test('UNSUPPORTED input fails helpfully with search available', async ({ page })
   await page.getByLabel(/tell us about your problem/i).fill('I want information about ISRO satellite launches');
   await page.getByRole('button', { name: /^continue$/i }).click();
   expect(await bodyTextExcludingEvidence(page)).not.toContain('No such Public Authority');
-  // Either an honest not-rti screen or a clarify path — both must offer a way onward.
+  // Either an honest not-rti screen or a clarify path: both must offer a way onward.
   const onward = page.getByRole('button', { name: /continue anyway|^continue$|search authorities/i });
   await expect(onward.first()).toBeVisible();
 });

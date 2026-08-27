@@ -55,7 +55,7 @@ function PrototypeBanner() {
   return (
     <div className="bg-ink-900 text-paper-50">
       <p className="mx-auto max-w-3xl px-4 py-2 text-center text-sm">
-        Independent prototype — <strong className="font-semibold">not a government service</strong>. It
+        Independent prototype: <strong className="font-semibold">not a government service</strong>. It
         cannot file a real RTI.{' '}
         <Link to="/about" className="underline underline-offset-2">
           What&apos;s real and what&apos;s simulated

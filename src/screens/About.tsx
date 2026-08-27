@@ -43,7 +43,7 @@ export function About() {
           No such Public Authority available in this portal !
         </p>
         <p className="mt-3 text-ink-700">
-          The office that holds those records — the Department of Pensions &amp; Pensioners Welfare —
+          The office that holds those records, the Department of Pensions &amp; Pensioners Welfare,
           was listed in a dropdown on the same screen. The system had the answer and refused the
           question, because the citizen described a <em>problem</em> instead of naming an{' '}
           <em>institution</em>.
@@ -84,7 +84,7 @@ export function About() {
           />
           <Row
             label="Fees and deadlines"
-            value="Fixed constants from the RTI Act and Rules — ₹10, free with a BPL certificate, 30 days to reply. Never generated text."
+            value="Fixed constants from the RTI Act and Rules: ₹10, free with a BPL certificate, 30 days to reply. Never generated text."
           />
         </dl>
       </Card>
@@ -127,7 +127,7 @@ export function About() {
         <h2 className="text-lg font-semibold">What it does not do</h2>
         <ul className="mt-3 grid gap-2 text-ink-700">
           {[
-            'It covers five subjects in depth — central pensions, provident fund, passports, railways and income tax refunds. Everything else gets an honest answer, not a guess.',
+            'It covers five subjects in depth: central pensions, provident fund, passports, railways and income tax refunds. Everything else gets an honest answer, not a guess.',
             'It cannot help with state or local matters, and it says so rather than sending you somewhere that would return your application and keep the fee.',
             'It cannot make anyone act. RTI obtains records; grievances obtain action.',
             'It does not give legal advice.',
@@ -145,7 +145,7 @@ export function About() {
         <p className="mt-3 text-ink-700">
           Read-only. We never submitted an application, an appeal, a payment or a login. The one
           authenticated session was completed by a person using their own details, and we stopped
-          before the payment step. We collected only public institutional names — never anyone&apos;s
+          before the payment step. We collected only public institutional names, never anyone&apos;s
           personal information.
         </p>
       </Card>

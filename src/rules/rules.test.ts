@@ -95,7 +95,7 @@ describe('mockReference', () => {
   it('is visibly not a real registration number', () => {
     const ref = mockReference(12345);
     expect(ref).toContain('DEMO-NOT-REAL');
-    // The real format is AAAAA/B/C/DD/EEEEE — ours must not match its shape.
+    // The real format is AAAAA/B/C/DD/EEEEE: ours must not match its shape.
     expect(/^[A-Z]{5}\/[RA]\/[EPTXL]\/\d{2}\/\d{5}$/.test(ref)).toBe(false);
   });
 });

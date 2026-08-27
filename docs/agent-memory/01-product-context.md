@@ -1,14 +1,14 @@
-# 01 — Product Context
+# 01: Product Context
 
-**Working name:** RTI Sarathi *(placeholder — see open question 2 in `04-user-problem.md`)*
+**Working name:** RTI Sarathi *(placeholder: see open question 2 in `04-user-problem.md`)*
 
 ## One-line description
 
-An independent prototype that turns a citizen's plain-language problem into a correctly worded RTI request aimed at the right public authority — with the reasoning shown, on a phone, in one screen flow.
+An independent prototype that turns a citizen's plain-language problem into a correctly worded RTI request aimed at the right public authority: with the reasoning shown, on a phone, in one screen flow.
 
 ## Why it exists
 
-The Right to Information Act gives every Indian citizen the right to ask the government for records. `rtionline.gov.in` makes that right *available* but not *usable*: before you can ask your question you must already know that RTI is the right instrument, which of roughly 2,900 public authorities holds the answer, and how to phrase a request so it is legally answerable. The portal offers no help with any of the three, and its own FAQ documents what happens when you get it wrong — a transfer under s.6(3) with a new registration number, or, for a state authority, the application returned **without refund of fee**.
+The Right to Information Act gives every Indian citizen the right to ask the government for records. `rtionline.gov.in` makes that right *available* but not *usable*: before you can ask your question you must already know that RTI is the right instrument, which of roughly 2,900 public authorities holds the answer, and how to phrase a request so it is legally answerable. The portal offers no help with any of the three, and its own FAQ documents what happens when you get it wrong: a transfer under s.6(3) with a new registration number, or, for a state authority, the application returned **without refund of fee**.
 
 The gap is not information. It is translation.
 

@@ -1,4 +1,4 @@
-# RTI Online — raw audit notes (2026-08-26)
+# RTI Online: raw audit notes (2026-08-26)
 
 Working notes behind `docs/agent-memory/03-rti-site-inventory.md`. Kept so a later agent can check our reasoning without re-running the audit.
 
@@ -35,7 +35,7 @@ inputs: [ {lan, select-one}, {Email, text}, {cell, password, placeholder:"Enter 
           {6_letters_code, text}, {Submit, submit}, {reset} ]
 ```
 
-`cell` — the mobile number — is `type="password"`. The citizen cannot see the number they typed.
+`cell`: the mobile number: is `type="password"`. The citizen cannot see the number they typed.
 
 Validation behaviour: submitting the form empty POSTs to `/request/request_email_check.php`, and the page re-renders with the loose strings *"Please enter a valid Email ID"* and *"Please Enter Correct Captcha Code."*. There are no `required` attributes and no client-side blocking; the CAPTCHA regenerates on every failure.
 
@@ -50,7 +50,7 @@ Public authority list (`/request/allpa.php`): one `<table>`, 3,114 rows, 2,904 u
 
 ## Registration number format (user manual, p.29)
 
-`AAAAA/B/C/DD/EEEEE` — public authority code / `R`equest or `A`ppeal / receipt type (`E` online, `P` physical, `T` transferred, `X` part transfer, `L` legacy) / two-digit year / five-digit serial.
+`AAAAA/B/C/DD/EEEEE`: public authority code / `R`equest or `A`ppeal / receipt type (`E` online, `P` physical, `T` transferred, `X` part transfer, `L` legacy) / two-digit year / five-digit serial.
 
 Our mock references must be visibly distinguishable from this.
 

@@ -27,7 +27,7 @@ for (const d of DOMAINS as { authorities: { name: string; reason: string }[] }[]
  * Honest context for a search result.
  *
  * Where we have authored a reason, we show it. Where we have not, we say what we
- * actually know — that it is on the portal's list — rather than inventing a
+ * actually know: that it is on the portal's list: rather than inventing a
  * description of what the body does. The original portal shows nothing at all;
  * a fabricated description would be worse than that.
  */
@@ -62,7 +62,7 @@ export interface SearchHit {
  *
  * The observed portal search matches institutional names only, and answers
  * problem-language with "No such Public Authority available in this portal !".
- * Ours is still a name search — we do not pretend otherwise — but it is
+ * Ours is still a name search: we do not pretend otherwise: but it is
  * token-based, order-independent and acronym-tolerant, and the UI states plainly
  * that it searches names so the citizen knows what to type.
  */
@@ -89,20 +89,20 @@ export function search(query: string, limit = 12): SearchHit[] {
   return hits.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name)).slice(0, limit);
 }
 
-/** Union Territory / state-run bodies — filing these centrally costs the fee. */
+/** Union Territory / state-run bodies: filing these centrally costs the fee. */
 export function looksStateOrUt(name: string): boolean {
   return name.startsWith('UT ');
 }
 
 /**
  * The "why this may be the right place" bullets.
- * Each one is tied to something the citizen actually did — their answers or the
- * information they asked for — not to a score.
+ * Each one is tied to something the citizen actually did: their answers or the
+ * information they asked for: not to a score.
  */
 export function reasonsFor(opts: {
   result: ReasoningResult;
   answers: Record<string, string>;
-  /** Noun phrases, not question labels — see InfoOption.noun (FR-2). */
+  /** Noun phrases, not question labels: see InfoOption.noun (FR-2). */
   infoTypeLabels: string[];
   authorityReason: string;
 }): string[] {

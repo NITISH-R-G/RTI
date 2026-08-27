@@ -1,8 +1,8 @@
-# Authenticated flow map — RTI Online request journey
+# Authenticated flow map: RTI Online request journey
 
 **Audit date:** 2026-08-26 · **Authenticated:** Yes (owner completed email + mobile + CAPTCHA + OTP manually)
 **Evidence:** `[O]` observed directly in a real browser this session, unless tagged otherwise.
-**Boundary:** the journey below stops at `Make Payment` / `Submit`. **Submission behaviour was NOT observed — we deliberately stopped before the irreversible action.** Anything about what happens after that point is `[D]` from the official manual, never `[O]`.
+**Boundary:** the journey below stops at `Make Payment` / `Submit`. **Submission behaviour was NOT observed: we deliberately stopped before the irreversible action.** Anything about what happens after that point is `[D]` from the official manual, never `[O]`.
 
 ---
 
@@ -27,13 +27,13 @@ STEP 2  request/request_email_check.php                                     [O]
   v
 STEP 3  request/Request_Check_Otp.php                       [O] route only
   |     FIELD: OTP
-  |     *** HUMAN AUTHENTICATION BOUNDARY — completed manually by the owner ***
+  |     *** HUMAN AUTHENTICATION BOUNDARY: completed manually by the owner ***
   |     BACK BEHAVIOUR: navigating back to this route afterwards produces a
   |     browser error page. The token is single-use; the journey cannot be
   |     resumed backwards.                                                   [O]
   v
 STEP 4  request/request.php?emailchk=..&cellchk=..&urletoken=..             [O]
-  |     THE APPLICATION FORM — 40 visible inputs, one screen, no steps,
+  |     THE APPLICATION FORM: 40 visible inputs, one screen, no steps,
   |     no progress indicator, no save/draft.
   |     Full structure: authenticated-form-structure.md
   |
@@ -80,7 +80,7 @@ STEP 5  "Make Payment" (non-BPL) or "Submit" (BPL)
         was impossible even if validation had passed.
 ==========================================================================
 
-BEYOND THIS POINT — [D] official citizen user manual only, never observed:
+BEYOND THIS POINT: [D] official citizen user manual only, never observed:
   payment mode selection (Net banking / Card / UPI) -> external gateway
   -> return to portal -> registration number issued, or delayed 24-48
   working hours pending reconciliation -> application reaches the Nodal

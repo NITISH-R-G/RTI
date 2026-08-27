@@ -2,7 +2,7 @@
  * Deterministic rules. Pure functions, no UI imports, no network.
  *
  * Every value here is a real rule of the RTI system, with its source recorded.
- * Nothing in this file may ever be produced by a template or a model — the
+ * Nothing in this file may ever be produced by a template or a model: the
  * observed portal states these facts, and so must we, from one place (ED-009).
  */
 
@@ -20,7 +20,7 @@ export const MAX_REQUEST_CHARS = 3000;
 
 /**
  * The exact character set the real portal accepts in the request text.
- * Source: verbatim on-screen note — "Only alphabets A-Z a-z number 0-9 and
+ * Source: verbatim on-screen note: "Only alphabets A-Z a-z number 0-9 and
  * special characters , . - _ ( ) / @ : & ? \ % are allowed".
  * Note what this EXCLUDES: apostrophe, #, ;, +, =, ", the rupee sign, and all Devanagari.
  */
@@ -50,7 +50,7 @@ export interface TextValidation {
   valid: boolean;
 }
 
-/** Validates against the real limits. Runs on every keystroke — no network (ED-003, ED-004). */
+/** Validates against the real limits. Runs on every keystroke: no network (ED-003, ED-004). */
 export function validateRequestText(text: string): TextValidation {
   const disallowed = [...new Set([...text].filter((ch) => !ALLOWED_CHAR.test(ch)))];
   return {
@@ -66,7 +66,7 @@ export function validateRequestText(text: string): TextValidation {
 const REPLACEMENTS: Record<string, string> = {
   '‘': "", '’': "", "'": '',        // curly and straight apostrophes
   '“': '', '”': '', '"': '',        // quotes
-  '–': '-', '—': '-',               // en/em dash
+  '–': '-', ', ': '-',               // en/em dash
   '₹': 'Rs.', '#': 'No.', ';': ',', '+': 'and', '=': 'is', '*': '', '!': '.',
   '…': '...', '\t': ' ',
 };

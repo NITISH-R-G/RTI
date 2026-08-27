@@ -1,7 +1,7 @@
 import type { ReactNode, ButtonHTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 
-/* Shared primitives. One coherent visual language across every screen —
+/* Shared primitives. One coherent visual language across every screen;
    screens must not look like they came from different libraries. */
 
 const base =
@@ -50,7 +50,7 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
   );
 }
 
-/** Used for the state/UT no-refund warning — an observed, expensive citizen mistake. */
+/** Used for the state/UT no-refund warning: an observed, expensive citizen mistake. */
 export function Notice({
   tone = 'info',
   title,

@@ -45,7 +45,7 @@ describe('DEMO-CRITICAL PATH: my pension has not been paid', () => {
   it('walks problem to authority without a dead end, and reaches review', async () => {
     const user = await walkPensionJourney();
 
-    // Draft screen — shows what they said, what they chose, and the request
+    // Draft screen: shows what they said, what they chose, and the request
     expect(screen.getByRole('heading', { name: /^your request$/i })).toBeInTheDocument();
     expect(screen.getByText('my pension has not been paid')).toBeInTheDocument();
     expect(screen.getByText(/what information do you want to get/i)).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('DEMO-CRITICAL PATH: my pension has not been paid', () => {
 
     await user.click(screen.getByRole('button', { name: /find where to send it/i }));
 
-    // Authority screen — the recommendation, derived and explained
+    // Authority screen: the recommendation, derived and explained
     expect(screen.getByText(/based on what you told us/i)).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: 'Department of Pensions & Pensioners Welfare' }),
@@ -209,7 +209,7 @@ describe('Authority screen', () => {
   });
 });
 
-describe('Social pension — the expensive mistake', () => {
+describe('Social pension: the expensive mistake', () => {
   it('proposes no central office and warns that the fee is not refunded', async () => {
     const user = userEvent.setup();
     renderApp();

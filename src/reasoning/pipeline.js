@@ -183,7 +183,7 @@ export function run(rawInput) {
   const norm = normalise(rawInput);
   const trace = { normalised: norm.text.slice(0, 200), stages: [] };
 
-  // 1 — no usable input
+  // 1: no usable input
   if (norm.tokens.length === 0) {
     trace.stages.push('empty-input');
     return result({
@@ -200,7 +200,7 @@ export function run(rawInput) {
   trace.stages.push('scored');
   trace.scores = scored.map((s) => ({ id: s.id, score: s.score, distinctive: s.distinctive }));
 
-  // 2 — not an RTI matter (checked before domain routing, but domain is still reported)
+  // 2: not an RTI matter (checked before domain routing, but domain is still reported)
   const opinion = phraseHits(norm.text, OPINION_SIGNALS);
   const thirdParty = phraseHits(norm.text, THIRD_PARTY_SIGNALS);
   const grievance = phraseHits(norm.text, GRIEVANCE_SIGNALS);
@@ -215,7 +215,7 @@ export function run(rawInput) {
     trace.stages.push('not-rti:speculation');
     return result({
       classification: 'not_rti', domain: likelyDomain, confidence: 0.7,
-      reasoning: 'This asks what may happen in future. RTI gets you records that already exist, so no office can answer it — a decision that has not been taken has no file. You can ask instead for the current rules, or for the file notings on a proposal already under consideration.',
+      reasoning: 'This asks what may happen in future. RTI gets you records that already exist, so no office can answer it: a decision that has not been taken has no file. You can ask instead for the current rules, or for the file notings on a proposal already under consideration.',
       next_action: 'explain_limit', trace,
     });
   }
@@ -224,7 +224,7 @@ export function run(rawInput) {
     trace.stages.push('not-rti:opinion');
     return result({
       classification: 'not_rti', domain: likelyDomain, confidence: 0.8,
-      reasoning: 'RTI gives you records the government already holds — it does not provide opinions or views. You can ask for the file notings or policy documents behind a decision instead.',
+      reasoning: 'RTI gives you records the government already holds: it does not provide opinions or views. You can ask for the file notings or policy documents behind a decision instead.',
       next_action: 'explain_limit', trace,
     });
   }
@@ -240,7 +240,7 @@ export function run(rawInput) {
     trace.stages.push('not-rti:grievance');
     return result({
       classification: 'not_rti', domain: likelyDomain, confidence: 0.75,
-      reasoning: 'This reads as a complaint asking for action. RTI obtains records; it does not investigate or resolve. A public grievance channel is the better route — and you can still use RTI afterwards to ask what was done.',
+      reasoning: 'This reads as a complaint asking for action. RTI obtains records; it does not investigate or resolve. A public grievance channel is the better route: and you can still use RTI afterwards to ask what was done.',
       next_action: 'explain_limit', trace,
     });
   }
@@ -248,7 +248,7 @@ export function run(rawInput) {
     trace.stages.push('not-rti:action-no-domain');
     return result({
       classification: 'not_rti', domain: null, confidence: 0.6,
-      reasoning: 'RTI lets you see the records behind a decision — it cannot compel an office to act or to penalise anyone. If you tell us what happened, we can help you ask for the file instead.',
+      reasoning: 'RTI lets you see the records behind a decision: it cannot compel an office to act or to penalise anyone. If you tell us what happened, we can help you ask for the file instead.',
       next_action: 'explain_limit', trace,
     });
   }
@@ -257,7 +257,7 @@ export function run(rawInput) {
     const d = domainById(likelyDomain);
     return result({
       classification: 'not_rti', domain: likelyDomain, confidence: 0.6,
-      reasoning: `RTI cannot make an office act — but it can make them show you the file. We can turn this into a request for the ${d.label.toLowerCase()} records instead.`,
+      reasoning: `RTI cannot make an office act: but it can make them show you the file. We can turn this into a request for the ${d.label.toLowerCase()} records instead.`,
       next_action: 'clarify',
       required_questions: questionsFor(likelyDomain),
       information_types: d.infoTypes,
@@ -265,7 +265,7 @@ export function run(rawInput) {
     });
   }
 
-  // 3 — state subject: never route centrally, and warn about the fee
+  // 3: state subject: never route centrally, and warn about the fee
   const stateHits = phraseHits(norm.text, STATE_SIGNALS);
   if (stateHits.length && top.distinctive > 0) {
     trace.stages.push('state-signal-with-domain');
@@ -285,22 +285,22 @@ export function run(rawInput) {
     return result({
       classification: 'unsupported', domain: null, confidence: 0.7,
       reasoning: 'This looks like a matter handled by your state government, not by a central ministry.',
-      warnings: ['The central RTI portal returns applications meant for state public authorities — and the fee is not refunded. File through your own state’s RTI route instead.'],
+      warnings: ['The central RTI portal returns applications meant for state public authorities: and the fee is not refunded. File through your own state’s RTI route instead.'],
       next_action: 'explain_limit', trace,
     });
   }
 
-  // 4 — no domain signal at all
+  // 4: no domain signal at all
   if (top.score === 0) {
     trace.stages.push('no-signal');
     return result({
       classification: 'unsupported', domain: null, confidence: 0,
-      reasoning: 'We could not tell which government office this belongs to. This prototype covers pension, provident fund, passport, railways and income tax in depth — you can still search all public authorities yourself, and we will show you what a good request looks like.',
+      reasoning: 'We could not tell which government office this belongs to. This prototype covers pension, provident fund, passport, railways and income tax in depth: you can still search all public authorities yourself, and we will show you what a good request looks like.',
       next_action: 'explain_limit', trace,
     });
   }
 
-  // 5 — weak or contested signal: ask, never guess
+  // 5: weak or contested signal: ask, never guess
   const confidence = confidenceFrom(top, second);
   const contenders = scored.filter((s) => s.score > 0 && s.score >= top.score - 2 && s.distinctive > 0);
   const contested = contenders.length > 1;
@@ -334,8 +334,8 @@ export function run(rawInput) {
     });
   }
 
-  // 6 — supported. If we know the topic but the citizen has not described a problem,
-  // we know WHAT it is about but not WHAT THEY WANT — so ask instead of routing.
+  // 6: supported. If we know the topic but the citizen has not described a problem,
+  // we know WHAT it is about but not WHAT THEY WANT: so ask instead of routing.
   const describesProblem = phraseHits(norm.text, PROBLEM_SIGNALS).length > 0;
   trace.stages.push(describesProblem ? 'supported' : 'supported:no-problem-signal');
   const d = domainById(top.id);
@@ -344,7 +344,7 @@ export function run(rawInput) {
     domain: top.id,
     confidence,
     reasoning: describesProblem
-      ? `This looks like a ${d.label.toLowerCase()} matter. Based on what you described, the office below is likely to hold these records — you can change it if you know better.`
+      ? `This looks like a ${d.label.toLowerCase()} matter. Based on what you described, the office below is likely to hold these records: you can change it if you know better.`
       : `This looks like it concerns ${d.label.toLowerCase()}, but we are not sure what you want to find out. Tell us a little more and we can point you the right way.`,
     next_action: (describesProblem && confidence >= 0.7) ? 'continue' : 'clarify',
     candidate_authorities: d.authorities,

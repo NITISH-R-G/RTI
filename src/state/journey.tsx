@@ -59,7 +59,7 @@ function save(state: JourneyState) {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(state));
   } catch {
-    // Storage unavailable — the journey still works for this page session (T-09).
+    // Storage unavailable: the journey still works for this page session (T-09).
   }
 }
 

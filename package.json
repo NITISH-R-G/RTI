@@ -9,15 +9,17 @@
     "build": "vite build",
     "preview": "vite preview --port 4173",
     "typecheck": "tsc --noEmit",
-    "test": "node --test \"test/*.test.js\" && vitest run",
+    "test": "node scripts/check-em-dash.js && node --test \"test/*.test.js\" && vitest run",
     "test:reasoning": "node --test \"test/*.test.js\"",
     "test:unit": "vitest run",
     "eval": "node scripts/evaluate.js",
     "eval:holdout": "node scripts/holdout.js",
     "test:e2e": "playwright test",
-    "test:a11y": "playwright test e2e/a11y.spec.ts"
+    "test:a11y": "playwright test e2e/a11y.spec.ts",
+    "check:em-dash": "node scripts/check-em-dash.js"
   },
   "dependencies": {
+    "motion": "^12.43.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2"

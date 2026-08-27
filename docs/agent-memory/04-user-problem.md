@@ -1,4 +1,4 @@
-# 04 — The User Problem
+# 04: The User Problem
 
 **Status: SETTLED.** Re-ranked after the authenticated audit (C1: 27 → 29) and **ratified as the final product thesis in PD-010** (`05-product-decisions.md`), which supersedes PD-002. The refined problem statement, alternatives reconsidered, what is explicitly not being solved, success criteria and reversibility all live in PD-010. This file remains the ranking evidence.
 **Evidence base:** `03-rti-site-inventory.md`, `docs/research/rti-online/authenticated-friction-map.md`, `authenticated-form-structure.md`, `authenticated-flow-map.md`.
@@ -21,12 +21,12 @@
 >
 > | Candidate | Was | Now | Why |
 > |---|---|---|---|
-> | **C1** — problem-language to correctly aimed, correctly worded RTI | 27 | **29** | User pain 5→5 (held); AI/logic usefulness 5→5 (held); **demo clarity 5→5 (held, now with a verbatim failure to show)**; build cost 3→**4** — the two-level cascade and the real ministry list make authority mapping *more* tractable than a flat 2,900 lookup would have been |
-> | C2 — wrong-authority routing alone | 22 | **24** | The observed search failure is real, but routing alone still leaves wording unsolved |
-> | C4 — accessible mobile re-skin | 18 | **17** | The authenticated form *does* carry `lang` and a viewport meta, so the "portal is not responsive" case is weaker than Session 1 claimed |
+> | **C1**: problem-language to correctly aimed, correctly worded RTI | 27 | **29** | User pain 5→5 (held); AI/logic usefulness 5→5 (held); **demo clarity 5→5 (held, now with a verbatim failure to show)**; build cost 3→**4**: the two-level cascade and the real ministry list make authority mapping *more* tractable than a flat 2,900 lookup would have been |
+> | C2: wrong-authority routing alone | 22 | **24** | The observed search failure is real, but routing alone still leaves wording unsolved |
+> | C4: accessible mobile re-skin | 18 | **17** | The authenticated form *does* carry `lang` and a viewport meta, so the "portal is not responsive" case is weaker than Session 1 claimed |
 > | C3, C5, C6 | 19 / 13 / 19 | unchanged | No new evidence bearing on them |
 >
-> **Conclusion: C1 holds and is stronger.** The problem statement is refined below — it is not merely that choosing an authority is hard, it is that **the portal requires the citizen to translate their problem into institutional vocabulary before it will help them at all, and refuses them outright when they cannot.**
+> **Conclusion: C1 holds and is stronger.** The problem statement is refined below: it is not merely that choosing an authority is hard, it is that **the portal requires the citizen to translate their problem into institutional vocabulary before it will help them at all, and refuses them outright when they cannot.**
 
 ## Candidate problems considered
 
@@ -45,14 +45,14 @@ Each was drawn from an observed friction point (F-codes refer to `03-rti-site-in
 
 ## Recommended problem: C1
 
-> **RTI Online requires citizens to translate a real-world problem into institutional language before the system will help them.** A citizen knows what they want to know. They do not know which ministry owns it, what the office is formally called, how to word the request so it is legally answerable, or whether RTI is even the right instrument. When they describe the problem in their own words, the portal answers *"No such Public Authority available in this portal !"* — even when the correct department exists in its own dropdown `[O]`. Getting it wrong costs 30–60 days and, for a state authority, the fee with no refund `[D]`.
+> **RTI Online requires citizens to translate a real-world problem into institutional language before the system will help them.** A citizen knows what they want to know. They do not know which ministry owns it, what the office is formally called, how to word the request so it is legally answerable, or whether RTI is even the right instrument. When they describe the problem in their own words, the portal answers *"No such Public Authority available in this portal !"*: even when the correct department exists in its own dropdown `[O]`. Getting it wrong costs 30–60 days and, for a state authority, the fee with no refund `[D]`.
 
 ### Why this problem and not the others
 
 1. **It is where the failure actually originates.** Tracking (C3) and appeals (C6) are downstream repairs for a request that was mis-aimed or mis-worded at the start. Fix the start and the downstream pain shrinks.
-2. **It is provably unserved, and now provably *refused*.** The portal's own FAQ answers "How do I write my application…?" with nothing but a character limit `[O]`. And the one control that looks like it accepts a problem description — the authority search — rejects problem language outright `[O]`. See `authenticated-friction-map.md` F-A1.
+2. **It is provably unserved, and now provably *refused*.** The portal's own FAQ answers "How do I write my application…?" with nothing but a character limit `[O]`. And the one control that looks like it accepts a problem description: the authority search: rejects problem language outright `[O]`. See `authenticated-friction-map.md` F-A1.
 3. **The penalty for getting it wrong is documented by the government itself**, not inferred by us: transfer under s.6(3) with a new registration number, or return **without refund** for a state authority. [D]
-4. **The reasoning work is real and can be built deterministically.** Mapping "my EPF withdrawal has been stuck since March" onto (a) is-this-RTI-or-a-grievance, (b) the right public authority, and (c) a specific, records-based, answerable question is the hard part. Under PD-009 it is delivered by a structured interview, a domain taxonomy, authored templates and ranked search over the real authority list — not by a runtime model. See `09-ai-behavior.md`.
+4. **The reasoning work is real and can be built deterministically.** Mapping "my EPF withdrawal has been stuck since March" onto (a) is-this-RTI-or-a-grievance, (b) the right public authority, and (c) a specific, records-based, answerable question is the hard part. Under PD-009 it is delivered by a structured interview, a domain taxonomy, authored templates and ranked search over the real authority list: not by a runtime model. See `09-ai-behavior.md`.
 5. **It demos in 90 seconds** and the before/after is self-evident to a judge who has never filed an RTI.
 6. **It needs almost no mocking.** The public-authority list is real public institutional data. Only identity, payment, OTP and submission are simulated.
 
@@ -71,9 +71,9 @@ Measured against the observed portal (`03` §2). To be re-measured and evidenced
 | | RTI Online (observed/documented) | Target for this prototype |
 |---|---|---|
 | Steps before you can start writing | 4 (home, guidelines wall, email/mobile/CAPTCHA, OTP) | 1 (describe your problem) |
-| Decisions the citizen must make unaided | Which of ~2,900 authorities; whether RTI applies; how to word it; BPL; fee mode | 0 unaided — every one is proposed with reasoning and is editable |
+| Decisions the citizen must make unaided | Which of ~2,900 authorities; whether RTI applies; how to word it; BPL; fee mode | 0 unaided: every one is proposed with reasoning and is editable |
 | Guidance on wording the request | None (character limit only) | Drafted, explained, editable, with the reason each sentence is there |
-| Terminology assumed known | CPIO, Nodal Officer, Public Authority, First Appellate Authority, s.6(3), BPL | 0 assumed — every term glossed at the point of use |
+| Terminology assumed known | CPIO, Nodal Officer, Public Authority, First Appellate Authority, s.6(3), BPL | 0 assumed: every term glossed at the point of use |
 | Usable on a 360 px phone | No (`viewport` meta absent; 980 px lock) | Yes, mobile-first |
 | Form fields with programmatic labels | 0 of 6 | 100% |
 | Knowing when you may appeal | Discovered by failing to file one | Shown as a date, up front |
@@ -84,6 +84,6 @@ Real submission to any government system · real payment · real OTP · login/ac
 
 ## Open questions for the project owner
 
-1. ~~Ratify C1?~~ **Done — PD-010.**
-2. Product name — a working name is needed that cannot be mistaken for an official government service. Placeholder in use: **"RTI Sarathi"** (`sarathi` = guide/charioteer). Change freely; it is referenced only in `01-product-context.md`.
+1. ~~Ratify C1?~~ **Done: PD-010.**
+2. Product name: a working name is needed that cannot be mistaken for an official government service. Placeholder in use: **"RTI Sarathi"** (`sarathi` = guide/charioteer). Change freely; it is referenced only in `01-product-context.md`.
 3. ~~Is an OpenAI API key available for the deployed build?~~ **Resolved 2026-08-26:** no runtime LLM. R1 is satisfied through Codex-assisted development. See PD-009 and `19-codex-contribution-log.md`.

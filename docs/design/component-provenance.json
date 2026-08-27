@@ -1,0 +1,83 @@
+{
+  "audit_date": "2026-08-27",
+  "providers_searched": [
+    {
+      "provider": "React Bits",
+      "access_method": "public JSON registry at reactbits.dev/r/*.json, fetched directly, no auth required",
+      "status": "accessible",
+      "items_available": 672,
+      "ts_tailwind_variants": 168
+    },
+    {
+      "provider": "21st.dev",
+      "access_method": "attempted unauthenticated registry endpoint (21st.dev/r/styles/default/index.json) and a known component path (21st.dev/r/kokonutd/ai-input)",
+      "status": "blocked",
+      "result": "404 / 403. No MCP server for 21st is connected in this session, and no API key is configured. Not used. Any claim of 21st.dev components in this product would be false and is not made anywhere."
+    },
+    {
+      "provider": "Origin UI",
+      "access_method": "attempted registry.json and a single component JSON",
+      "status": "inconclusive",
+      "result": "Serves through a redirect/CDN layer (dpl_ prefixed responses), not a flat JSON registry fetchable the same way as React Bits within the time budget. Not pursued further given the one-day timebox. Not used."
+    }
+  ],
+  "decision": "React Bits only. It is the sole provider with verified, directly fetchable component source in this session. Using unverifiable providers would repeat the earlier failure of claiming tools that were not actually used.",
+  "components_selected": [
+    {
+      "provider": "React Bits",
+      "component": "DecryptedText",
+      "source_url": "https://reactbits.dev/text-animations/decrypted-text",
+      "registry_fetch": "https://reactbits.dev/r/DecryptedText-TS-TW.json",
+      "dependency": "motion@^12.23.12",
+      "acquisition_method": "fetched registry JSON directly with curl, source written to src/vendor/reactbits/DecryptedText.tsx",
+      "target_screen": "Landing (hero)",
+      "ux_purpose": "The citizen's problem statement resolves from scrambled characters into readable text. Visually stages the product's actual claim: an unstructured problem becomes something the system can read. Not decorative motion; it dramatizes the transformation the product performs.",
+      "why_it_fits": "Reinforces uncertainty -> understanding directly at the point where the citizen types, rather than as a separate explainer block.",
+      "status": "IMPLEMENTED AND MUTATION-TESTED. See docs/evals/component-mutation-testing.md."
+    },
+    {
+      "provider": "React Bits",
+      "component": "AnimatedContent",
+      "source_url": "https://reactbits.dev/animations/animated-content",
+      "registry_fetch": "https://reactbits.dev/r/AnimatedContent-TS-TW.json",
+      "dependency": "motion@^12.23.12 (re-implemented on motion instead of the registry's gsap variant, to avoid a second animation library for one component)",
+      "acquisition_method": "concept and API shape taken from the registry component; reimplemented against `motion` to share the single animation dependency already pulled in by DecryptedText and Stepper",
+      "target_screen": "Landing (the failed-portal-exchange reveal), Authority (situation -> meaning -> destination reveal)",
+      "ux_purpose": "Staged reveal: citizen sentence, then the portal's real refusal, then our product's response. Communicates progression, not decoration.",
+      "why_it_fits": "Direct implementation of the required landing story: problem enters as language, system responds.",
+      "status": "IMPLEMENTED AND MUTATION-TESTED. See docs/evals/component-mutation-testing.md."
+    },
+    {
+      "provider": "React Bits",
+      "component": "Stepper",
+      "source_url": "https://reactbits.dev/components/stepper",
+      "registry_fetch": "https://reactbits.dev/r/Stepper-TS-TW.json",
+      "dependency": "motion@^12.23.12",
+      "acquisition_method": "concept taken from the registry; reimplemented as a lightweight progress-of-understanding indicator on the Authority screen rather than importing the full multi-step-form Stepper (which assumes form-wizard semantics this product's routing does not use)",
+      "target_screen": "Authority",
+      "ux_purpose": "Visualizes Your situation -> What that means -> Where it belongs as a real sequence rather than a static three-line list, so the recommendation reads as earned rather than dropped in.",
+      "why_it_fits": "Matches the exact structure requested for the authority screen.",
+      "status": "EVALUATED, NOT IMPLEMENTED. Descoped under the one-day timebox after the landing hero (P0) consumed the available time. See docs/evals/component-mutation-testing.md."
+    }
+  ],
+  "components_rejected": [
+    {
+      "name": "Dither / Beams / Aurora backgrounds",
+      "reason": "All require three.js or ogl (WebGL). Adds 150kB+ and a GPU dependency for a background effect on a low-bandwidth-target civic tool. Rejected on the performance/purpose test."
+    },
+    {
+      "name": "SplitText / TextType",
+      "reason": "Overlaps with DecryptedText's job on the same screen. One text-transformation moment is enough; two competes for attention."
+    },
+    {
+      "name": "GooeyNav / BubbleMenu / FlowingMenu",
+      "reason": "Navigation decoration with no role in a linear, six-step citizen journey."
+    },
+    {
+      "name": "SpotlightCard / TiltedCard / GlareHover",
+      "reason": "Card-hover embellishment with no connection to the product's actual claim; the anti-slop test (would this look identical with the branding removed?) fails."
+    }
+  ],
+  "single_dependency_added": "motion@^12.23.12",
+  "note_on_verification": "Every claim in this file is checked against actual imports and route rendering in docs/evals/component-mutation-testing.md, produced after implementation, not before."
+}

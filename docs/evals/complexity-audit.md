@@ -9,7 +9,7 @@
 | **RTI Online (observed)** | 5 unaided: which of 96 ministries · which of up to 183 authorities · gender / rural-urban / literacy / education level · BPL · how to word 3,000 characters |
 | **This prototype** | 4, **none unaided**: answer ≤3 clarifying questions (each with "I am not sure") · tick which information you want (pre-selected) · accept or change the proposed office · state whether you would pay the fee |
 
-The count barely moves. **What changes is that every decision arrives with a proposal, a reason, and an escape.** That is the honest claim — not "fewer decisions".
+The count barely moves. **What changes is that every decision arrives with a proposal, a reason, and an escape.** That is the honest claim: not "fewer decisions".
 
 ## Screens
 
@@ -32,10 +32,10 @@ Six versus five. **We have one more screen than the baseline and that is fine.**
 
 ## Reading load on the first viewport
 
-The landing page carries: heading, one-sentence lede, labelled input, primary button, three examples, the evidence block, the fee notice. The evidence block was **added** in Phase 4, which increases reading load — accepted deliberately, because without it a judge cannot tell why the product exists (fresh-reviewer FR-1). It sits **below** the input and the primary action, so it never delays a citizen who just wants to start.
+The landing page carries: heading, one-sentence lede, labelled input, primary button, three examples, the evidence block, the fee notice. The evidence block was **added** in Phase 4, which increases reading load: accepted deliberately, because without it a judge cannot tell why the product exists (fresh-reviewer FR-1). It sits **below** the input and the primary action, so it never delays a citizen who just wants to start.
 
 ## Where complexity remains, honestly
 
 1. **Six steps reads as long** before you start. The progress bar mitigates it once moving; measured against a form that needs 985 px of horizontal scrolling, this is the better trade.
 2. **The draft is long prose.** Structured further, it would stop being the thing the citizen can paste into the real portal. Kept as-is deliberately.
-3. **The authority screen carries a lot** — recommendation, three reasons, provenance, uncertainty note, three actions. It is the most loaded screen in the product. Justified because it is the decision that costs money to get wrong, but it is the first place to look if load needs reducing.
+3. **The authority screen carries a lot**: recommendation, three reasons, provenance, uncertainty note, three actions. It is the most loaded screen in the product. Justified because it is the decision that costs money to get wrong, but it is the first place to look if load needs reducing.

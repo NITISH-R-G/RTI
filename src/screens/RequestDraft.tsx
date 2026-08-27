@@ -68,11 +68,11 @@ export function RequestDraft() {
 
   return (
     <>
-      <PageTitle lede="Choose what you want to know. We turn it into a request the office is obliged to answer — and you can change every word of it.">
+      <PageTitle lede="Choose what you want to know. We turn it into a request the office is obliged to answer, and you can change every word of it.">
         Build your request
       </PageTitle>
 
-      {/* 1 — what they told us */}
+      {/* 1: what they told us */}
       <Card className="mb-4">
         <h2 className="text-sm font-medium text-ink-500">What you told us</h2>
         <p className="mt-1 text-ink-900">{state.problem}</p>
@@ -85,12 +85,12 @@ export function RequestDraft() {
         </button>
       </Card>
 
-      {/* 2 — what to ask for */}
+      {/* 2: what to ask for */}
       <Card className="mb-4">
         <fieldset>
           <legend className="font-semibold">What information do you want to get?</legend>
           <p className="mt-1 text-sm text-ink-500">
-            Pick the ones that matter. Fewer, sharper questions get answered — you do not need to
+            Pick the ones that matter. Fewer, sharper questions get answered; you do not need to
             fill the page.
           </p>
           <div className="mt-4 grid gap-2">
@@ -117,13 +117,13 @@ export function RequestDraft() {
         </fieldset>
         {selected.length === 0 && (
           <p className="mt-3 text-sm text-warn-700">
-            Nothing selected. Your request will only describe your situation — pick at least one
+            Nothing selected. Your request will only describe your situation; pick at least one
             question so the office knows what to answer.
           </p>
         )}
       </Card>
 
-      {/* 3 — the resulting request */}
+      {/* 3: the resulting request */}
       <Card>
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="font-semibold">
@@ -160,7 +160,7 @@ export function RequestDraft() {
           <p id={countId} className={v.overLimit ? 'font-medium text-danger-700' : 'text-ink-500'}>
             {v.length.toLocaleString('en-IN')} of {MAX_REQUEST_CHARS.toLocaleString('en-IN')}{' '}
             characters
-            {!v.overLimit && ` — ${v.remaining.toLocaleString('en-IN')} left`}
+            {!v.overLimit && `, ${v.remaining.toLocaleString('en-IN')} left`}
           </p>
         </div>
 

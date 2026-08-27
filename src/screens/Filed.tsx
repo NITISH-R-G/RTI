@@ -27,7 +27,7 @@ export function Filed() {
     { label: 'Request prepared', detail: 'Your wording and chosen office are ready.', done: true },
     { label: 'Submitted in this demo', detail: `Demo record created ${formatDate(filedAt)}.`, done: true },
     { label: 'Under review by the office', detail: 'Would begin once you file it for real.', done: false },
-    { label: 'Reply due', detail: `${formatDate(replyDue)} — 30 days from a real filing.`, done: false },
+    { label: 'Reply due', detail: `${formatDate(replyDue)}: 30 days from a real filing.`, done: false },
   ];
 
   async function copy() {
@@ -48,7 +48,7 @@ export function Filed() {
 
   return (
     <>
-      <PageTitle lede="Your request is written and aimed at the right office. Here is the text — file it yourself on the real portal.">
+      <PageTitle lede="Your request is written and aimed at the right office. Here is the text: file it yourself on the real portal.">
         Your request is ready
       </PageTitle>
 
@@ -65,7 +65,7 @@ export function Filed() {
         <p className="text-sm text-ink-500">Demonstration reference</p>
         <p className="mt-1 font-mono text-lg font-semibold text-ink-900">{ref ?? state.filedRef}</p>
         <p className="mt-2 text-sm text-ink-500">
-          Made up for this demo. A real RTI reference looks nothing like this — it is issued by the
+          Made up for this demo. A real RTI reference looks nothing like this. It is issued by the
           portal in the form <span className="font-mono">AAAAA/R/E/26/12345</span>.
         </p>
       </Card>
@@ -130,7 +130,7 @@ export function Filed() {
         <h2 className="font-semibold">If you do file it</h2>
         <p className="mt-2 text-ink-700">
           The office has 30 days to reply. If you get no answer by{' '}
-          <strong>{formatDate(replyDue)}</strong>, you can ask for a free review — a first appeal — on
+          <strong>{formatDate(replyDue)}</strong>, you can ask for a free review, a first appeal, on
           the same portal. There is no fee for that.
         </p>
         <div className="mt-5">

@@ -1,4 +1,4 @@
-# ADR-0001 — Persistent agent memory lives in the repository
+# ADR-0001: Persistent agent memory lives in the repository
 
 **Date:** 2026-08-26 · **Status:** Accepted
 

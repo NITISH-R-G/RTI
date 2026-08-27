@@ -1,11 +1,11 @@
-# 11 — Evaluation Log
+# 11: Evaluation Log
 
 Every entry: date · version · scenario · input · expected · actual · pass/fail · failure reason · fix · re-test result.
 "It looked good" is not an evaluation. Product evaluations (steps, confusion, clarity) belong here alongside assistant evaluations.
 
 ---
 
-## 2026-08-26 — Session 1 — Baseline measurement of the existing portal
+## 2026-08-26: Session 1: Baseline measurement of the existing portal
 
 Not an evaluation of our product (none exists). This is the **benchmark** every later claim of improvement is measured against. Method and evidence: `03-rti-site-inventory.md`.
 
@@ -13,10 +13,10 @@ Not an evaluation of our product (none exists). This is the **benchmark** every 
 |---|---|---|
 | Steps from home to first typing your actual question | 4 (home, guidelines wall, email+mobile+CAPTCHA, OTP) | [O] |
 | Unaided decisions before submitting | Authority (1 of ~2,900), RTI applicability, wording, BPL, payment mode | [O]/[D] |
-| Public authorities listed on the **catalogue page** `allpa.php` (NOT the form — see the Session 2 baseline below) | 2,904 unique (3,114 rows) | [O] |
+| Public authorities listed on the **catalogue page** `allpa.php` (NOT the form: see the Session 2 baseline below) | 2,904 unique (3,114 rows) | [O] |
 | Official guidance on how to word a request | None beyond a 3,000-character limit | [O] FAQ |
 | Form inputs with a programmatic label (request step 1) | 0 of 6 | [O] |
-| `<meta name="viewport">` present | No — 980 px lock on a 375 px device | [O] |
+| `<meta name="viewport">` present | No: 980 px lock on a 375 px device | [O] |
 | Landmarks / skip link | None / none | [O] |
 | Moving content with no pause control | 1 `<marquee>` on the home page | [O] |
 | OTP required to read your own status | Every time | [O] |
@@ -27,7 +27,7 @@ Not an evaluation of our product (none exists). This is the **benchmark** every 
 
 ---
 
-## 2026-08-26 — Session 2 — Baseline re-measured against the authenticated form
+## 2026-08-26: Session 2: Baseline re-measured against the authenticated form
 
 Supersedes the Session 1 baseline row where they differ. Method: `docs/research/rti-online/`.
 
@@ -49,13 +49,13 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 
 **Pass/fail:** n/a (baseline). **Next:** re-measure each row against our build and record the delta. No row in `docs/design/before-after-journey.md` §1 may be reported as achieved before its verification has run.
 
-## 2026-08-26 — Phase 3 Work Unit 1 — Application shell, design system, routing
+## 2026-08-26: Phase 3 Work Unit 1: Application shell, design system, routing
 
 **Verified in a real browser** (Chrome, `http://localhost:5173`), not by inspection alone.
 
 | Check | Expected | Actual | Pass |
 |---|---|---|---|
-| Build | passes | `vite build` OK — 235 kB JS / 75 kB gzip, 16.6 kB CSS / 4.3 kB gzip | Pass |
+| Build | passes | `vite build` OK: 235 kB JS / 75 kB gzip, 16.6 kB CSS / 4.3 kB gzip | Pass |
 | Typecheck | 0 errors | 0 | Pass |
 | Reasoning regression suite | 62 passing | 62 passing | Pass |
 | `<html lang>` | present | `en` | Pass |
@@ -65,15 +65,15 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 | **Horizontal overflow @ 360 px** | 0 | **0** (scrollWidth 360 = innerWidth 360) | Pass |
 | Elements past the right edge @ 360 px | 0 | 0 | Pass |
 | Persistent prototype disclosure | visible on every screen | visible, non-dismissible, links to /about | Pass |
-| Touch targets under 44 px | 0, excluding inline text links | 2 — the skip link before focus (51 px when focused, so compliant in use) and the inline disclosure link inside a sentence (39 px, WCAG 2.5.8 inline exception) | Pass, with the exception noted |
+| Touch targets under 44 px | 0, excluding inline text links | 2: the skip link before focus (51 px when focused, so compliant in use) and the inline disclosure link inside a sentence (39 px, WCAG 2.5.8 inline exception) | Pass, with the exception noted |
 
 **Baseline for contrast:** the real RTI form needs 985 px at a 360 px constraint, with 32 controls off-screen and 30 under 44 px.
 
-**Fixed during verification:** the progress label rendered as "Step 1 of 6 What happened" with no visual separator — a screen-reader-only colon is invisible to sighted users. Added a visual `·` plus an `aria-hidden`/`sr-only` pair so both audiences get a separator.
+**Fixed during verification:** the progress label rendered as "Step 1 of 6 What happened" with no visual separator: a screen-reader-only colon is invisible to sighted users. Added a visual `·` plus an `aria-hidden`/`sr-only` pair so both audiences get a separator.
 
 **Not yet verified:** axe-core (Playwright not installed yet), screen-reader behaviour, colour contrast measurement.
 
-## 2026-08-27 — Phase 3 Work Unit 2 — Landing screen
+## 2026-08-27: Phase 3 Work Unit 2: Landing screen
 
 **Automated:** 24 unit/component tests passing (16 rules + 8 Landing), plus the 62 reasoning tests. Build and typecheck clean.
 
@@ -96,12 +96,12 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 |---|---|
 | Horizontal overflow @ 360 px | **0** (scrollWidth 360 = innerWidth 360) |
 | Controls past the right edge | **0 of 9** |
-| Controls under 44 px | 2 — skip link before focus (51 px focused) and the inline disclosure link in a sentence (38 px, WCAG 2.5.8 inline exception) |
+| Controls under 44 px | 2: skip link before focus (51 px focused) and the inline disclosure link in a sentence (38 px, WCAG 2.5.8 inline exception) |
 | Visual check, desktop + mobile | Calm, single-column, one primary action; examples read as options rather than decoration |
 
 **Still not verified:** axe-core (Playwright not yet installed), screen reader, colour contrast.
 
-## 2026-08-27 — Phase 3 Work Unit 3 — Clarification flow
+## 2026-08-27: Phase 3 Work Unit 3: Clarification flow
 
 **Automated:** 33 vitest tests (16 rules + 8 Landing + 9 Clarify) and 70 node tests (62 corpus + 8 refine). All passing.
 
@@ -123,7 +123,7 @@ Supersedes the Session 1 baseline row where they differ. Method: `docs/research/
 
 **Architecture note:** answer refinement lives in `src/reasoning/refine.js`, **separate from the frozen `pipeline.js`**, so the Phase 2.5 corpus keeps testing exactly what it tested before. 8 new tests cover it, including a no-fabricated-authority assertion.
 
-## 2026-08-27 — Phase 3 Work Units 4 & 5 — Draft and Authority
+## 2026-08-27: Phase 3 Work Units 4 & 5: Draft and Authority
 
 Built and verified as one connected experience: what you told us to what you want to know to the request to where it goes. The authority is **derived from the request**, not guessed before it exists.
 
@@ -131,7 +131,7 @@ Built and verified as one connected experience: what you told us to what you wan
 
 | Suite | Result |
 |---|---|
-| Reasoning (node) | **70 passing** — corpus 62, refine 8 |
+| Reasoning (node) | **70 passing**: corpus 62, refine 8 |
 | Unit + component (vitest) | **79 passing** across 6 files |
 | Playwright e2e + axe | **28 passing** across desktop and 360 px |
 | **axe-core, serious/critical violations** | **0** on landing, clarify, draft, draft-error and authority-with-search |
@@ -160,9 +160,9 @@ Every returned name is asserted against `public-authorities.json`. A fabricated 
 
 ### Three real defects found by these tests, and fixed
 
-1. **Duplicate heading name.** The draft page `h1` and the textarea label were both "Your request" — two same-named headings on one page, confusing for screen-reader users. The page title is now "Build your request"; the section keeps "Your request".
+1. **Duplicate heading name.** The draft page `h1` and the textarea label were both "Your request": two same-named headings on one page, confusing for screen-reader users. The page title is now "Build your request"; the section keeps "Your request".
 2. **Back navigation showed a dead summary.** Returning to `/clarify` after answering showed "we have what we need" instead of re-offering the question, so the citizen could not change their answer. Fixed by keeping the unrefined classification as `baseResult` and always asking from it.
-3. **The too-short threshold was wrong.** 80 characters blocked *"Please provide the pension processing history for my case."* — a perfectly good RTI request, and one our own copy tells people to prefer. Lowered to 40; the threshold exists to catch nonsense, not to push people toward padding.
+3. **The too-short threshold was wrong.** 80 characters blocked *"Please provide the pension processing history for my case."*: a perfectly good RTI request, and one our own copy tells people to prefer. Lowered to 40; the threshold exists to catch nonsense, not to push people toward padding.
 
 ### Also caught
 
@@ -170,18 +170,18 @@ A bug in `SearchHit` construction where the context spread produced `text` inste
 
 ### Honest limitations
 
-- Manual search still matches **names**, not problems. We do not pretend otherwise — the screen says so explicitly and tells the citizen what to type, which the real portal does not.
+- Manual search still matches **names**, not problems. We do not pretend otherwise: the screen says so explicitly and tells the citizen what to type, which the real portal does not.
 - Where we have no authored description of an office, the search result says *"We do not hold a description of what this office covers"* rather than inventing one.
 - Colour contrast is still not measured. Screen-reader behaviour is still not tested with a real screen reader.
 
-## 2026-08-27 — Phase 3 Work Units 6-9 — Review, mock filing, not-RTI, about
+## 2026-08-27: Phase 3 Work Units 6-9: Review, mock filing, not-RTI, about
 
 ### Every suite, run together at the Phase 3 gate
 
 | Suite | Result |
 |---|---|
 | Reasoning (node) | **72 passing** |
-| Corpus evaluation | **60 / 60 (100%)** — 0 dead ends, 0 fabricated authorities |
+| Corpus evaluation | **60 / 60 (100%)**: 0 dead ends, 0 fabricated authorities |
 | Held-out set | 16 / 16 (note: burned since Phase 2.5, see KI-013) |
 | Unit + component (vitest) | **79 passing**, 6 files |
 | Playwright (desktop + 360 px) | **62 passing** |
@@ -190,7 +190,7 @@ A bug in `SearchHit` construction where the context spread produced `text` inste
 | Build | 412 kB JS / **123 kB gzip**, 19 kB CSS / 4.8 kB gzip |
 | Typecheck | clean |
 
-### Colour contrast — the gap is now closed
+### Colour contrast: the gap is now closed
 
 Previously listed as an unmeasured gap. A measurement harness (`e2e/contrast.spec.ts`) now computes the WCAG ratio for **every visible text element** on every screen, resolving the effective background through the ancestor chain and compositing alpha, and applies the correct 4.5:1 / 3:1 threshold by font size and weight.
 
@@ -203,17 +203,17 @@ Previously listed as an unmeasured gap. A measurement harness (`e2e/contrast.spe
 | Test | Result |
 |---|---|
 | Full demo path: pension to mock tracking | Pass, desktop and 360 px |
-| Social/old-age pension | Pass — no central authority, fee warning, useful onward route, and the body never contains "Department of Pensions" |
-| Not-RTI grievance | Pass — grievance route explained, never a rejection |
+| Social/old-age pension | Pass: no central authority, fee warning, useful onward route, and the body never contains "Department of Pensions" |
+| Not-RTI grievance | Pass: grievance route explained, never a rejection |
 | All five supported domains | Pass |
-| Ambiguous input | Pass — asks which subject |
-| Unsupported input | Pass — helpful, never the observed refusal string |
+| Ambiguous input | Pass: asks which subject |
+| Unsupported input | Pass: helpful, never the observed refusal string |
 | About page honesty claims | Pass |
-| Deep-link guards (/review, /filed without state) | Pass — redirect, no crash |
+| Deep-link guards (/review, /filed without state) | Pass: redirect, no crash |
 
 ### A real defect found by these tests
 
-**Ambiguity asked the wrong question.** `where is my refund` correctly classified as ambiguous, but then asked the **income tax** question ("What is this about?") instead of asking *which subject*. That quietly assumes income tax — precisely the false certainty the ambiguity detection exists to prevent. The Phase 2.5 corpus missed it because it asserted classification, domain and next action, but never the *quality of the question asked*.
+**Ambiguity asked the wrong question.** `where is my refund` correctly classified as ambiguous, but then asked the **income tax** question ("What is this about?") instead of asking *which subject*. That quietly assumes income tax: precisely the false certainty the ambiguity detection exists to prevent. The Phase 2.5 corpus missed it because it asserted classification, domain and next action, but never the *quality of the question asked*.
 
 **Fix (category: clarification failure).** When a domain is claimed only by cross-domain words, or when domains are contested, ask which subject. A domain-specific question is asked only when one domain clearly leads. Two regression tests added; full corpus re-run: still 60/60, no regression.
 
@@ -221,7 +221,7 @@ This is exactly the class of defect the frozen-corpus discipline is meant to sur
 
 ### Honesty boundaries now in the product
 
-- Review: "Nothing here is sent to the government", no payment, no account, no details stored — stated next to the action button.
+- Review: "Nothing here is sent to the government", no payment, no account, no details stored: stated next to the action button.
 - Filed: "Demo confirmation", a `DEMO-NOT-REAL/nnnnn` reference with the real format shown for contrast, and the timeline explicitly labelled as not representing actual government processing.
 - Not-RTI: says plainly that we are **not** linking to a specific service because we have not verified one, rather than inventing a destination.
 - About: "There is no artificial intelligence running here", the verbatim observed failure, the privacy boundary, and what the prototype cannot do.

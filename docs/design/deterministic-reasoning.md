@@ -1,4 +1,4 @@
-# Deterministic reasoning — architecture
+# Deterministic reasoning: architecture
 
 **Status:** Phase 2.5, validated 2026-08-26 · **Code:** `src/reasoning/` · **Tests:** `test/corpus.test.js` · **Harnesses:** `scripts/evaluate.js`, `scripts/holdout.js`
 
@@ -37,11 +37,11 @@ domain                 domain id | null
 confidence             0..1
 confidence_band        high (≥0.7) | medium (≥0.4) | low
 next_action            continue | clarify | explain_limit
-candidate_authorities  [{ name, reason }]   — names VERBATIM from the captured dataset
+candidate_authorities  [{ name, reason }]  : names VERBATIM from the captured dataset
 reasoning              plain-language, user-facing
 required_questions     [{ id, text, options }]
 information_types      [string]
-warnings               [string]             — e.g. the state no-refund warning
+warnings               [string]            : e.g. the state no-refund warning
 trace                  { normalised, stages[], scores[] }
 ```
 
@@ -49,7 +49,7 @@ Confidence is never silently promoted: the band is derived from the number, and 
 
 ## Why scoring, not `if (input.includes(...))`
 
-Domains are **data** (`src/reasoning/taxonomy.js`); the pipeline is **generic**. Adding a sixth domain means adding a record, not editing control flow. The scoring layer is deliberately small — four weights and one cap — because the corpus, not cleverness, is what tells us whether it works.
+Domains are **data** (`src/reasoning/taxonomy.js`); the pipeline is **generic**. Adding a sixth domain means adding a record, not editing control flow. The scoring layer is deliberately small: four weights and one cap: because the corpus, not cleverness, is what tells us whether it works.
 
 ## Domain boundaries
 
@@ -61,7 +61,7 @@ Domains are **data** (`src/reasoning/taxonomy.js`); the pipeline is **generic**.
 | railways | train, railway, rail, irctc, pnr, ticket | pension, passport, income tax, provident |
 | income_tax | income tax, itr, tds, assessment year, tax refund | pension, passport, train, railway, provident |
 
-**Cross-domain words** — `refund`, `status`, `delayed`, `pending`, `money`, `claim`, `not received` — may support a domain but can never establish one. A domain claimed *only* by these is capped at 2 points and marked non-distinctive.
+**Cross-domain words**: `refund`, `status`, `delayed`, `pending`, `money`, `claim`, `not received`: may support a domain but can never establish one. A domain claimed *only* by these is capped at 2 points and marked non-distinctive.
 
 ## Supported language patterns
 
@@ -76,11 +76,11 @@ Domains are **data** (`src/reasoning/taxonomy.js`); the pipeline is **generic**.
 
 The system asks rather than guesses when **any** of these hold:
 
-1. **Contested** — two or more domains score within 2 points of each other with distinctive evidence. Both are named; the leading candidate is still reported so the citizen sees what we suspect.
-2. **Low confidence** — below 0.4.
-3. **No distinctive evidence** — only cross-domain words matched.
-4. **Topic without a problem** — a domain keyword appears but nothing describes an issue (*"pensioner association meeting minutes"*). We know the subject, not the need.
-5. **State signal alongside a domain** — *"old age pension"* could be central or state. Downgraded to clarification **with the fee warning**, never routed confidently.
+1. **Contested**: two or more domains score within 2 points of each other with distinctive evidence. Both are named; the leading candidate is still reported so the citizen sees what we suspect.
+2. **Low confidence**: below 0.4.
+3. **No distinctive evidence**: only cross-domain words matched.
+4. **Topic without a problem**: a domain keyword appears but nothing describes an issue (*"pensioner association meeting minutes"*). We know the subject, not the need.
+5. **State signal alongside a domain**: *"old age pension"* could be central or state. Downgraded to clarification **with the fee warning**, never routed confidently.
 
 ## Unsupported behaviour
 
@@ -94,7 +94,7 @@ Never a flat refusal. Three distinct honest outcomes:
 
 Authority names live only in the taxonomy, are copied verbatim from `docs/research/rti-online/public-authorities.json`, and a test asserts every returned name is a member of that set. There is no code path that can synthesise a name.
 
-## Known weaknesses — recorded, not hidden
+## Known weaknesses: recorded, not hidden
 
 1. **Coverage is five domains.** Anything else reaches the honest-failure path. This is by design, but it means most real RTI subjects are not classified.
 2. **Keyword and edit-distance matching has no semantics.** *"my retirement money never came"* leans on `retirement`; a phrasing that avoids every anchor word will fall to clarification. Safe, but blunt.

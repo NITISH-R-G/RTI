@@ -21,7 +21,7 @@ export function NotRti() {
 
   return (
     <>
-      <PageTitle lede="You have not done anything wrong — this route may just not be the one that gets you an answer.">
+      <PageTitle lede="You have not done anything wrong. This route may just not be the one that gets you an answer.">
         Let us point you somewhere better
       </PageTitle>
 
@@ -33,7 +33,7 @@ export function NotRti() {
           onClick={() => navigate('/')}
           className="tap mt-2 inline-flex items-center text-sm text-brand-700 underline underline-offset-4"
         >
-          That is not quite right — let me rewrite it
+          That is not quite right, let me rewrite it
         </button>
       </Card>
 
@@ -44,7 +44,7 @@ export function NotRti() {
 
       {isStateMatter && (
         <div className="mb-4">
-          <Notice tone="warn" title="Central portal or state portal — this matters">
+          <Notice tone="warn" title="Central portal or state portal: this matters">
             {r.warnings.map((w) => (
               <p key={w} className="mb-2 last:mb-0">
                 {w}

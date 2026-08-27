@@ -1,7 +1,7 @@
 # Taxonomy test corpus
 
 **Created:** 2026-08-26, **before any classifier implementation existed.** Git history is the proof: this file and `corpus.json` are committed in advance of `src/reasoning/`.
-**Machine-readable fixture:** `docs/evals/corpus.json` — that file is the source of truth for automated tests; this document explains it.
+**Machine-readable fixture:** `docs/evals/corpus.json`: that file is the source of truth for automated tests; this document explains it.
 
 ## Why corpus-first
 
@@ -23,7 +23,7 @@ The failure mode this guards against is writing a classifier and then writing te
 | out of scope | 1 | Central, but outside our five domains |
 | edge | 6 | Empty, gibberish, no-signal, multi-domain, 5,000 characters, look-alike |
 
-Every supported domain includes **natural variation** — not just the canonical phrasing. Pension alone spans "has not been paid", "hasn't come", "did not receive", "why is it delayed", "pending for three months", "when will it be credited", "stopped suddenly", plus a typo-heavy variant and an old-age-pension case that is deliberately a state matter.
+Every supported domain includes **natural variation**: not just the canonical phrasing. Pension alone spans "has not been paid", "hasn't come", "did not receive", "why is it delayed", "pending for three months", "when will it be credited", "stopped suddenly", plus a typo-heavy variant and an old-age-pension case that is deliberately a state matter.
 
 ## The result contract
 
@@ -45,7 +45,7 @@ required_questions  0 or more { id, text, options }
 
 These fail a case regardless of what else is right:
 
-1. A dead end — a result with no `next_action`, or with no `reasoning`.
+1. A dead end: a result with no `next_action`, or with no `reasoning`.
 2. Any `candidate_authorities` name not present **verbatim** in `docs/research/rti-online/public-authorities.json`.
 3. A supported-domain input returning **zero** candidate authorities **and** zero required questions.
 4. Non-deterministic output across repeated runs.
@@ -59,11 +59,11 @@ Condition 3 is the direct guard against reproducing the observed baseline failur
 
 Some inputs are genuinely ambiguous to a human. Forcing a single expected answer would be dishonest, so those cases accept **a set** of classifications, and the reason is recorded in the case's `note`. Examples:
 
-- **P06** `old age pension money hasn't arrived` — social pensions are usually delivered by state governments. Accepts `ambiguous` or `unsupported`; **rejects** a confident central routing.
-- **F08** `eps pension` — EPS is a pension scheme run by EPFO. Accepts `ambiguous` or `supported` in either domain.
-- **I07** `where is my refund` — spans tax, railways and provident fund. Accepts **only** `ambiguous`: guessing here is a failure even if the guess happens to be popular.
-- **E04** `my pension and passport are both delayed` — accepts **only** `ambiguous`.
-- **E06** `pensioner association meeting minutes` — looks like pension, is not. Must not route confidently.
+- **P06** `old age pension money hasn't arrived`: social pensions are usually delivered by state governments. Accepts `ambiguous` or `unsupported`; **rejects** a confident central routing.
+- **F08** `eps pension`: EPS is a pension scheme run by EPFO. Accepts `ambiguous` or `supported` in either domain.
+- **I07** `where is my refund`: spans tax, railways and provident fund. Accepts **only** `ambiguous`: guessing here is a failure even if the guess happens to be popular.
+- **E04** `my pension and passport are both delayed`: accepts **only** `ambiguous`.
+- **E06** `pensioner association meeting minutes`: looks like pension, is not. Must not route confidently.
 
 ## Adversarial cases and what each attacks
 
@@ -76,11 +76,11 @@ Some inputs are genuinely ambiguous to a human. Forcing a single expected answer
 | F01 | `pf money is stuck` | Two-letter abbreviation carrying the whole signal |
 | T06 / R07 | `tatkal passport delay` / `tatkal ticket refund` | A shared keyword that must resolve to different domains |
 | T07 | `passport` | Single word |
-| I07 / I08 | `where is my refund` / `refund` | A word spanning three supported domains — must ask |
+| I07 / I08 | `where is my refund` / `refund` | A word spanning three supported domains: must ask |
 | N04 | `please release my pension immediately` | Supported domain, but asks for action not records |
 | N06 | `give me my neighbour's pension details` | Supported domain, but third-party personal data |
-| U01–U05 | road, ration card, electricity, FIR, school | State subjects — the expensive mistake |
-| U06 | `ISRO satellite launches` | Central but out of scope — must fail helpfully |
+| U01–U05 | road, ration card, electricity, FIR, school | State subjects: the expensive mistake |
+| U06 | `ISRO satellite launches` | Central but out of scope: must fail helpfully |
 | E01 / E02 | empty / gibberish | No signal |
 | E04 | pension **and** passport | Two supported domains at once |
 | E05 | 5,000 characters | Length |

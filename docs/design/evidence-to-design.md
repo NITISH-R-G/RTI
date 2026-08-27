@@ -7,11 +7,11 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-001 — Institutional vocabulary mismatch *(the founding decision)*
+## ED-001: Institutional vocabulary mismatch *(the founding decision)*
 
 **Observed problem.** The citizen must name an institution before the system will engage with their problem.
 
-**Evidence** `[O]` — route `request/request.php`, authenticated, synthetic input, control `Search Public Authority`:
+**Evidence** `[O]`: route `request/request.php`, authenticated, synthetic input, control `Search Public Authority`:
 
 | Input | Observed result |
 |---|---|
@@ -21,7 +21,7 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 **Counter-evidence** `[O]`: `Department of Pensions & Pensioners Welfare` exists in the `MinistryId` cascade **on the same screen**. The system contained the answer and refused the citizen anyway.
 
-**Citizen impact.** A person with a valid, answerable request is told the system cannot help them. There is no error state on the government's side — the request simply never exists. The search works only for those who already know the formal name, which is precisely the knowledge the citizen lacks.
+**Citizen impact.** A person with a valid, answerable request is told the system cannot help them. There is no error state on the government's side: the request simply never exists. The search works only for those who already know the formal name, which is precisely the knowledge the citizen lacks.
 
 **Design response.** Invert the order. The journey opens with *"What happened?"* in the citizen's own words. The institution is **derived** from the problem via a curated taxonomy, then shown with reasoning and ranked alternatives. Problem-language is the *expected* input, not a failure mode.
 
@@ -31,13 +31,13 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-002 — Authority selection precedes intent
+## ED-002: Authority selection precedes intent
 
 **Observed problem.** Two required dropdowns (`Select Ministry/Department/Apex body`, `Select Public Authority`) sit at the **top** of the form, above any question about what the citizen wants `[O]`.
 
-**Evidence** `[O]`: form-structure §1 — fields 3 and 4 of 40, before the request text at field 36. Ministry select has **96** options with no description of what any covers; `Ministry of Railways` cascades to **184**. `All Ministries` is selectable and yields **zero** authorities.
+**Evidence** `[O]`: form-structure §1: fields 3 and 4 of 40, before the request text at field 36. Ministry select has **96** options with no description of what any covers; `Ministry of Railways` cascades to **184**. `All Ministries` is selectable and yields **zero** authorities.
 
-**Citizen impact.** The citizen must model government structure before articulating a need. A wrong guess costs a s.6(3) transfer and a new registration number, or — for a state body — the application returned **without refund** `[D]`. The form never states either consequence.
+**Citizen impact.** The citizen must model government structure before articulating a need. A wrong guess costs a s.6(3) transfer and a new registration number, or: for a state body: the application returned **without refund** `[D]`. The form never states either consequence.
 
 **Design response.** Authority selection moves **after** the request is drafted, and is computed from the problem domain. The screen states the consequence of a wrong choice in plain language, and warns explicitly when the likely destination is a state/UT body.
 
@@ -47,11 +47,11 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-003 — Validation arrives after a network round trip
+## ED-003: Validation arrives after a network round trip
 
 **Observed problem.** No client-side field validation exists at all.
 
-**Evidence** `[O]`: no field carries an HTML `required` attribute (form-structure §1). Enumerating every page function containing `alert(` yields exactly two messages — `Only Indian citizens can file RTI Request application.` and `Your request will be filed with \n\n<authority>` (form-structure §7a). On the pre-auth page, errors returned as loose text after a full reload **with the CAPTCHA regenerated** (inventory §3).
+**Evidence** `[O]`: no field carries an HTML `required` attribute (form-structure §1). Enumerating every page function containing `alert(` yields exactly two messages: `Only Indian citizens can file RTI Request application.` and `Your request will be filed with \n\n<authority>` (form-structure §7a). On the pre-auth page, errors returned as loose text after a full reload **with the CAPTCHA regenerated** (inventory §3).
 
 **Citizen impact.** A blank mandatory field costs a page load; on the earlier screen it also costs solving a fresh CAPTCHA to fix a typo. On a slow connection this is the difference between filing and abandoning.
 
@@ -63,13 +63,13 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-004 — Restricted characters are enforced only at submit
+## ED-004: Restricted characters are enforced only at submit
 
 **Observed problem.** The rule `Only alphabets A-Z a-z number 0-9 and special characters , . - _ ( ) / @ : & ? \ %` is printed on screen, but the textarea has **no** `oninput`, `onkeyup`, `onkeypress`, `onchange` or `onblur` handler `[O]` (form-structure §5).
 
-**Citizen impact.** The set excludes the apostrophe, `#`, `;`, `+`, `=`, `"`, the rupee sign and **all Devanagari**. So "my father's pension" fails, and a request written in Hindi fails wholesale — discovered after composing up to 3,000 characters.
+**Citizen impact.** The set excludes the apostrophe, `#`, `;`, `+`, `=`, `"`, the rupee sign and **all Devanagari**. So "my father's pension" fails, and a request written in Hindi fails wholesale: discovered after composing up to 3,000 characters.
 
-**Design response.** Validate as the citizen types. Name the specific offending characters. Offer a one-tap fix that maps common offenders (curly quotes, en dashes, the rupee sign) to allowed equivalents. This is pure, unit-tested code — never model behaviour.
+**Design response.** Validate as the citizen types. Name the specific offending characters. Offer a one-tap fix that maps common offenders (curly quotes, en dashes, the rupee sign) to allowed equivalents. This is pure, unit-tested code: never model behaviour.
 
 **Expected measurable improvement.** Characters typed before the citizen learns of a violation: **up to 3,000 → 0**.
 
@@ -77,7 +77,7 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-005 — No remaining-character feedback
+## ED-005: No remaining-character feedback
 
 **Observed problem.** `maxlength="3000"` truncates silently; no counter exists anywhere `[O]` (form-structure §5).
 
@@ -91,13 +91,13 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-006 — The form does not reflow
+## ED-006: The form does not reflow
 
-**Observed problem.** Constrained to 360 px the form requires **985 px** — 625 px of horizontal overflow, 32 controls past the right edge, and **30** controls under the 44 px touch target `[O]` (form-structure §7b).
+**Observed problem.** Constrained to 360 px the form requires **985 px**: 625 px of horizontal overflow, 32 controls past the right edge, and **30** controls under the 44 px touch target `[O]` (form-structure §7b).
 
 *Method limitation, stated plainly:* device emulation was unavailable for the authenticated tab, so reflow was measured directly rather than on a phone. No real device was used.
 
-**Citizen impact.** The page has a viewport meta, so it does not zoom out — instead the citizen scrolls sideways on every row of a 40-field form with ~26 px targets, and a label can be off-screen from its own field. India files RTIs on phones.
+**Citizen impact.** The page has a viewport meta, so it does not zoom out: instead the citizen scrolls sideways on every row of a 40-field form with ~26 px targets, and a label can be off-screen from its own field. India files RTIs on phones.
 
 **Design response.** Mobile-first, single-column, no layout tables. Minimum 44 px targets. Acceptance criterion per route (PD-008), not a review step.
 
@@ -107,7 +107,7 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-007 — Nothing is programmatically labelled
+## ED-007: Nothing is programmatically labelled
 
 **Observed problem.** **0 `<label>` elements for 40 visible inputs**; 0 `aria-required`; 0 `aria-describedby`; 6 layout tables; 0 landmarks; 1 `h1` and no `h2`/`h3` `[O]` (form-structure §6).
 
@@ -121,7 +121,7 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-008 — Back navigation destroys the journey
+## ED-008: Back navigation destroys the journey
 
 **Observed problem.** Navigating back to the OTP screen produces a **browser error page**; the token is single-use `[O]` (flow-map STEP 3). The form has no draft, no save and no progress indicator.
 
@@ -135,13 +135,13 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-009 — The fee is hidden until a specific question is answered
+## ED-009: The fee is hidden until a specific question is answered
 
 **Observed problem.** No fee is shown on load. Choosing `BPL = No` reveals `You are required to pay the RTI fee of ₹ 10` and relabels the button to **Make Payment** `[O]` (form-structure §4).
 
 **Citizen impact.** The button changing label is the only structural signal that money is involved. A citizen who never answers the BPL question never learns there is a fee.
 
-**Design response.** State the fee and the BPL exemption **before** effort is invested, in plain language, sourced from the deterministic rules module with its citation — never from generated prose.
+**Design response.** State the fee and the BPL exemption **before** effort is invested, in plain language, sourced from the deterministic rules module with its citation: never from generated prose.
 
 **Expected measurable improvement.** Effort invested before the fee is disclosed: **entire form → none**.
 
@@ -149,9 +149,9 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-010 — Demographic disclosure to exercise a right
+## ED-010: Demographic disclosure to exercise a right
 
-**Observed problem.** The form collects Gender (**defaulting to Male**), Rural/Urban, and Literate/Illiterate — the last revealing four further education-level radios `[O]` (form-structure §4, friction F-A5).
+**Observed problem.** The form collects Gender (**defaulting to Male**), Rural/Urban, and Literate/Illiterate: the last revealing four further education-level radios `[O]` (form-structure §4, friction F-A5).
 
 **Citizen impact.** The citizen declares gender, rural/urban status and education level in order to ask a question. A silent default records an answer nobody gave.
 
@@ -163,7 +163,7 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-011 — Inapplicable branches are always visible
+## ED-011: Inapplicable branches are always visible
 
 **Observed problem.** `bplCardNo`, `YearOfUssue` and `IssuAuthority` remain visible and enabled in **every** BPL state `[O]` (F-A6). `Country = Other` leaves the India State dropdown and a free-text country box enabled side by side `[O]` (F-A13).
 
@@ -177,11 +177,11 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-012 — The authority "confirmation" cannot be declined
+## ED-012: The authority "confirmation" cannot be declined
 
-**Observed problem.** The public-authority step fires `alert("Your request will be filed with \n\n" + name)` — an `alert()`, not a `confirm()`. There is no Cancel `[O]` (form-structure §7a).
+**Observed problem.** The public-authority step fires `alert("Your request will be filed with \n\n" + name)`: an `alert()`, not a `confirm()`. There is no Cancel `[O]` (form-structure §7a).
 
-**Citizen impact.** The one moment the portal could warn about a wrong destination is a dead acknowledgement. The consequence — s.6(3) transfer, or return without refund for a state body `[D]` — is never stated.
+**Citizen impact.** The one moment the portal could warn about a wrong destination is a dead acknowledgement. The consequence: s.6(3) transfer, or return without refund for a state body `[D]`: is never stated.
 
 **Design response.** The authority step is a genuine, reversible decision on its own screen: recommendation, reasoning, ranked alternatives, full search, and an explicit statement of consequence including the state/UT no-refund warning.
 
@@ -191,13 +191,13 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-013 — Honest failure instead of a confident wrong answer
+## ED-013: Honest failure instead of a confident wrong answer
 
-**Observed problem.** The portal's failure mode for unrecognised input is a flat refusal — *"No such Public Authority available in this portal !"* — with no suggestion and no route onward `[O]` (F-A1).
+**Observed problem.** The portal's failure mode for unrecognised input is a flat refusal: *"No such Public Authority available in this portal !"*: with no suggestion and no route onward `[O]` (F-A1).
 
 **Risk this creates for us** (R-17): a taxonomy-driven product can fail the same way, or worse, by silently mapping an unsupported problem to an arbitrary authority.
 
-**Design response.** Out-of-coverage input produces: an explicit statement that we have no template for this, an explanation of what makes a good RTI request, the full authority search, and the option to proceed with the citizen's own wording. **Never a flat refusal, never a fabricated match.** Uncertainty is expressed in words at the point of the claim — *"Based on what you described, this may be the right office"* — never as a percentage.
+**Design response.** Out-of-coverage input produces: an explicit statement that we have no template for this, an explanation of what makes a good RTI request, the full authority search, and the option to proceed with the citizen's own wording. **Never a flat refusal, never a fabricated match.** Uncertainty is expressed in words at the point of the claim: *"Based on what you described, this may be the right office"*: never as a percentage.
 
 **Expected measurable improvement.** Dead ends: **1 observed → 0**. Taxonomy coverage across the evaluation set is measured and **reported**, not hidden.
 
@@ -205,7 +205,7 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 
 ---
 
-## ED-014 — Do not collect identity
+## ED-014: Do not collect identity
 
 **Observed problem.** The real form collects name, address (3 lines), pincode, phone, email and confirm-email `[O]` (form-structure §1).
 
@@ -236,6 +236,6 @@ Source of all `[O]` claims: the frozen audit in `docs/research/rti-online/`.
 | ED-011 | F-A6, F-A13 | `/review` | component |
 | ED-012 | F-A11 | `/authority` | S7, S12 |
 | ED-013 | F-A1 + R-17 | `/clarify`, `/authority`, `/not-rti` | S5, S6, S7, S9 |
-| ED-014 | — (privacy, PD-009) | `/review` | assertion |
+| ED-014 |: (privacy, PD-009) | `/review` | assertion |
 
 **Unchained features are forbidden.** If a later agent wants to add something, it needs a chain here first, or it does not ship.

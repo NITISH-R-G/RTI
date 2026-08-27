@@ -1,4 +1,4 @@
-# User Flow — every transition
+# User Flow: every transition
 
 **Status:** Phase 2, frozen with `mvp-spec.md` v1.0 · 2026-08-26
 
@@ -9,7 +9,7 @@
 
 ---
 
-## T-01 — Landing → Clarification
+## T-01: Landing → Clarification
 
 | | |
 |---|---|
@@ -23,14 +23,14 @@
 
 ---
 
-## T-02 — Clarification → verdict
+## T-02: Clarification → verdict
 
 | | |
 |---|---|
 | **Current state** | `/clarify`, question *n* of ≤3 |
 | **User action** | Chooses an option, or **"I'm not sure"**, or **Back** |
 | **System response** | Records the answer, re-scores, and either asks the next question or resolves the verdict. "I'm not sure" is a first-class answer: it widens the candidate set rather than blocking |
-| **Validation** | None can fail — every question has an escape answer |
+| **Validation** | None can fail: every question has an escape answer |
 | **Failure path** | If answers leave the domain ambiguous after 3 questions, the verdict is `out-of-coverage`. **The system does not ask a fourth question and does not guess** |
 | **Recovery** | Back re-opens the previous question with the earlier answer selected |
 | **Next state** | `suitable`/`needs-reframing` → `/request` · `not-rti`/`state-subject` → `/not-rti` · `out-of-coverage` → `/request` un-assisted |
@@ -39,7 +39,7 @@
 
 ---
 
-## T-03 — Not-RTI → onward
+## T-03: Not-RTI → onward
 
 | | |
 |---|---|
@@ -55,7 +55,7 @@
 
 ---
 
-## T-04 — Compose the request
+## T-04: Compose the request
 
 | | |
 |---|---|
@@ -67,17 +67,17 @@
 | **Recovery** | "Reset to suggested draft" restores the generated version; the citizen's own original problem text is always still available |
 | **Next state** | `/authority` |
 
-**No network call occurs on this screen** (ED-003) — asserted by an e2e test.
+**No network call occurs on this screen** (ED-003): asserted by an e2e test.
 
 ---
 
-## T-05 — Choose the destination
+## T-05: Choose the destination
 
 | | |
 |---|---|
 | **Current state** | `/authority`, one recommendation + ≥2 alternatives + search |
 | **User action** | **Use this office**, or selects an alternative, or searches and selects, or **Back** |
-| **System response** | Records the chosen authority (verbatim from `public-authorities.json`) and its reasoning. Search runs locally over the bundled dataset — case-insensitive, acronym-tolerant, token-based |
+| **System response** | Records the chosen authority (verbatim from `public-authorities.json`) and its reasoning. Search runs locally over the bundled dataset: case-insensitive, acronym-tolerant, token-based |
 | **Validation** | An authority must be selected. Membership in the real dataset is guaranteed by construction |
 | **Failure path** | Search returns nothing → "No match for that. Here's how to describe it differently," plus domain suggestions and the option to go back and re-clarify. **Never a flat refusal** (ED-013) |
 | **Recovery** | Back to `/request` preserves the draft exactly, including manual edits |
@@ -87,21 +87,21 @@
 
 ---
 
-## T-06 — Review
+## T-06: Review
 
 | | |
 |---|---|
 | **Current state** | `/review` |
 | **User action** | Sets **BPL yes/no**, uses an **Edit** link, or presses **File this (simulated)** |
 | **System response** | BPL recomputes the fee (₹10 / ₹0) from the rules module. Edit links navigate to the owning screen with all other state preserved. File → generates a visibly fake reference, computes the timeline from the 30-day rule |
-| **Validation** | BPL must be answered before filing — the fee cannot be left undefined (this is the one place the real portal's conditional disclosure is turned into an explicit question, ED-009) |
+| **Validation** | BPL must be answered before filing: the fee cannot be left undefined (this is the one place the real portal's conditional disclosure is turned into an explicit question, ED-009) |
 | **Failure path** | Unanswered BPL → inline prompt, focus moved to it |
 | **Recovery** | Every Edit link is a round trip that loses nothing |
 | **Next state** | `/filed/[ref]` |
 
 ---
 
-## T-07 — Confirmation
+## T-07: Confirmation
 
 | | |
 |---|---|
@@ -115,20 +115,20 @@
 
 ---
 
-## T-08 — Back navigation, from anywhere
+## T-08: Back navigation, from anywhere
 
 | | |
 |---|---|
 | **User action** | Browser back, back gesture, or an in-app Back control |
 | **System response** | Returns to the previous step with **all state intact** |
 | **Failure path** | **None by design.** This is the direct answer to the observed single-use-token error page (ED-008) |
-| **Recovery** | n/a — nothing to recover from |
+| **Recovery** | n/a: nothing to recover from |
 
 Explicitly tested: complete to `/review`, go back to `/`, forward again, assert every field intact.
 
 ---
 
-## T-09 — Storage unavailable
+## T-09: Storage unavailable
 
 | | |
 |---|---|
@@ -184,7 +184,7 @@ Explicitly tested: complete to `/review`, go back to `/`, forward again, assert 
 
 ---
 
-## Control inventory — proof of no dead buttons
+## Control inventory: proof of no dead buttons
 
 | Screen | Control | Response |
 |---|---|---|

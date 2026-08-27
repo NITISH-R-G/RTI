@@ -1,18 +1,18 @@
-# 12 — Change Log
+# 12: Change Log
 
 Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
-## 2026-08-27 — Phase 4 — Integration, adversarial evaluation, blind corpus, competition audit
+## 2026-08-27: Phase 4: Integration, adversarial evaluation, blind corpus, competition audit
 
-**Fresh-reviewer audit** run against the running application before inspecting implementation, and opening with its own limitation stated: I built this, so I am not a genuinely fresh reviewer and do not claim to be. Six findings; the critical one was that **the differentiator was invisible on the main path** — the observed portal refusal lived only on `/about`, so a judge who never clicked it would see a well-made form and no reason for it to exist.
+**Fresh-reviewer audit** run against the running application before inspecting implementation, and opening with its own limitation stated: I built this, so I am not a genuinely fresh reviewer and do not claim to be. Six findings; the critical one was that **the differentiator was invisible on the main path**: the observed portal refusal lived only on `/about`, so a judge who never clicked it would see a well-made form and no reason for it to exist.
 
 **Blind corpus.** 47 new colloquial inputs, written without consulting the development corpus and **committed before being run once** (`a86821f`), replacing the burned Phase 2.5 held-out set. **Original independent result: 44/47 (93.6%), 1 dangerous outcome, 0 dead ends, 0 fabricated authorities.** All 26 supported-domain cases behaved acceptably on phrasing that resembles nothing in development.
 
 **Four reasoning fixes**, each re-running both corpora. The two that mattered were both keyword over-reach the development corpus could never have caught: `password` fuzzy-matched `passport`, and **`pf` matched inside `helpful`**. Post-fix 46/47 with zero dangerous outcomes; development corpus unchanged at 60/60. The original 93.6% is preserved and labelled.
 
-**Adversarial suite** — 21 tests covering 13 hostile inputs, deep links into every later route, refresh at each step, browser back/forward, and four stale-state attacks. The important one: changing the problem after an authority was chosen must leave no trace of the old office. All passing.
+**Adversarial suite**: 21 tests covering 13 hostile inputs, deep links into every later route, refresh at each step, browser back/forward, and four stale-state attacks. The important one: changing the problem after an authority was chosen must leave no trace of the old office. All passing.
 
 **Four fresh-reviewer fixes.** An evidence block on the landing page showing the real observed exchange; authority-name provenance and the no-language-model statement moved onto the authority screen; and a genuinely ungrammatical reasoning sentence rewritten by giving each information option a noun phrase for prose.
 
@@ -24,13 +24,13 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
-## 2026-08-27 — Phase 3 WU6-WU9 — Review, mock filing, not-RTI, about
+## 2026-08-27: Phase 3 WU6-WU9: Review, mock filing, not-RTI, about
 
 **Built:**
-- **Review** — sectioned summary with an edit affordance on every section, the authority reasoning repeated, a BPL question that reveals the fee (the real portal hides it until you answer), the appeal date as a date, an explicit list of what the real portal will additionally ask for, and a warning block stating that nothing is sent anywhere.
-- **Filed** — demo confirmation, a visibly synthetic `DEMO-NOT-REAL/nnnnn` reference shown alongside the real format so they cannot be confused, a four-stage timeline with the last two marked "not started", the full request text with a copy button and a manual-copy fallback, and a link to the real portal.
-- **Not-RTI** — what we understood, why this may not fit, what you may need instead, what the prototype can and cannot help with, and a "continue anyway" override. Deliberately does **not** invent a service link we have not verified.
-- **About** — the observed failure quoted verbatim, the design change, how it actually works, what is simulated, the privacy boundary and what it does not do.
+- **Review**: sectioned summary with an edit affordance on every section, the authority reasoning repeated, a BPL question that reveals the fee (the real portal hides it until you answer), the appeal date as a date, an explicit list of what the real portal will additionally ask for, and a warning block stating that nothing is sent anywhere.
+- **Filed**: demo confirmation, a visibly synthetic `DEMO-NOT-REAL/nnnnn` reference shown alongside the real format so they cannot be confused, a four-stage timeline with the last two marked "not started", the full request text with a copy button and a manual-copy fallback, and a link to the real portal.
+- **Not-RTI**: what we understood, why this may not fit, what you may need instead, what the prototype can and cannot help with, and a "continue anyway" override. Deliberately does **not** invent a service link we have not verified.
+- **About**: the observed failure quoted verbatim, the design change, how it actually works, what is simulated, the privacy boundary and what it does not do.
 
 **Closed the colour-contrast gap** with a measurement harness that is itself self-checked against injected failing text. Zero violations across all six screens.
 
@@ -41,11 +41,11 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
-## 2026-08-26 — Phase 3 WU1 — Application shell, design system, routing
+## 2026-08-26: Phase 3 WU1: Application shell, design system, routing
 
 **Ratified ADR-0002 with an amendment.** Next.js replaced by **Vite + React + TypeScript**, static output. The original justification for Next.js was keeping an OpenAI key off the client in server routes; PD-009 removed the runtime LLM and ED-014 removed identity collection, so there is no server-side work left. A framework justified by its server is the wrong tool once the server is gone.
 
-**Built:** Vite + React + TS + Tailwind v4 scaffold; design tokens (deep-teal civic palette, warm paper, system font stack — no webfont, so nothing to download on a slow connection); shared primitives (Button, ButtonLink, Card, Notice, PageTitle) so screens share one visual language; `Layout` with skip link, landmarks, six-step progress indicator, persistent non-dismissible prototype disclosure, and an honest footer; `JourneyProvider` state with try/catch-wrapped `localStorage`; all eight routes wired with stub screens; TypeScript declarations for the frozen reasoning engine.
+**Built:** Vite + React + TS + Tailwind v4 scaffold; design tokens (deep-teal civic palette, warm paper, system font stack: no webfont, so nothing to download on a slow connection); shared primitives (Button, ButtonLink, Card, Notice, PageTitle) so screens share one visual language; `Layout` with skip link, landmarks, six-step progress indicator, persistent non-dismissible prototype disclosure, and an honest footer; `JourneyProvider` state with try/catch-wrapped `localStorage`; all eight routes wired with stub screens; TypeScript declarations for the frozen reasoning engine.
 
 **Verified in a real browser**, results in `11-evaluation-log.md`: 0 horizontal overflow at 360 px, skip link is the first tab stop with a visible focus ring, landmarks present, build and typecheck clean, 62 reasoning tests still passing.
 
@@ -55,12 +55,12 @@ Newest first. One entry per meaningful change, with what was tested.
 
 ---
 
-## 2026-08-26 — Session 2 — Authenticated audit of RTI Online
+## 2026-08-26: Session 2: Authenticated audit of RTI Online
 
 **Agent:** Claude (Opus 5), Claude Code, driving the owner's real Chrome. **Authentication performed manually by the project owner** (email + mobile + CAPTCHA + OTP); the agent entered no credentials.
 
 **Discovered and persisted:**
-- The authenticated **Online RTI Request Form** (`request/request.php`) in full — 40 visible inputs with names, types, maxlengths, conditionals and verbatim instructional text. New file `docs/research/rti-online/authenticated-form-structure.md`.
+- The authenticated **Online RTI Request Form** (`request/request.php`) in full: 40 visible inputs with names, types, maxlengths, conditionals and verbatim instructional text. New file `docs/research/rti-online/authenticated-form-structure.md`.
 - The journey end-to-end up to the irreversible boundary. New file `authenticated-flow-map.md`. **Submission and payment were never crossed and are marked as deliberately not observed.**
 - Ten reproducible friction points with citizen impact and severity. New file `authenticated-friction-map.md`.
 - The 96-entry ministry list, 35 states, the Railways cascade sample and three search-behaviour experiments. New file `ministries.json`.
@@ -68,9 +68,9 @@ Newest first. One entry per meaningful change, with what was tested.
 
 **Headline finding** `[O]`: typing `my pension has not been paid` into `Search Public Authority` returns **`No such Public Authority available in this portal !`**, while `Department of Pensions & Pensioners Welfare` sits in the ministry cascade on the same screen. The portal requires citizens to translate a problem into institutional vocabulary before it will help, and refuses them when they cannot.
 
-**Corrections to Session 1 — kept visible, not deleted:**
+**Corrections to Session 1: kept visible, not deleted:**
 1. The authority picker is **not** a flat 2,900-item dropdown. It is a searchable two-level cascade (96 ministries → cascaded authorities). The 2,904 figure describes the separate `allpa.php` catalogue page.
-2. Accessibility findings A1 (no viewport meta) and A2 (no `lang`) are **page-scoped, not portal-wide** — `/index.php` lacks both; the authenticated form has both.
+2. Accessibility findings A1 (no viewport meta) and A2 (no `lang`) are **page-scoped, not portal-wide**: `/index.php` lacks both; the authenticated form has both.
 3. An intermediate hypothesis during this session that the form never discloses the fee was **wrong**: `BPL = No` reveals "You are required to pay the RTI fee of ₹ 10" and relabels the button to "Make Payment".
 
 **Re-ranked** the candidate problems in `04-user-problem.md` against the new evidence: C1 rises 27 → 29 and its problem statement is sharpened; C4 falls 18 → 17.
@@ -79,22 +79,22 @@ Newest first. One entry per meaningful change, with what was tested.
 
 **Tested:** no application code exists, so no test suite was run. All findings carry evidence tags and reproduction steps.
 
-**Audit closed later the same session — all three outstanding items resolved without further human authentication:**
-- **Validation inventory** `[O]`: enumerated every page function containing `alert(` and extracted its dialog literals via `Function.prototype.toString`, avoiding native dialogs entirely. Only two dialog messages exist on the whole form — `Only Indian citizens can file RTI Request application.` and `Your request will be filed with 
+**Audit closed later the same session: all three outstanding items resolved without further human authentication:**
+- **Validation inventory** `[O]`: enumerated every page function containing `alert(` and extracted its dialog literals via `Function.prototype.toString`, avoiding native dialogs entirely. Only two dialog messages exist on the whole form: `Only Indian citizens can file RTI Request application.` and `Your request will be filed with 
 
 <authority>`. **There is no client-side field validation at all**, and the public-authority "confirmation" is an `alert()` with no Cancel. New friction point F-A11.
 - **`Country = Other`** `[O]`: no branching. The India State dropdown and the free-text country box stay visible and enabled together. New friction point F-A13.
-- **Reflow at 360 px** `[O]`: device emulation was unavailable for the authenticated tab, so reflow was measured directly — constraining `body` to 360 px yields a 985 px minimum content width (625 px overflow), 32 controls past the right edge, and 30 controls under the 44 px touch target. The form has a viewport meta but **does not reflow**. New friction point F-A12, severity Critical.
+- **Reflow at 360 px** `[O]`: device emulation was unavailable for the authenticated tab, so reflow was measured directly: constraining `body` to 360 px yields a 985 px minimum content width (625 px overflow), 32 controls past the right edge, and 30 controls under the 44 px touch target. The form has a viewport meta but **does not reflow**. New friction point F-A12, severity Critical.
 
 **Baseline now frozen** (KI-012). Residual `[U]`: colour contrast never measured; no real device or screen reader used.
 
-**Not done:** the before/after journey document and evidence chains — deliberately left for the next step, at the owner's instruction not to begin implementation.
+**Not done:** the before/after journey document and evidence chains: deliberately left for the next step, at the owner's instruction not to begin implementation.
 
 **Process correction:** the owner identified that findings were being reported in chat before being written to the repository. This session's checkpoint persisted everything discovered before the audit resumed. The rule now stands: discover → write → verify → continue.
 
 ---
 
-## 2026-08-26 — Session 1 — Research and memory foundation
+## 2026-08-26: Session 1: Research and memory foundation
 
 **Agent:** Claude (Opus 5), Claude Code.
 
@@ -110,9 +110,9 @@ Newest first. One entry per meaningful change, with what was tested.
 - Recorded ADR-0001 (persistent memory system) and ADR-0002 (proposed stack, status *proposed*).
 - Replaced the inherited `AGENTS.md` and wrote the project `README.md`.
 
-**Tested:** nothing to test — no application code was written. The audit findings were each verified directly in the live DOM or read from the portal's own published documents, and are labelled [O]/[D]/[I]/[U] accordingly in `03-rti-site-inventory.md`.
+**Tested:** nothing to test: no application code was written. The audit findings were each verified directly in the live DOM or read from the portal's own published documents, and are labelled [O]/[D]/[I]/[U] accordingly in `03-rti-site-inventory.md`.
 
-**Then, on the project owner's decision (PD-009):** reworked the compliance and architecture story. Rule R1 is now satisfied through the brief's *"built with Codex"* branch rather than a runtime OpenAI API. The deployed prototype will call no LLM; the complete citizen journey runs on deterministic local logic behind an `Assistant` interface that a model could later implement. Rewrote `02`, `07`, `09`, `15`, `17`, `18`, `docs/design/mvp-spec.md` and the README accordingly, added `19-codex-contribution-log.md` as the R1 evidence file, and replaced KI-004 (no API key) with the real remaining issue: that log is empty. Added KI-008 — the domain taxonomy the rule-based assistant needs does not exist yet, and is now the largest design task in the project.
+**Then, on the project owner's decision (PD-009):** reworked the compliance and architecture story. Rule R1 is now satisfied through the brief's *"built with Codex"* branch rather than a runtime OpenAI API. The deployed prototype will call no LLM; the complete citizen journey runs on deterministic local logic behind an `Assistant` interface that a model could later implement. Rewrote `02`, `07`, `09`, `15`, `17`, `18`, `docs/design/mvp-spec.md` and the README accordingly, added `19-codex-contribution-log.md` as the R1 evidence file, and replaced KI-004 (no API key) with the real remaining issue: that log is empty. Added KI-008: the domain taxonomy the rule-based assistant needs does not exist yet, and is now the largest design task in the project.
 
 **Not done:** no application, no test infrastructure, no deployment, no stack ratification. The problem in `04-user-problem.md` is still awaiting owner ratification.
 

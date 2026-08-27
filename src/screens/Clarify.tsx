@@ -6,7 +6,7 @@ import { refine, pendingQuestions } from '../reasoning/refine';
 
 /**
  * At most three questions, and a question is only asked when its answer changes
- * the outcome — the verdict, the draft or the authority. The observed form asks
+ * the outcome: the verdict, the draft or the authority. The observed form asks
  * gender, rural/urban and education level, none of which change anything (ED-010).
  */
 export function Clarify() {
@@ -53,7 +53,7 @@ export function Clarify() {
     else navigate('/');
   }
 
-  // Nothing to ask — the engine was already confident enough.
+  // Nothing to ask: the engine was already confident enough.
   if (!question) {
     return (
       <>
@@ -87,7 +87,7 @@ export function Clarify() {
             {question.text}
           </legend>
           <p className="mt-1 text-sm text-ink-500">
-            Question {index + 1} of {queue.length} — this decides which office holds your records.
+            Question {index + 1} of {queue.length}. This decides which office holds your records.
           </p>
 
           <div className="mt-4 grid gap-2" role="radiogroup" aria-labelledby={legendId}>
@@ -124,7 +124,7 @@ export function Clarify() {
         <Notice title="Why we are asking">
           <p>
             Choosing the wrong office is the most expensive mistake on the real portal. A central
-            office will forward your request, but a <strong>state</strong> office returns it — and the
+            office will forward your request, but a <strong>state</strong> office returns it, and the
             fee is not refunded.
           </p>
         </Notice>

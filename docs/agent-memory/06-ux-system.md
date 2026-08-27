@@ -1,6 +1,6 @@
-# 06 — UX System
+# 06: UX System
 
-**Status:** Principles and flow agreed (Session 1). Visual system not yet built — no tokens, no components, no code.
+**Status:** Principles and flow agreed (Session 1). Visual system not yet built: no tokens, no components, no code.
 
 ## The flow
 
@@ -28,8 +28,8 @@ Every transition must answer: *what does the citizen need to know to move forwar
 ## Principles
 
 1. **One decision per screen.** The baseline portal asks a first-time user to choose among 2,900 authorities, judge RTI applicability, and compose legal prose on a single page. We never do that.
-2. **Nothing is asked that can be inferred, and nothing inferred is hidden.** Every inference the app makes is displayed with its reasoning and is editable (PD-004). Where the app cannot infer, it asks — it never guesses (PD-009).
-3. **Plain language first, legal wording glossed.** Never "Enter particulars of information sought"; always "What do you want to know?" — with the formal phrasing visible in the generated request, explained.
+2. **Nothing is asked that can be inferred, and nothing inferred is hidden.** Every inference the app makes is displayed with its reasoning and is editable (PD-004). Where the app cannot infer, it asks: it never guesses (PD-009).
+3. **Plain language first, legal wording glossed.** Never "Enter particulars of information sought"; always "What do you want to know?": with the formal phrasing visible in the generated request, explained.
 4. **Progress is always visible, and going back never destroys work.**
 5. **Errors say what to do next**, are tied to their field programmatically, and never require restarting.
 6. **Motion communicates state or does not exist.** No decorative animation. Respect `prefers-reduced-motion`.

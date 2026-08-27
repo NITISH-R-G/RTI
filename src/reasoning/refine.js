@@ -35,7 +35,7 @@ export function refine(result, answers) {
         information_types: [],
         required_questions: [],
         reasoning:
-          'This prototype covers pension, provident fund, passport, railways and income tax in depth. Yours is something else — you can still search every public authority yourself, and we will show you what a good request looks like.',
+          'This prototype covers pension, provident fund, passport, railways and income tax in depth. Yours is something else: you can still search every public authority yourself, and we will show you what a good request looks like.',
       };
     }
     const d = domainById(chosen);
@@ -50,7 +50,7 @@ export function refine(result, answers) {
         information_types: d.infoTypes,
         required_questions: d.questions,
         next_action: 'continue',
-        reasoning: `Thanks — that makes it a ${d.label.toLowerCase()} matter. The office below is likely to hold these records.`,
+        reasoning: `Thanks: that makes it a ${d.label.toLowerCase()} matter. The office below is likely to hold these records.`,
       };
     }
   }
@@ -114,7 +114,7 @@ export function refine(result, answers) {
         confidence_band: 'medium',
         next_action: 'continue',
         reasoning:
-          'We are not certain which kind of pension this is, so treat the office below as a best guess — check the alternatives before you file.',
+          'We are not certain which kind of pension this is, so treat the office below as a best guess: check the alternatives before you file.',
       };
     }
   }

@@ -1,7 +1,7 @@
-# Before vs After — the citizen journey
+# Before vs After: the citizen journey
 
 **Status:** Phase 2 specification, 2026-08-26.
-**Source of truth for the "current" column:** the frozen authenticated audit — `docs/research/rti-online/authenticated-flow-map.md`, `authenticated-form-structure.md`, `authenticated-friction-map.md`. Every current-state claim below carries an evidence tag and a pointer. Nothing here is written from memory or assumption.
+**Source of truth for the "current" column:** the frozen authenticated audit: `docs/research/rti-online/authenticated-flow-map.md`, `authenticated-form-structure.md`, `authenticated-friction-map.md`. Every current-state claim below carries an evidence tag and a pointer. Nothing here is written from memory or assumption.
 
 **Rule observed throughout:** no unmeasurable claims. There is no "10x easier" or "dramatically simpler" in this document. Every comparison is a count, a boolean, or a pixel measurement, and every one is testable.
 
@@ -12,26 +12,26 @@
 | # | Dimension | RTI Online (observed) | Our prototype (specified) | Evidence for "current" |
 |---|---|---|---|---|
 | 1 | **Entry point** | Home page → *Submit Request* → guidelines wall → email/CAPTCHA → OTP, before any question about what you want | Public URL → one question: **"What happened?"** | flow-map STEP 1–4 `[O]` |
-| 2 | **Screens before you can describe your problem** | **4** | **0** — it is the first screen | flow-map, screen count `[O]` |
+| 2 | **Screens before you can describe your problem** | **4** | **0**: it is the first screen | flow-map, screen count `[O]` |
 | 3 | **Major steps to a filed request** | **5** to the payment boundary | **6** screens, but the first is the problem itself | flow-map `[O]` |
 | 4 | **Total form fields presented** | **40** visible inputs on one screen | **≤ 7** across the whole journey | form-structure §1 `[O]` |
-| 5 | **Explicit unaided user decisions** | **5** — ministry, public authority, demographics, BPL, wording | **≤ 4**, none unaided; every one is proposed with reasoning and is editable | flow-map, USER DECISION 4a–4e `[O]` |
-| 6 | **Points requiring prior institutional knowledge** | **2 mandatory** — you must name a ministry (96 options) and a public authority (183 for Railways alone) before proceeding | **0 required** — institutional names are proposed, never demanded | form-structure §3 `[O]` |
+| 5 | **Explicit unaided user decisions** | **5**: ministry, public authority, demographics, BPL, wording | **≤ 4**, none unaided; every one is proposed with reasoning and is editable | flow-map, USER DECISION 4a–4e `[O]` |
+| 6 | **Points requiring prior institutional knowledge** | **2 mandatory**: you must name a ministry (96 options) and a public authority (183 for Railways alone) before proceeding | **0 required**: institutional names are proposed, never demanded | form-structure §3 `[O]` |
 | 7 | **Government terminology the citizen must already understand** | Public Authority, Ministry/Department/Apex body, CPIO, Nodal Officer, BPL, First Appellate Authority, s.6(3) | **0 assumed.** Every term appears with a plain-language gloss at the point of use | inventory §6, form-structure §2 `[O]`/`[D]` |
-| 8 | **When validation happens** | **After a network round trip.** No HTML `required` attributes and no client-side field validation exist; the only two dialogs are a citizenship guard and an authority notice | **Before any network call** — all validation is deterministic and local | form-structure §7a, friction F-A11 `[O]` |
+| 8 | **When validation happens** | **After a network round trip.** No HTML `required` attributes and no client-side field validation exist; the only two dialogs are a citizenship guard and an authority notice | **Before any network call**: all validation is deterministic and local | form-structure §7a, friction F-A11 `[O]` |
 | 9 | **Restricted-character feedback** | At submit, after composing up to 3,000 characters. The textarea has no `oninput`/`onkeyup`/`onkeypress`/`onchange`/`onblur` handler | **As you type**, naming the offending characters, with a one-tap fix | form-structure §5, friction F-A3 `[O]` |
 | 10 | **Remaining-character feedback** | **None.** `maxlength=3000` truncates silently | Live remaining count | form-structure §5, friction F-A4 `[O]` |
 | 11 | **Authority selection method** | Two cascading dropdowns (96 → 183) plus a search that matches institutional names, not needs | Derived from the problem; presented as one recommendation + reasoning + ranked alternatives + full search as a floor | form-structure §3, friction F-A1 `[O]` |
 | 12 | **Problem-language input to the authority search** | `my pension has not been paid` → **"No such Public Authority available in this portal !"** while the relevant department exists in the same screen's cascade | The same sentence is the **expected** input and reaches a recommendation | friction F-A1 `[O]` |
 | 13 | **Authority confirmation** | An `alert()` reading "Your request will be filed with …". No Cancel; consequence of a wrong choice never stated | A reversible screen stating the consequence: transfer under s.6(3), or **return without refund** for a state body | form-structure §7a `[O]`, `[D]` for consequence |
-| 14 | **Error recovery** | Server round trip re-renders the page with loose text and **regenerates the CAPTCHA** — a typo costs a new CAPTCHA | Errors are inline, tied to their field, and never discard work | inventory §3 `[O]` |
+| 14 | **Error recovery** | Server round trip re-renders the page with loose text and **regenerates the CAPTCHA**: a typo costs a new CAPTCHA | Errors are inline, tied to their field, and never discard work | inventory §3 `[O]` |
 | 15 | **Back-navigation behaviour** | Going back to the OTP screen produces a **browser error page**; the token is single-use and the journey cannot be resumed | Every step reversible; state preserved; back never destroys work | flow-map STEP 3 `[O]` |
 | 16 | **Draft / save** | None. No progress indicator, no save, in a 40-field form | Work persists locally across steps and reloads within the session | form-structure §1 `[O]` (absence) |
-| 17 | **Authentication challenges** | **3** — CAPTCHA, OTP, then a second CAPTCHA on the form itself | **0** — but see the honesty note below | form-structure §1 (#38), flow-map `[O]` |
-| 18 | **Minimum usable viewport** | Constrained to 360 px the form needs **985 px** — 625 px of horizontal overflow, 32 controls past the right edge. Has a viewport meta but does not reflow | **360 px with 0 horizontal overflow**, verified at 360/390/430/768/1024/1440 | form-structure §7b, friction F-A12 `[O]` |
+| 17 | **Authentication challenges** | **3**: CAPTCHA, OTP, then a second CAPTCHA on the form itself | **0**: but see the honesty note below | form-structure §1 (#38), flow-map `[O]` |
+| 18 | **Minimum usable viewport** | Constrained to 360 px the form needs **985 px**: 625 px of horizontal overflow, 32 controls past the right edge. Has a viewport meta but does not reflow | **360 px with 0 horizontal overflow**, verified at 360/390/430/768/1024/1440 | form-structure §7b, friction F-A12 `[O]` |
 | 19 | **Touch-target compliance** | **30** controls under 44 px (mostly 24–28 px) | **0** under 44 px | form-structure §7b `[O]` |
 | 20 | **Programmatic labels** | **0 `<label>` elements for 40 inputs**; 0 `aria-required`; 0 `aria-describedby`; 6 layout tables; 0 landmarks | 100% of inputs labelled; errors via `aria-describedby`; landmarks present; axe clean | form-structure §6 `[O]` |
-| 21 | **Fee disclosure** | Only after answering "Is the Applicant Below Poverty Line?" — then red text and the button relabels to *Make Payment* | Stated up front, before any effort is invested, with the exemption explained | form-structure §4 `[O]` |
+| 21 | **Fee disclosure** | Only after answering "Is the Applicant Below Poverty Line?": then red text and the button relabels to *Make Payment* | Stated up front, before any effort is invested, with the exemption explained | form-structure §4 `[O]` |
 | 22 | **When you learn you may appeal** | Nowhere in this journey | On the review screen, as a **date** | flow-map `[O]` (absence), `[D]` for the 30-day rule |
 | 23 | **Demographic disclosure** | Gender (defaulting to Male), Rural/Urban, Literate/Illiterate → four further education radios | **Not asked.** None of it changes the request, the authority or the fee | form-structure §4, friction F-A5 `[O]` |
 | 24 | **Inapplicable fields shown** | BPL card number, year of issue and issuing authority stay visible and enabled even when BPL = No; `Country = Other` shows the India State dropdown alongside a free-text country box | Only the branch that applies is shown | friction F-A6, F-A13 `[O]` |
@@ -50,21 +50,21 @@ Condensed from `authenticated-flow-map.md`. `[O]` unless marked.
 ```
 Home
  └─> Submit Request
-      └─> Guidelines wall — 22 bullets, mandatory checkbox
+      └─> Guidelines wall: 22 bullets, mandatory checkbox
            (navigating directly to the form URL bypassed this gate entirely)
            └─> Email + Mobile + CAPTCHA  ──> OTP dispatched
                 └─> OTP screen           ← going BACK here later = browser error page
                      └─> THE FORM: 40 inputs, one screen, no progress, no save
                           ├─ decide: which of 96 ministries?
                           ├─ decide: which of N public authorities? (183 for Railways)
-                          ├─ or: search — but only institutional names work
+                          ├─ or: search: but only institutional names work
                           ├─ disclose: gender / rural-urban / literacy / education
                           ├─ decide: BPL? → reveals the ₹10 fee, relabels the button
                           ├─ compose: ≤3000 chars, no counter, restricted charset
                           │           enforced only at submit
                           └─ solve: a SECOND CAPTCHA
                                └─> alert("Your request will be filed with …")  [OK only]
-                                    └─> ═══ Make Payment ═══  NOT OBSERVED — we stopped
+                                    └─> ═══ Make Payment ═══  NOT OBSERVED: we stopped
 ```
 
 **Where a citizen can fail, and what it costs:**
@@ -100,7 +100,7 @@ Designed from the failures above, not from a blank page. Full detail in `informa
 
 ### The inversion that matters
 
-RTI Online asks **"which office?"** *before* it asks **"what do you want?"**. That ordering is what produces the observed dead end — the citizen must name an institution before the system will engage with their problem.
+RTI Online asks **"which office?"** *before* it asks **"what do you want?"**. That ordering is what produces the observed dead end: the citizen must name an institution before the system will engage with their problem.
 
 We reverse it. The problem comes first; the institution is *derived* from it and shown with reasoning. This is the single most important structural difference, and it is recorded as decision **ED-001** in `evidence-to-design.md`.
 
@@ -120,7 +120,7 @@ We reverse it. The problem comes first; the institution is *derived* from it and
 | Claim | Verification |
 |---|---|
 | Screens, steps, fields, decisions | Counted against the built routes in `docs/agent-memory/17-route-inventory.md`; asserted in an end-to-end test |
-| 0 points requiring institutional knowledge | Scenario evaluations in `docs/evals/citizen-scenarios.md` — a participant reaches a recommendation without typing any authority's formal name |
+| 0 points requiring institutional knowledge | Scenario evaluations in `docs/evals/citizen-scenarios.md`: a participant reaches a recommendation without typing any authority's formal name |
 | Validation before any network call | Unit tests on the pure rules module; e2e test asserting no network request on validation failure |
 | 360 px, 0 horizontal overflow | Playwright viewport matrix at 360/390/430/768/1024/1440 |
 | 0 touch targets under 44 px | Automated measurement in the e2e suite |

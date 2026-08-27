@@ -1,18 +1,18 @@
 # RTI Sarathi *(working name)*
 
-An independent prototype that turns a citizen's plain-language problem into a correctly worded RTI request, aimed at the right public authority — built for the **Build What Moves India** hackathon.
+An independent prototype that turns a citizen's plain-language problem into a correctly worded RTI request, aimed at the right public authority: built for the **Build What Moves India** hackathon.
 
 > **This is not a government service.** It is an independent prototype. It is not affiliated with, endorsed by, or connected to the Government of India, the Department of Personnel & Training, or `rtionline.gov.in`. **It cannot file a real RTI application.** Filing, payment, OTP and status are simulated.
 
 ---
 
-## Current state — research phase complete, no application code yet
+## Current state: research phase complete, no application code yet
 
 | | |
 |---|---|
-| RTI Online audit | Done — [`docs/agent-memory/03-rti-site-inventory.md`](docs/agent-memory/03-rti-site-inventory.md) |
-| Problem chosen | Recommended, awaiting ratification — [`docs/agent-memory/04-user-problem.md`](docs/agent-memory/04-user-problem.md) |
-| MVP spec + acceptance criteria | Done — [`docs/design/mvp-spec.md`](docs/design/mvp-spec.md) |
+| RTI Online audit | Done: [`docs/agent-memory/03-rti-site-inventory.md`](docs/agent-memory/03-rti-site-inventory.md) |
+| Problem chosen | Recommended, awaiting ratification: [`docs/agent-memory/04-user-problem.md`](docs/agent-memory/04-user-problem.md) |
+| MVP spec + acceptance criteria | Done: [`docs/design/mvp-spec.md`](docs/design/mvp-spec.md) |
 | Application | **Not started** |
 | Public URL | **Not deployed** |
 
@@ -45,14 +45,14 @@ Built mobile-first, WCAG 2.2 AA as an acceptance criterion rather than a review 
 
 ## What is real and what is simulated
 
-**Real:** the 2,904 public authority names (captured read-only from the portal's own public listing on 2026-08-26), the fee and 30-day appeal rules, and the 3,000-character and allowed-character-set constraints. The guidance is produced by deterministic logic running in your browser — there is no language model at runtime, and nothing you type is sent anywhere.
+**Real:** the 2,904 public authority names (captured read-only from the portal's own public listing on 2026-08-26), the fee and 30-day appeal rules, and the 3,000-character and allowed-character-set constraints. The guidance is produced by deterministic logic running in your browser: there is no language model at runtime, and nothing you type is sent anywhere.
 
 **Simulated:** identity, filing, payment, OTP, registration numbers, and case status. Nothing is ever sent to any government system.
 
 ## Repository map
 
 ```
-docs/agent-memory/   persistent project memory, 00-19 — read this first
+docs/agent-memory/   persistent project memory, 00-19: read this first
 docs/research/       the RTI Online audit and captured reference data
 docs/design/         specifications and acceptance criteria
 docs/adr/            architecture decision records
@@ -62,7 +62,7 @@ docs/testing/        test plans and results
 
 ## Development
 
-The stack is proposed but not yet ratified — see [`docs/adr/0002-stack.md`](docs/adr/0002-stack.md). Once the application exists, these commands are the agreed contract (`docs/agent-memory/10-test-strategy.md`):
+The stack is proposed but not yet ratified: see [`docs/adr/0002-stack.md`](docs/adr/0002-stack.md). Once the application exists, these commands are the agreed contract (`docs/agent-memory/10-test-strategy.md`):
 
 ```bash
 npm run dev
@@ -78,4 +78,4 @@ No API key or environment variable is required to run the product. Competition r
 
 ## Research ethics
 
-The audit of `rtionline.gov.in` was read-only. No RTI application, appeal, payment, login or OTP was ever submitted, no private or undocumented API was used, and no personal or restricted information was collected — only public institutional names. Details and the evidence labelling scheme are in [`docs/agent-memory/03-rti-site-inventory.md`](docs/agent-memory/03-rti-site-inventory.md).
+The audit of `rtionline.gov.in` was read-only. No RTI application, appeal, payment, login or OTP was ever submitted, no private or undocumented API was used, and no personal or restricted information was collected: only public institutional names. Details and the evidence labelling scheme are in [`docs/agent-memory/03-rti-site-inventory.md`](docs/agent-memory/03-rti-site-inventory.md).

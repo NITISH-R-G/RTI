@@ -154,7 +154,7 @@ export function Review() {
           {fee !== null && (
             <p className="text-ink-900">
               Fee on the real portal: <strong>₹{fee}</strong>
-              {fee === 0 && ' — you would attach a copy of your BPL certificate.'}
+              {fee === 0 && ', and you would attach a copy of your BPL certificate.'}
             </p>
           )}
           {touched && !bpl && (
@@ -197,7 +197,7 @@ export function Review() {
       <Card>
         <h2 className="font-semibold">What the real portal will also ask you for</h2>
         <p className="mt-1 text-sm text-ink-500">
-          We deliberately do not collect any of this — it never leaves your hands.
+          We deliberately do not collect any of this. It never leaves your hands.
         </p>
         <ul className="mt-3 grid gap-1 text-ink-700">
           {['Your name', 'Your address and pin code', 'Your email and mobile number', 'Gender, rural or urban, and education level', 'A security code (CAPTCHA), twice'].map((x) => (

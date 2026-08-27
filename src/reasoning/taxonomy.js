@@ -1,4 +1,4 @@
-// Domain taxonomy — DATA, not logic.
+// Domain taxonomy: DATA, not logic.
 // Frozen at five domains: docs/design/mvp-spec.md v1.0.
 // Authority names must exist VERBATIM in docs/research/rti-online/public-authorities.json.
 

@@ -9,7 +9,7 @@ import { optionsFor } from '../draft/compose';
  * The heart of the product.
  *
  * The recommendation is DERIVED from what the citizen told us and what they asked
- * for — it is not a guess made before the request existed, which is the ordering
+ * for; it is not a guess made before the request existed, which is the ordering
  * that produces the observed dead end (ED-001, ED-002).
  *
  * It is never framed as "AI recommends". There is no runtime model. The reasoning
@@ -61,11 +61,11 @@ export function Authority() {
 
   return (
     <>
-      <PageTitle lede="Worked out from what you told us and what you are asking for — not from a list you had to know your way around.">
+      <PageTitle lede="Worked out from what you told us and what you are asking for, not from a list you had to know your way around.">
         Where this should go
       </PageTitle>
 
-      {/* No central office to propose — the expensive-mistake branch. */}
+      {/* No central office to propose: the expensive-mistake branch. */}
       {result.warnings.length > 0 && (
         <div className="mb-4">
           <Notice tone="warn" title="This may not belong to the central RTI portal">
@@ -123,13 +123,13 @@ export function Authority() {
 
           <p className="mt-4 text-sm text-ink-500">
             This name comes from the list of 2,904 public authorities published by the RTI portal
-            itself, captured on 26 August 2026 — we cannot suggest an office that does not exist on
+            itself, captured on 26 August 2026. We cannot suggest an office that does not exist on
             it. The reasoning above is rules we wrote, not a language model.
           </p>
 
           {result.confidence_band !== 'high' && (
             <p className="mt-4 rounded-xl bg-paper-100 p-3 text-sm text-ink-700">
-              This is the most likely match based on what you told us — not a certainty. Have a look
+              This is the most likely match based on what you told us, not a certainty. Have a look
               at the alternatives before you decide.
             </p>
           )}
@@ -188,7 +188,7 @@ export function Authority() {
           </label>
           <p className="mt-1 text-sm text-ink-500">
             This searches the <strong>names</strong> of the 2,904 offices listed on the RTI portal, so
-            type a word from the office name — for example <em>provident</em> or <em>railway</em>.
+            type a word from the office name, for example <em>provident</em> or <em>railway</em>.
             Describing your problem here will not work, which is exactly the trap on the real portal.
           </p>
           <input
