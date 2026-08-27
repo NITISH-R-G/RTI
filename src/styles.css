@@ -38,9 +38,17 @@
   --color-danger-700: #9a1c1c;
   --color-danger-100: #fbe4e4;
 
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", sans-serif;
-  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  /* Hind: designed explicitly for UI (not a display retrofit), ships real
+     Devanagari glyphs alongside Latin in the same family, so Hindi text
+     inside an English layout does not fall back to a mismatched system
+     font mid-sentence. Chosen over Inter/Poppins per the multilingual-
+     readiness requirement; see docs/design/ux-research.md. */
+  --font-sans: "Hind", "Noto Sans Devanagari", system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Fraunces has no Devanagari glyphs: any Hindi text placed in a
+     display heading falls through to Hind automatically via this stack,
+     rather than to a mismatched serif substitute or missing glyphs. */
+  --font-display: "Fraunces", "Hind", "Noto Sans Devanagari", ui-serif, Georgia, serif;
 
   --radius-card: 0.875rem;
 }
