@@ -6,12 +6,15 @@ import { execSync } from 'node:child_process';
 const EM_DASH = '—';
 
 // Tracked files only (respects .gitignore), excluding vendored third-party source
-// (verbatim upstream code we do not rewrite) and package-lock.
+// (verbatim upstream code we do not rewrite, including installed agent skill
+// packages under .claude/skills and .agents/skills) and package-lock.
 const files = execSync('git ls-files', { encoding: 'utf8' })
   .split('\n')
   .filter(Boolean)
   .filter((f) => /\.(tsx?|jsx?|md|mdx|css|html)$/.test(f))
   .filter((f) => !f.startsWith('src/vendor/'))
+  .filter((f) => !f.startsWith('.claude/skills/'))
+  .filter((f) => !f.startsWith('.agents/skills/'))
   .filter((f) => !f.includes('package-lock.json'))
   .filter((f) => f !== 'scripts/check-em-dash.js');
 

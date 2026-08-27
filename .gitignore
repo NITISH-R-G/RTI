@@ -18,4 +18,7 @@ Thumbs.db
 # Vite
 dist/
 test-results/
+
+# Claude Code local settings (machine-specific hook wiring, not shared config)
+.claude/settings.local.json
 playwright-report/
